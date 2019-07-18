@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity
 import android.widget.Button
 import android.widget.Toast
 import com.renj.view.CircleImageView
-import com.renj.view.R
 import com.renj.view.dialog.CustomDialog
 
 internal class MainActivity : AppCompatActivity() {

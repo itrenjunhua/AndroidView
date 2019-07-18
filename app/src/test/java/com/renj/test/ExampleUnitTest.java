@@ -1,4 +1,4 @@
-package com.renj.view;
+package com.renj.test;
 
 import org.junit.Test;
 

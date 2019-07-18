@@ -1,4 +1,4 @@
-package com.renj.view;
+package com.renj.test;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
