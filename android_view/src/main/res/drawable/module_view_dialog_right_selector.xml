@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?><!--Dialog右边按钮状态选择器-->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <corners android:bottomRightRadius="12dp" />
+            <solid android:color="@color/module_view_main_hint" />
+        </shape>
+    </item>
+
+    <item android:state_pressed="false">
+        <shape android:shape="rectangle">
+            <corners android:bottomRightRadius="12dp" />
+            <solid android:color="@color/module_view_color_white" />
+        </shape>
+    </item>
+
+</selector>

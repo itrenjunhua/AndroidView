@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--通过宽高比例自动适配的图片控件属性-->
+    <declare-styleable name="AutoImageView">
+        <attr name="auto_width" format="integer" />
+        <attr name="auto_height" format="integer" />
+        <attr name="auto_type" format="enum">
+            <enum name="type_width" value="0" />
+            <enum name="type_height" value="1" />
+        </attr>
+    </declare-styleable>
+
+    <!--可以设置是否能滑动的 ViewPager-->
+    <declare-styleable name="MyViewPager">
+        <attr name="is_can_scroll" format="boolean" />
+    </declare-styleable>
+
+    <!--通过宽高比例自动适配的LinearLayout控件属性-->
+    <declare-styleable name="AutoWidthHeightView">
+        <attr name="auto_view_width" format="integer" />
+        <attr name="auto_view_height" format="integer" />
+        <attr name="auto_view_type" format="enum">
+            <enum name="auto_view_width" value="0" />
+            <enum name="auto_view_height" value="1" />
+        </attr>
+    </declare-styleable>
+
+    <!--圆形图片控件属性-->
+    <declare-styleable name="CircleImageView">
+        <attr name="civ_border_width" format="dimension" />
+        <attr name="civ_border_color" format="color" />
+        <attr name="civ_border_overlay" format="boolean" />
+        <!-- {@deprecated Use civ_circlebackground_color instead.} -->
+        <attr name="civ_fill_color" format="color" />
+        <attr name="civ_circle_background_color" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="ClearAbleEditText">
+        <attr name="delete_icon" format="reference"/>
+    </declare-styleable>
+
+</resources>

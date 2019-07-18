@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="module_view_dialog_title">18sp</dimen>
+    <dimen name="module_view_dialog_button">16sp</dimen>
+    <dimen name="module_view_dialog_content">15sp</dimen>
+    <dimen name="module_view_dialog_phone">18sp</dimen>
+</resources>

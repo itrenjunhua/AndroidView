@@ -28,6 +28,4 @@ dependencies {
     // support
     implementation rootProject.ext.dependencies["androidSupportV7"]
     implementation rootProject.ext.dependencies["recyclerviewV7"]
-    // jetbrains 注解
-    implementation rootProject.ext.dependencies["jetbrainsAnnotations"]
 }

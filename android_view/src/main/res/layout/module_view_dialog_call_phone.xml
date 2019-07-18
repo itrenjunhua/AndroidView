@@ -1,0 +1,53 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_gravity="center"
+              android:background="@drawable/module_view_dialog_bg_shape"
+              android:gravity="center"
+              android:orientation="vertical">
+
+
+    <TextView
+            android:id="@+id/tv_phone"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginBottom="17dp"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:lineSpacingExtra="4dp"
+            android:paddingLeft="26dp"
+            android:paddingRight="26dp"
+            android:text=""
+            android:textColor="@color/module_view_main_text"
+            android:textSize="@dimen/module_view_dialog_phone"/>
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/module_view_line_bg"/>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        <TextView
+                android:id="@+id/tv_cancel"
+                style="@style/view_dialog_bt_style"
+                android:background="@drawable/module_view_dialog_left_selector"
+                android:text="@string/module_view_cancel"/>
+
+        <View
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"
+                android:background="@color/module_view_line_bg"/>
+
+        <TextView
+                android:id="@+id/tv_ok"
+                style="@style/view_dialog_bt_style"
+                android:background="@drawable/module_view_dialog_right_selector"
+                android:text="@string/module_view_call"/>
+    </LinearLayout>
+
+</LinearLayout>

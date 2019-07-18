@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">android_view</string>
+
+    <string name="module_view_cancel">取消</string>
+    <string name="module_view_confirm">确定</string>
+    <string name="module_view_call">呼叫</string>
 </resources>
