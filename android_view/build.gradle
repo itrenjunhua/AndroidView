@@ -28,4 +28,6 @@ dependencies {
     // support
     implementation rootProject.ext.dependencies["androidSupportV7"]
     implementation rootProject.ext.dependencies["recyclerviewV7"]
+    // 刷新控件 https://github.com/Aspsine/SwipeToLoadLayout
+    api rootProject.ext.dependencies["swipeToLoadLayout"]
 }

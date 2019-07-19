@@ -17,6 +17,7 @@ ext {
             supportTestEspresso     : "3.0.1",
             jetbrainsAnnotations    : "13.0",
             gson                    : "2.8.5",
+            swipeToLoadLayout       : "1.0.4",
     ]
 
     dependencies = [
@@ -32,5 +33,7 @@ ext {
             "jetbrainsAnnotations"    : "org.jetbrains:annotations:${dependVersion.jetbrainsAnnotations}",
             // Gson
             "gson"                    : "com.google.code.gson:gson:${dependVersion.gson}",
+            // 刷新控件 https://github.com/Aspsine/SwipeToLoadLayout
+            "swipeToLoadLayout"       : "com.github.Aspsine:SwipeToLoadLayout:${dependVersion.swipeToLoadLayout}",
     ]
 }

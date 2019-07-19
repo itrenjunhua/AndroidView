@@ -5,4 +5,9 @@
     <color name="module_view_line_bg">#FFEBEBEB</color>
     <color name="module_view_color_white">#FFFFFFFF</color>
     <color name="module_view_main_hint">#FFCCCCCC</color>
+
+    <!--加载进度条颜色-->
+    <color name="module_view_progress_bar_start_color">#333333</color>
+    <color name="module_view_progress_bar_end_color">#FFFFFF</color>
+    <color name="module_view_progress_bar_center_color">#666666</color>
 </resources>
