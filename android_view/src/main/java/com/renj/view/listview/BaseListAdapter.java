@@ -26,32 +26,11 @@ import java.util.List;
 public abstract class BaseListAdapter<T> extends BaseAdapter {
 
     protected List<T> dataList = new ArrayList<T>();
-    protected Context context;
 
-    public BaseListAdapter(@NonNull Context context) {
-        this.context = context;
+    public BaseListAdapter() {
     }
 
-    public BaseListAdapter(@NonNull Fragment fragment) {
-        this.context = fragment.getActivity();
-    }
-
-    public BaseListAdapter(@NonNull android.support.v4.app.Fragment fragment) {
-        this.context = fragment.getActivity();
-    }
-
-    public BaseListAdapter(@NonNull Context context, @NonNull List<T> dataList) {
-        this.context = context;
-        this.dataList = dataList;
-    }
-
-    public BaseListAdapter(@NonNull Fragment fragment, @NonNull List<T> dataList) {
-        this.context = fragment.getActivity();
-        this.dataList = dataList;
-    }
-
-    public BaseListAdapter(@NonNull android.support.v4.app.Fragment fragment, @NonNull List<T> dataList) {
-        this.context = fragment.getActivity();
+    public BaseListAdapter(@NonNull List<T> dataList) {
         this.dataList = dataList;
     }
 
@@ -99,7 +78,7 @@ public abstract class BaseListAdapter<T> extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         BaseListViewHolder<T> listViewHolder;
         if (convertView == null) {
-            listViewHolder = getViewHolder(context, parent, position);
+            listViewHolder = getViewHolder(parent.getContext(), parent, position);
         } else {
             listViewHolder = (BaseListViewHolder<T>) convertView.getTag();
         }
