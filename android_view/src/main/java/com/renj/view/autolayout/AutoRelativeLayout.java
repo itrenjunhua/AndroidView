@@ -1,4 +1,4 @@
-package com.renj.view;
+package com.renj.view.autolayout;
 
 import android.content.Context;
 import android.content.res.TypedArray;

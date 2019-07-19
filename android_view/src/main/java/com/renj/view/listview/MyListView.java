@@ -1,4 +1,4 @@
-package com.renj.view;
+package com.renj.view.listview;
 
 import android.content.Context;
 import android.util.AttributeSet;

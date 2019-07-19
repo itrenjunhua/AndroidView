@@ -1,12 +1,11 @@
-package com.renj.view;
+package com.renj.view.autolayout;
 
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
-import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.renj.view.R;
 
@@ -15,36 +14,37 @@ import com.renj.view.R;
  * ======================================================================
  * <p>
  * 作者：Renj
+ * 邮箱：itrenjunhua@163.com
  * <p>
- * 创建时间：2018-03-07   15:10
+ * 创建时间：2018-05-04   10:35
  * <p>
- * 描述：通过设置宽高比例自动适配线性布局控件
+ * 描述：通过设置宽高比例自动适配帧布局控件
  * <p>
  * 修订历史：
  * <p>
  * ======================================================================
  */
-public class AutoLinearLayout extends LinearLayout {
+public class AutoFrameLayout extends RelativeLayout {
     // 自动适配的类型，0：宽适配 1：高适配
     private int auto_type = 1;
     private int auto_width;
     private int auto_height;
 
-    public AutoLinearLayout(Context context) {
-        this(context, null, 0);
+    public AutoFrameLayout(Context context) {
+        this(context,null);
     }
 
-    public AutoLinearLayout(Context context, @Nullable AttributeSet attrs) {
-        this(context, attrs, 0);
+    public AutoFrameLayout(Context context, AttributeSet attrs) {
+        this(context, attrs,0);
     }
 
-    public AutoLinearLayout(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public AutoFrameLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(attrs);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public AutoLinearLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public AutoFrameLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(attrs);
     }
@@ -58,6 +58,7 @@ public class AutoLinearLayout extends LinearLayout {
 
         typedArray.recycle();
     }
+
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
