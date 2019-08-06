@@ -5,9 +5,6 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.renj.view.listview.BaseListViewHolder;
-
-
 /**
  * ======================================================================
  * <p>
