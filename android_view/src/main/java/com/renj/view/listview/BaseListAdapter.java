@@ -1,6 +1,5 @@
 package com.renj.view.listview;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.View;

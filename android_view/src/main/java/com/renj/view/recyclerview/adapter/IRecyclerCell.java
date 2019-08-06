@@ -5,6 +5,8 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.renj.view.listview.BaseListViewHolder;
+
 
 /**
  * ======================================================================
@@ -26,7 +28,7 @@ public interface IRecyclerCell<T> {
 
     /**
      * 返回 item 类型，子类必须实现。<b>并且添加到同一个 {@link RecyclerAdapter} 的不同
-     * {@link IRecyclerCell} 的 {@link #getRecyclerItemType()} 返回值必须不同</b><br/>
+     * {@link IRecyclerCell} 的 {@link #getRecyclerItemType()} 返回值必须不同，否则发生 {@link ClassCastException}</b><br/>
      * <b>作用：用于在 {@link RecyclerAdapter} 中区分不同的 item 类型。</b>
      *
      * @return item 类型值，用于区分不同的 item 类型
@@ -50,7 +52,9 @@ public interface IRecyclerCell<T> {
 
     void onDetachedFromWindow(@NonNull RecyclerViewHolder holder);
 
-    void onItemClick(@NonNull Context context, @NonNull RecyclerAdapter recyclerAdapter, @NonNull View itemView, int position, T itemData);
+    void onItemClick(@NonNull Context context, @NonNull RecyclerAdapter recyclerAdapter,
+                     @NonNull RecyclerViewHolder holder, @NonNull View itemView, int position, T itemData);
 
-    boolean onItemLongClick(@NonNull Context context, @NonNull RecyclerAdapter recyclerAdapter, @NonNull View itemView, int position, T itemData);
+    boolean onItemLongClick(@NonNull Context context, @NonNull RecyclerAdapter recyclerAdapter,
+                            @NonNull RecyclerViewHolder holder, @NonNull View itemView, int position, T itemData);
 }
