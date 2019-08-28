@@ -53,7 +53,7 @@ public class RecyclerAdapter<T extends IRecyclerCell> extends RecyclerView.Adapt
     public RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         for (T cell : cellList) {
             if (viewType == cell.getRecyclerItemType()) {
-                return cell.onCreateViewHolder(parent.getContext(), parent, viewType);
+                return cell.onCreateViewHolder(parent.getContext(), this, parent, viewType);
             }
         }
         throw new IllegalStateException("This itemViewType:" + viewType + " is not found.See if it is defined.");
@@ -76,7 +76,7 @@ public class RecyclerAdapter<T extends IRecyclerCell> extends RecyclerView.Adapt
                 return cell.onItemLongClick(itemView.getContext(), RecyclerAdapter.this, viewHolder, itemView, tmpPosition, cell.getItemData());
             }
         });
-        cellList.get(position).onBindViewHolder(viewHolder, position, cell.getItemData());
+        cellList.get(position).onBindViewHolder(this, viewHolder, position, cell.getItemData());
     }
 
     @Override
@@ -90,7 +90,7 @@ public class RecyclerAdapter<T extends IRecyclerCell> extends RecyclerView.Adapt
         if (adapterPosition < 0 || adapterPosition >= cellList.size())
             return;
 
-        cellList.get(adapterPosition).onAttachedToWindow(holder);
+        cellList.get(adapterPosition).onAttachedToWindow(this, holder);
     }
 
     @Override
@@ -99,7 +99,7 @@ public class RecyclerAdapter<T extends IRecyclerCell> extends RecyclerView.Adapt
         if (adapterPosition < 0 || adapterPosition >= cellList.size())
             return;
 
-        cellList.get(adapterPosition).onDetachedFromWindow(holder);
+        cellList.get(adapterPosition).onDetachedFromWindow(this, holder);
     }
 
 

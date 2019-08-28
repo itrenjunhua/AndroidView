@@ -35,7 +35,7 @@ public abstract class RecyclerCell<T> implements IRecyclerCell<T> {
     }
 
     @Override
-    public void onAttachedToWindow(@NonNull RecyclerViewHolder holder) {
+    public void onAttachedToWindow(@NonNull RecyclerAdapter recyclerAdapter, @NonNull RecyclerViewHolder holder) {
 
     }
 
@@ -45,7 +45,7 @@ public abstract class RecyclerCell<T> implements IRecyclerCell<T> {
      * @param holder
      */
     @Override
-    public void onDetachedFromWindow(@NonNull RecyclerViewHolder holder) {
+    public void onDetachedFromWindow(@NonNull RecyclerAdapter recyclerAdapter, @NonNull RecyclerViewHolder holder) {
 
     }
 

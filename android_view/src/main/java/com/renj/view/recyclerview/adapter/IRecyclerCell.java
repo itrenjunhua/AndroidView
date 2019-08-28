@@ -21,7 +21,7 @@ import android.view.ViewGroup;
  */
 public interface IRecyclerCell<T> {
 
-    void onAttachedToWindow(@NonNull RecyclerViewHolder holder);
+    void onAttachedToWindow(@NonNull RecyclerAdapter recyclerAdapter, @NonNull RecyclerViewHolder holder);
 
     /**
      * 返回 item 类型，子类必须实现。<b>并且添加到同一个 {@link RecyclerAdapter} 的不同
@@ -40,14 +40,14 @@ public interface IRecyclerCell<T> {
      * @param viewType 正常情况下该参数的值和 {@link #getRecyclerItemType()} 方法的返回值相等
      */
     @NonNull
-    RecyclerViewHolder onCreateViewHolder(@NonNull Context context, @NonNull ViewGroup parent, int viewType);
+    RecyclerViewHolder onCreateViewHolder(@NonNull Context context, @NonNull RecyclerAdapter recyclerAdapter, @NonNull ViewGroup parent, int viewType);
 
     /**
      * 绑定 holder，{@link RecyclerCell#itemData} 为 item 数据
      */
-    void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position, T itemData);
+    void onBindViewHolder(@NonNull RecyclerAdapter recyclerAdapter, @NonNull RecyclerViewHolder holder, int position, T itemData);
 
-    void onDetachedFromWindow(@NonNull RecyclerViewHolder holder);
+    void onDetachedFromWindow(@NonNull RecyclerAdapter recyclerAdapter, @NonNull RecyclerViewHolder holder);
 
     void onItemClick(@NonNull Context context, @NonNull RecyclerAdapter recyclerAdapter,
                      @NonNull RecyclerViewHolder holder, @NonNull View itemView, int position, T itemData);

@@ -54,7 +54,7 @@ public class BindingRecyclerAdapter<T extends IBindingRecyclerCell> extends Recy
     public BindingRecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         for (T cell : cellList) {
             if (viewType == cell.getRecyclerItemType()) {
-                return cell.onCreateViewHolder(parent.getContext(), parent, viewType);
+                return cell.onCreateViewHolder(parent.getContext(), this, parent, viewType);
             }
         }
         throw new IllegalStateException("This itemViewType:" + viewType + " is not found.See if it is defined.");
@@ -77,7 +77,7 @@ public class BindingRecyclerAdapter<T extends IBindingRecyclerCell> extends Recy
                 return cell.onItemLongClick(itemView.getContext(), BindingRecyclerAdapter.this, viewHolder, viewHolder.viewDataBinding, itemView, tmpPosition, cell.getItemData());
             }
         });
-        cellList.get(position).onBindViewHolder(viewHolder, viewHolder.viewDataBinding, position, cell.getItemData());
+        cellList.get(position).onBindViewHolder(this, viewHolder, viewHolder.viewDataBinding, position, cell.getItemData());
         viewHolder.viewDataBinding.executePendingBindings();
     }
 
@@ -92,7 +92,7 @@ public class BindingRecyclerAdapter<T extends IBindingRecyclerCell> extends Recy
         if (adapterPosition < 0 || adapterPosition >= cellList.size())
             return;
 
-        cellList.get(adapterPosition).onAttachedToWindow(holder, holder.viewDataBinding);
+        cellList.get(adapterPosition).onAttachedToWindow(this, holder, holder.viewDataBinding);
     }
 
     @Override
@@ -101,7 +101,7 @@ public class BindingRecyclerAdapter<T extends IBindingRecyclerCell> extends Recy
         if (adapterPosition < 0 || adapterPosition >= cellList.size())
             return;
 
-        cellList.get(adapterPosition).onDetachedFromWindow(holder, holder.viewDataBinding);
+        cellList.get(adapterPosition).onDetachedFromWindow(this, holder, holder.viewDataBinding);
     }
 
 

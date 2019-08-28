@@ -35,7 +35,7 @@ public abstract class BindingRecyclerCell<T, IDB extends ViewDataBinding> implem
     }
 
     @Override
-    public void onAttachedToWindow(@NonNull BindingRecyclerViewHolder holder, IDB viewDataBinding) {
+    public void onAttachedToWindow(@NonNull BindingRecyclerAdapter recyclerAdapter, @NonNull BindingRecyclerViewHolder holder, IDB viewDataBinding) {
 
     }
 
@@ -45,7 +45,7 @@ public abstract class BindingRecyclerCell<T, IDB extends ViewDataBinding> implem
      * @param holder
      */
     @Override
-    public void onDetachedFromWindow(@NonNull BindingRecyclerViewHolder holder, IDB viewDataBinding) {
+    public void onDetachedFromWindow(@NonNull BindingRecyclerAdapter recyclerAdapter, @NonNull BindingRecyclerViewHolder holder, IDB viewDataBinding) {
 
     }
 

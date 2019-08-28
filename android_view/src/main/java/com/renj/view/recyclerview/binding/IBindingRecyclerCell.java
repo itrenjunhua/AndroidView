@@ -21,7 +21,7 @@ import android.view.ViewGroup;
  * ======================================================================
  */
 public interface IBindingRecyclerCell<T, IDB extends ViewDataBinding> {
-    void onAttachedToWindow(@NonNull BindingRecyclerViewHolder holder, IDB viewDataBinding);
+    void onAttachedToWindow(@NonNull BindingRecyclerAdapter recyclerAdapter, @NonNull BindingRecyclerViewHolder holder, IDB viewDataBinding);
 
     /**
      * 返回 item 类型，子类必须实现。<b>并且添加到同一个 {@link BindingRecyclerAdapter} 的不同
@@ -40,14 +40,14 @@ public interface IBindingRecyclerCell<T, IDB extends ViewDataBinding> {
      * @param viewType 正常情况下该参数的值和 {@link #getRecyclerItemType()} 方法的返回值相等
      */
     @NonNull
-    BindingRecyclerViewHolder onCreateViewHolder(@NonNull Context context, @NonNull ViewGroup parent, int viewType);
+    BindingRecyclerViewHolder onCreateViewHolder(@NonNull Context context, @NonNull BindingRecyclerAdapter recyclerAdapter, @NonNull ViewGroup parent, int viewType);
 
     /**
      * 绑定 holder，{@link BindingRecyclerCell#itemData} 为 item 数据
      */
-    void onBindViewHolder(@NonNull BindingRecyclerViewHolder holder, IDB viewDataBinding, int position, T itemData);
+    void onBindViewHolder(@NonNull BindingRecyclerAdapter recyclerAdapter, @NonNull BindingRecyclerViewHolder holder, IDB viewDataBinding, int position, T itemData);
 
-    void onDetachedFromWindow(@NonNull BindingRecyclerViewHolder holder, IDB viewDataBinding);
+    void onDetachedFromWindow(@NonNull BindingRecyclerAdapter recyclerAdapter, @NonNull BindingRecyclerViewHolder holder, IDB viewDataBinding);
 
     void onItemClick(@NonNull Context context, @NonNull BindingRecyclerAdapter recyclerAdapter,
                      @NonNull BindingRecyclerViewHolder holder, IDB viewDataBinding,
