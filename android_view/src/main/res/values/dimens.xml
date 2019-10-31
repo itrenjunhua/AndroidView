@@ -4,6 +4,7 @@
     <dimen name="module_view_dialog_button">16sp</dimen>
     <dimen name="module_view_dialog_content">15sp</dimen>
     <dimen name="module_view_dialog_phone">18sp</dimen>
+    <dimen name="module_view_text_size">16sp</dimen>
 
     <!--刷新和加载更多高度-->
     <dimen name="module_view_refresh_header_height">48dp</dimen>

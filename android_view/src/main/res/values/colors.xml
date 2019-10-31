@@ -2,6 +2,7 @@
 <resources>
     <color name="module_view_dialog_bt_text">#0076FF</color>
     <color name="module_view_main_text">#FF333333</color>
+    <color name="module_view_gray_text">#FF999999</color>
     <color name="module_view_line_bg">#FFEBEBEB</color>
     <color name="module_view_color_white">#FFFFFFFF</color>
     <color name="module_view_main_hint">#FFCCCCCC</color>

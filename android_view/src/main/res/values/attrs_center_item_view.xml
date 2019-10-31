@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="CenterItemView">
+        <!-- 控件前padding值 -->
+        <attr name="centerItemView_viewPaddingStart" format="dimension" />
+        <!-- 控件后padding值 -->
+        <attr name="centerItemView_viewPaddingEnd" format="dimension" />
+
+        <!-- ************** icon 图标控制 ************** -->
+        <!-- 是否需要显示icon图标 -->
+        <attr name="centerItemView_iconViewIsShow" format="boolean" />
+        <!-- icon图标宽 -->
+        <attr name="centerItemView_iconWidth" format="dimension" />
+        <!-- icon图标高 -->
+        <attr name="centerItemView_iconHeight" format="dimension" />
+        <!-- icon图标图片 -->
+        <attr name="centerItemView_iconResImage" format="reference" />
+
+        <!-- ************** 前面部分 文字控制 ************** -->
+        <!-- 前面部分文字大小 -->
+        <attr name="centerItemView_nameTextSize" format="dimension" />
+        <!-- 前面部分文字颜色 -->
+        <attr name="centerItemView_nameTextColor" format="color" />
+        <!-- 前面部分文字内容 -->
+        <attr name="centerItemView_nameText" format="string" />
+        <!-- 前面部分文字与icon的间距 -->
+        <attr name="centerItemView_nameMarginStart" format="dimension" />
+
+        <!-- ************** 后面部分 文字控制 ************** -->
+        <!-- 后面部分文字是否显示 -->
+        <attr name="centerItemView_valueViewIsShow" format="boolean" />
+        <!-- 后面部分文字大小 -->
+        <attr name="centerItemView_valueTextSize" format="dimension" />
+        <!-- 后面部分文字颜色 -->
+        <attr name="centerItemView_valueTextColor" format="color" />
+        <!-- 后面部分文字内容 -->
+        <attr name="centerItemView_valueText" format="string" />
+        <!-- 后面部分文字与前面部分文字之间的间距 -->
+        <attr name="centerItemView_valueMarginStart" format="dimension" />
+
+        <!-- ************** 箭头 图标控制 ************** -->
+        <!-- 是否显示右边箭头 -->
+        <attr name="centerItemView_arrowViewIsShow" format="boolean" />
+        <!-- 右边箭头宽 -->
+        <attr name="centerItemView_arrowWidth" format="dimension" />
+        <!-- 右边箭头高 -->
+        <attr name="centerItemView_arrowHeight" format="dimension" />
+        <!-- 右边箭头的图片 -->
+        <attr name="centerItemView_arrowResImage" format="reference" />
+        <!-- 右边箭头与它前面文字之间的间距 -->
+        <attr name="centerItemView_arrowMarginStart" format="dimension" />
+    </declare-styleable>
+</resources>

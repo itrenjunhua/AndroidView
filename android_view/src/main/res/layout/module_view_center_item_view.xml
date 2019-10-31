@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/iv_center_icon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        tools:background="@mipmap/module_view_icon" />
+
+    <TextView
+        android:id="@+id/tv_center_name"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="6dp"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textColor="@color/module_view_main_text"
+        android:textSize="@dimen/module_view_text_size"
+        tools:text="设置" />
+
+    <TextView
+        android:id="@+id/tv_center_value"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginStart="6dp"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textColor="@color/module_view_gray_text"
+        android:textSize="@dimen/module_view_text_size"
+        tools:text="值" />
+
+    <ImageView
+        android:id="@+id/iv_center_arrow"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="6dp"
+        android:background="@mipmap/module_view_arrow_right" />
+
+</merge>
