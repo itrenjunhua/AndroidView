@@ -6,8 +6,10 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.support.annotation.StringRes;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -140,7 +142,264 @@ public class CenterItemView extends LinearLayout {
         // 根据 attrs 对控件的样式和内容进行设置
         this.setPadding(viewPaddingStart, 0, viewPaddingEnd, 0);
 
-        // icon
+        setIconViewInfo();   // icon
+        setNameViewInfo();   // name
+        setValueViewInfo();  // value
+        setArrowViewInfo();  // arrow
+    }
+
+    // ***********【start】 Icon信息设置部分 【start】********** //
+
+    /**
+     * 设置Icon控件信息。<b>注意：如果需要将修改的信息生效，请调用 {@link #applyModifyIconInfo()} 方法。</b>
+     *
+     * @param iconViewIsShow Icon控件是否显示
+     */
+    public CenterItemView modifyIconInfo(boolean iconViewIsShow) {
+        this.iconViewIsShow = iconViewIsShow;
+        return this;
+    }
+
+    /**
+     * 设置Icon控件信息。<b>注意：如果需要将修改的信息生效，请调用 {@link #applyModifyIconInfo()} 方法。</b>
+     *
+     * @param iconWidth  Icon控件宽
+     * @param iconHeight Icon控件高
+     */
+    public CenterItemView modifyIconInfo(int iconWidth, int iconHeight) {
+        this.iconWidth = iconWidth;
+        this.iconHeight = iconHeight;
+        return this;
+    }
+
+    /**
+     * 设置Icon控件信息。<b>注意：如果需要将修改的信息生效，请调用 {@link #applyModifyIconInfo()} 方法。</b>
+     *
+     * @param iconResImage Icon控件图片
+     */
+    public CenterItemView modifyIconInfo(Drawable iconResImage) {
+        this.iconResImage = iconResImage;
+        return this;
+    }
+
+    /**
+     * 设置Icon控件信息。<b>注意：如果需要将修改的信息生效，请调用 {@link #applyModifyIconInfo()} 方法。</b>
+     *
+     * @param iconResId Icon控件图片
+     */
+    public CenterItemView modifyIconInfo(@DrawableRes int iconResId) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            this.iconResImage = resources.getDrawable(iconResId, null);
+        } else {
+            this.iconResImage = resources.getDrawable(iconResId);
+        }
+        return this;
+    }
+
+    /**
+     * 将修改的Icon控件信息应用
+     */
+    public void applyModifyIconInfo() {
+        setIconViewInfo();
+    }
+    // ***********【end】 Icon信息设置部分 【end】********** //
+
+
+    // ***********【start】 Name信息设置部分 【start】********** //
+
+    /**
+     * 设置Name控件信息。<b>注意：如果需要将修改的信息生效，请调用 {@link #applyModifyNameInfo()} 方法。</b>
+     *
+     * @param nameText 显示内容
+     */
+    public CenterItemView modifyNameText(String nameText) {
+        this.nameText = nameText;
+        return this;
+    }
+
+    /**
+     * 设置Name控件信息。<b>注意：如果需要将修改的信息生效，请调用 {@link #applyModifyNameInfo()} 方法。</b>
+     *
+     * @param nameTextColor 文字颜色
+     */
+    public CenterItemView modifyNameTextColor(int nameTextColor) {
+        this.nameTextColor = nameTextColor;
+        return this;
+    }
+
+    /**
+     * 设置Name控件信息。<b>注意：如果需要将修改的信息生效，请调用 {@link #applyModifyNameInfo()} 方法。</b>
+     *
+     * @param nameTextSize 文字大小 单位: px
+     */
+    public CenterItemView modifyNameTextSize(int nameTextSize) {
+        this.nameTextSize = nameTextSize;
+        return this;
+    }
+
+    /**
+     * 设置Name控件信息。<b>注意：如果需要将修改的信息生效，请调用 {@link #applyModifyNameInfo()} 方法。</b>
+     *
+     * @param nameMarginStart 与icon之间的间距
+     */
+    public CenterItemView modifyNameTextMargin(int nameMarginStart) {
+        this.nameMarginStart = nameMarginStart;
+        return this;
+    }
+
+    /**
+     * 设置Value控件信息。<b>注意：如果需要将修改的信息生效，请调用 {@link #applyModifyNameInfo()} 方法。</b>
+     *
+     * @param nameTextResId 显示内容
+     */
+    public CenterItemView modifyNameText(@StringRes int nameTextResId) {
+        this.nameText = resources.getString(nameTextResId);
+        return this;
+    }
+
+    /**
+     * 将修改的Name控件信息应用
+     */
+    public void applyModifyNameInfo() {
+        setNameViewInfo();
+    }
+
+    // ***********【end】 Name信息设置部分 【end】********** //
+
+
+    // ***********【start】 Value信息设置部分 【start】********** //
+
+    /**
+     * 设置Value控件信息。<b>注意：如果需要将修改的信息生效，请调用 {@link #applyModifyValueInfo()} 方法。</b>
+     *
+     * @param valueViewIsShow 是否显示Value控件
+     */
+    public CenterItemView modifyValueShow(boolean valueViewIsShow) {
+        this.valueViewIsShow = valueViewIsShow;
+        return this;
+    }
+
+    /**
+     * 设置Value控件信息。<b>注意：如果需要将修改的信息生效，请调用 {@link #applyModifyValueInfo()} 方法。</b>
+     *
+     * @param valueText 显示内容
+     */
+    public CenterItemView modifyValueText(String valueText) {
+        this.valueText = valueText;
+        return this;
+    }
+
+    /**
+     * 设置Value控件信息。<b>注意：如果需要将修改的信息生效，请调用 {@link #applyModifyValueInfo()} 方法。</b>
+     *
+     * @param valueTextResId 显示内容
+     */
+    public CenterItemView modifyValueText(@StringRes int valueTextResId) {
+        this.valueText = resources.getString(valueTextResId);
+        return this;
+    }
+
+    /**
+     * 设置Value控件信息。<b>注意：如果需要将修改的信息生效，请调用 {@link #applyModifyValueInfo()} 方法。</b>
+     *
+     * @param valueTextColor 文字颜色
+     */
+    public CenterItemView modifyValueTextColor(int valueTextColor) {
+        this.valueTextColor = valueTextColor;
+        return this;
+    }
+
+    /**
+     * 设置Value控件信息。<b>注意：如果需要将修改的信息生效，请调用 {@link #applyModifyValueInfo()} 方法。</b>
+     *
+     * @param valueTextSize 文字大小 单位: px
+     */
+    public CenterItemView modifyValueTextSize(int valueTextSize) {
+        this.valueTextSize = valueTextSize;
+        return this;
+    }
+
+    /**
+     * 设置Value控件信息。<b>注意：如果需要将修改的信息生效，请调用 {@link #applyModifyValueInfo()} 方法。</b>
+     *
+     * @param valueMarginStart 与icon之间的间距
+     */
+    public CenterItemView modifyValueTextMargin(int valueMarginStart) {
+        this.valueMarginStart = valueMarginStart;
+        return this;
+    }
+
+    /**
+     * 将修改的Value控件信息应用
+     */
+    public void applyModifyValueInfo() {
+        setValueViewInfo();
+    }
+
+    // ***********【end】 Value信息设置部分 【end】********** //
+
+
+    // ***********【start】 箭头信息设置部分 【start】********** //
+
+    /**
+     * 设置箭头控件信息。<b>注意：如果需要将修改的信息生效，请调用 {@link #applyModifyArrowInfo()} 方法。</b>
+     *
+     * @param arrowViewIsShow 箭头控件是否显示
+     */
+    public CenterItemView modifyArrowInfo(boolean arrowViewIsShow) {
+        this.arrowViewIsShow = arrowViewIsShow;
+        return this;
+    }
+
+    /**
+     * 设置箭头控件信息。<b>注意：如果需要将修改的信息生效，请调用 {@link #applyModifyArrowInfo()} 方法。</b>
+     *
+     * @param arrowWidth  箭头控件宽
+     * @param arrowHeight 箭头控件高
+     */
+    public CenterItemView modifyArrowInfo(int arrowWidth, int arrowHeight) {
+        this.arrowWidth = arrowWidth;
+        this.arrowHeight = arrowHeight;
+        return this;
+    }
+
+    /**
+     * 设置箭头控件信息。<b>注意：如果需要将修改的信息生效，请调用 {@link #applyModifyArrowInfo()} 方法。</b>
+     *
+     * @param arrowResImage 箭头控件图片
+     */
+    public CenterItemView modifyArrowInfo(Drawable arrowResImage) {
+        this.arrowResImage = arrowResImage;
+        return this;
+    }
+
+    /**
+     * 设置Icon控件信息。<b>注意：如果需要将修改的信息生效，请调用 {@link #applyModifyArrowInfo()} 方法。</b>
+     *
+     * @param arrowResId arrow控件图片
+     */
+    public CenterItemView modifyArrowInfo(@DrawableRes int arrowResId) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            this.arrowResImage = resources.getDrawable(arrowResId, null);
+        } else {
+            this.arrowResImage = resources.getDrawable(arrowResId);
+        }
+        return this;
+    }
+
+    /**
+     * 将修改的箭头控件信息应用
+     */
+    public void applyModifyArrowInfo() {
+        setArrowViewInfo();
+    }
+
+    // ***********【end】 箭头信息设置部分 【end】********** //
+
+    /**
+     * 设置Icon控件信息
+     */
+    private void setIconViewInfo() {
         if (iconViewIsShow) {
             ivIcon.setVisibility(VISIBLE);
             LayoutParams layoutParams = new LayoutParams(iconWidth, iconHeight);
@@ -151,31 +410,43 @@ public class CenterItemView extends LinearLayout {
         } else {
             ivIcon.setVisibility(GONE);
         }
+    }
 
-        // name
+    /**
+     * 设置Name控件信息
+     */
+    private void setNameViewInfo() {
         tvName.setTextColor(nameTextColor);
         tvName.setTextSize(TypedValue.COMPLEX_UNIT_PX, nameTextSize);
         tvName.setText(nameText);
         if (iconViewIsShow) {
-            LinearLayout.LayoutParams layoutParams = (LayoutParams) tvName.getLayoutParams();
+            LayoutParams layoutParams = (LayoutParams) tvName.getLayoutParams();
             layoutParams.leftMargin = nameMarginStart;
             tvName.setLayoutParams(layoutParams);
         }
+    }
 
-        // value
+    /**
+     * 设置Value控件信息
+     */
+    private void setValueViewInfo() {
         if (valueViewIsShow) {
             tvValue.setVisibility(VISIBLE);
             tvValue.setTextColor(valueTextColor);
             tvValue.setTextSize(TypedValue.COMPLEX_UNIT_PX, valueTextSize);
             tvValue.setText(valueText);
-            LinearLayout.LayoutParams layoutParams = (LayoutParams) tvValue.getLayoutParams();
+            LayoutParams layoutParams = (LayoutParams) tvValue.getLayoutParams();
             layoutParams.leftMargin = valueMarginStart;
             tvValue.setLayoutParams(layoutParams);
         } else {
             tvValue.setVisibility(GONE);
         }
+    }
 
-        // arrow
+    /**
+     * 设置箭头控件信息
+     */
+    private void setArrowViewInfo() {
         if (arrowViewIsShow) {
             ivArrow.setVisibility(VISIBLE);
             LayoutParams layoutParams = new LayoutParams(arrowWidth, arrowHeight);
@@ -187,7 +458,6 @@ public class CenterItemView extends LinearLayout {
         } else {
             ivArrow.setVisibility(GONE);
         }
-
     }
 
     private int dip2px(float dipValue) {
