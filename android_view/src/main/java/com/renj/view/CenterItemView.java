@@ -230,10 +230,10 @@ public class CenterItemView extends LinearLayout {
     /**
      * 设置Name控件信息。<b>注意：如果需要将修改的信息生效，请调用 {@link #applyModifyNameInfo()} 方法。</b>
      *
-     * @param nameTextSize 文字大小 单位: px
+     * @param nameTextSize 文字大小 单位: sp
      */
     public CenterItemView modifyNameTextSize(int nameTextSize) {
-        this.nameTextSize = nameTextSize;
+        this.nameTextSize = sp2px(nameTextSize);
         return this;
     }
 
@@ -312,10 +312,10 @@ public class CenterItemView extends LinearLayout {
     /**
      * 设置Value控件信息。<b>注意：如果需要将修改的信息生效，请调用 {@link #applyModifyValueInfo()} 方法。</b>
      *
-     * @param valueTextSize 文字大小 单位: px
+     * @param valueTextSize 文字大小 单位: sp
      */
     public CenterItemView modifyValueTextSize(int valueTextSize) {
-        this.valueTextSize = valueTextSize;
+        this.valueTextSize = sp2px(valueTextSize);
         return this;
     }
 
