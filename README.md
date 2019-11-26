@@ -26,6 +26,7 @@ Android常用控件以及对 ListView、RecyclerView 的Adapter 的封装
     * [RefreshHeaderView](https://github.com/itrenjunhua/AndroidView/blob/master/android_view/src/main/java/com/renj/view/refresh/RefreshHeaderView.java)
     * [RefreshFooterView](https://github.com/itrenjunhua/AndroidView/blob/master/android_view/src/main/java/com/renj/view/refresh/RefreshFooterView.java)
 
+* [CenterItemView](https://github.com/itrenjunhua/AndroidView/blob/master/android_view/src/main/java/com/renj/view/CenterItemView.java)：类似个人中心条目(左侧图标+文字name+文字value+右侧箭头样式)控件
 * [CircleImageView](https://github.com/itrenjunhua/AndroidView/blob/master/android_view/src/main/java/com/renj/view/CircleImageView.java)：用于显示圆形图片控件
 * [ClearAbleEditText](https://github.com/itrenjunhua/AndroidView/blob/master/android_view/src/main/java/com/renj/view/ClearAbleEditText.java)：带清除按钮的EditText
 * [MyViewPager](https://github.com/itrenjunhua/AndroidView/blob/master/android_view/src/main/java/com/renj/view/MyViewPager.java)：可以设置是否能滑动的 ViewPager
@@ -38,5 +39,6 @@ Android常用控件以及对 ListView、RecyclerView 的Adapter 的封装
 * [XEditText](https://github.com/itrenjunhua/XEditText)：自动格式化输入内容的EditText，同时可以指定格式化的模板
 * [WaveView](https://github.com/itrenjunhua/WaveView)：Android自定义水波纹百分比效果控件
 * [MoneyView](https://github.com/itrenjunhua/MoneyView)：金额输入框，可以自定义小数点所在的位置和小数点后的小数位数
+* [ProgressView](https://github.com/itrenjunhua/ProgressView)：Android进度控件，如刻度尺效果(ScaleView)、圆形进度条(CircleProgressView)、半圆进度条(SemicircleProgressView)、半圆拖动控件(SemicircleSeekBar)
 * [PercentChartDemo](https://github.com/itrenjunhua/PercentChartDemo)：Android根据百分比填充颜色图表
 * [FloatingMenu](https://github.com/itrenjunhua/FloatingMenu)：Android 浮动菜单效果
