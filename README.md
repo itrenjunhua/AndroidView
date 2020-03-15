@@ -9,6 +9,13 @@ Android常用控件以及对 ListView、RecyclerView 的Adapter 的封装
     * [AutoLinearLayout](https://github.com/itrenjunhua/AndroidView/blob/master/android_view/src/main/java/com/renj/view/autolayout/AutoLinearLayout.java)
     * [AutoRelativeLayout](https://github.com/itrenjunhua/AndroidView/blob/master/android_view/src/main/java/com/renj/view/autolayout/AutoRelativeLayout.java)
 
+* radius包：继承至 autolayout包中控件，实现自定义圆角功能
+    * [RadiusFrameLayout](https://github.com/itrenjunhua/AndroidView/blob/master/android_view/src/main/java/com/renj/view/radius/RadiusFrameLayout.java)
+    * [RadiusImageView](https://github.com/itrenjunhua/AndroidView/blob/master/android_view/src/main/java/com/renj/view/radius/RadiusImageView.java)
+    * [RadiusLinearLayout](https://github.com/itrenjunhua/AndroidView/blob/master/android_view/src/main/java/com/renj/view/radius/RadiusLinearLayout.java)
+    * [RadiusRelativeLayout](https://github.com/itrenjunhua/AndroidView/blob/master/android_view/src/main/java/com/renj/view/radius/RadiusRelativeLayout.java)
+    * [RadiusTextView](https://github.com/itrenjunhua/AndroidView/blob/master/android_view/src/main/java/com/renj/view/radius/RadiusTextView.java)
+
 * dialog包：拨打电话确认对话框和自定义对话框
     * [CallPhoneDialog](https://github.com/itrenjunhua/AndroidView/blob/master/android_view/src/main/java/com/renj/view/dialog/CallPhoneDialog.java)
     * [CustomDialog](https://github.com/itrenjunhua/AndroidView/blob/master/android_view/src/main/java/com/renj/view/dialog/CustomDialog.java)
