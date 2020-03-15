@@ -49,11 +49,11 @@ public class AutoRelativeLayout extends RelativeLayout {
         init(context, attrs);
     }
 
-    private void init(Context context, AttributeSet attrs) {
+    protected void init(Context context, AttributeSet attrs) {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.AutoWidthHeightView);
         auto_height = typedArray.getInt(R.styleable.AutoWidthHeightView_auto_view_height, 0);
         auto_width = typedArray.getInt(R.styleable.AutoWidthHeightView_auto_view_width, 0);
-        auto_type = typedArray.getInt(R.styleable.AutoWidthHeightView_auto_view_type, 1);
+        auto_type = typedArray.getInt(R.styleable.AutoWidthHeightView_auto_view_type, -1);
         typedArray.recycle();
     }
 

@@ -10,6 +10,7 @@
         android:id="@+id/cv_item_view"
         android:layout_width="match_parent"
         android:layout_height="48dp"
+        android:background="@drawable/selector_list_gray"
         app:centerItemView_iconResImage="@mipmap/ic_launcher"
         app:centerItemView_iconViewIsShow="true"
         app:centerItemView_nameText="个人中心"
@@ -19,24 +20,81 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <com.renj.view.radius.RadiusTextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_margin="12dp"
+        android:background="@drawable/selector_list_main"
+        android:gravity="center"
+        android:text="自定义TextView，点我修改上面控件内容"
+        android:textColor="@color/module_view_color_white"
+        android:textSize="16sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cv_item_view"
+        app:round_radius="30dp" />
+
     <Button
         android:id="@+id/bt_show_dialog"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginStart="12dp"
         android:layout_marginTop="12dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="12dp"
         android:text="显示自定义对话框"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cv_item_view" />
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <com.renj.view.radius.RadiusFrameLayout
+        android:id="@+id/fl_radius"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="12dp"
+        android:background="#ff0000"
+        android:elevation="6dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bt_show_dialog"
+        app:round_radius="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="自定义控件实现圆角布局"
+            android:textColor="@color/module_view_color_white"
+            android:textSize="20sp" />
+
+    </com.renj.view.radius.RadiusFrameLayout>
 
     <com.renj.view.CircleImageView
-        android:id="@+id/imageView"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_marginTop="140dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/imageView1"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="12dp"
+        android:src="@mipmap/test"
+        app:layout_constraintEnd_toStartOf="@id/imageView2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bt_show_dialog" />
+        app:layout_constraintTop_toBottomOf="@+id/fl_radius" />
+
+    <com.renj.view.radius.RadiusImageView
+        android:id="@+id/imageView2"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/test"
+        app:auto_view_height="120"
+        app:auto_view_type="auto_view_height"
+        app:auto_view_width="240"
+        app:layout_constraintBottom_toBottomOf="@id/imageView1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/imageView1"
+        app:layout_constraintTop_toBottomOf="@+id/fl_radius"
+        app:layout_constraintTop_toTopOf="@id/imageView1"
+        app:round_radius="5dp" />
+
+
 </android.support.constraint.ConstraintLayout>

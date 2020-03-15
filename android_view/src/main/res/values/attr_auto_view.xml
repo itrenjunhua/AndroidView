@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--通过宽高比例自动适配的控件属性-->
+    <declare-styleable name="AutoWidthHeightView">
+        <attr name="auto_view_width" format="integer" />
+        <attr name="auto_view_height" format="integer" />
+        <attr name="auto_view_type" format="enum">
+            <enum name="auto_view_width" value="0" />
+            <enum name="auto_view_height" value="1" />
+        </attr>
+    </declare-styleable>
+</resources>

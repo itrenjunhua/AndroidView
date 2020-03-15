@@ -460,6 +460,18 @@ public class CenterItemView extends LinearLayout {
         }
     }
 
+    /**
+     * 将修改的所有控件信息应用，调用该方法相当于同时调用了 {@link #applyModifyIconInfo()}、
+     * {@link #applyModifyNameInfo()}、{@link #applyModifyValueInfo()}、
+     * {@link #applyModifyArrowInfo()} 四个方法
+     */
+    public void applyModifyAllInfo() {
+        applyModifyIconInfo();
+        applyModifyNameInfo();
+        applyModifyValueInfo();
+        applyModifyArrowInfo();
+    }
+
     private int dip2px(float dipValue) {
         float scale = resources.getDisplayMetrics().density;
         return (int) (dipValue * scale + 0.5f);

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <!--类似个人中心条目(左侧图标+文字name+文字value+右侧箭头样式)控件属性-->
     <declare-styleable name="CenterItemView">
         <!-- 控件前padding值 -->
         <attr name="centerItemView_viewPaddingStart" format="dimension" />

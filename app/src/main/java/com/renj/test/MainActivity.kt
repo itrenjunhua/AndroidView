@@ -4,15 +4,15 @@ import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import com.renj.view.CenterItemView
-import com.renj.view.CircleImageView
 import com.renj.view.dialog.CustomDialog
 
 internal class MainActivity : AppCompatActivity() {
     private lateinit var showDialog: Button
     private lateinit var centerItemView: CenterItemView
-    private lateinit var imageView: CircleImageView
+    private lateinit var textView: TextView
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,14 +20,19 @@ internal class MainActivity : AppCompatActivity() {
 
         showDialog = findViewById(R.id.bt_show_dialog)
         centerItemView = findViewById(R.id.cv_item_view)
-        imageView = findViewById(R.id.imageView)
+        textView = findViewById(R.id.textView)
 
-        centerItemView.modifyNameText("修改后内容")
-                .modifyNameTextColor(Color.parseColor("#FF0000"))
-                .applyModifyNameInfo() // 应用修改信息
+        textView.setOnClickListener {
+            centerItemView.modifyNameText("修改后内容")
+                    .modifyNameTextColor(Color.parseColor("#FF0000"))
+                    .modifyValueText("RenJunhua")
+                    .applyModifyAllInfo() // 应用修改信息
+        }
 
+        centerItemView.setOnClickListener {
+            Toast.makeText(this@MainActivity, "点击", Toast.LENGTH_SHORT).show()
+        }
 
-        imageView.setImageResource(R.mipmap.test)
         showDialog.setOnClickListener {
             CustomDialog.newInstance(this@MainActivity)
                     .isShowTitle(true)
