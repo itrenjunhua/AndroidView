@@ -40,46 +40,43 @@ public class AutoLinearLayout extends LinearLayout {
 
     public AutoLinearLayout(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(attrs);
+        init(context, attrs);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public AutoLinearLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        init(attrs);
+        init(context, attrs);
     }
 
-    private void init(AttributeSet attrs) {
-        TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.AutoWidthHeightView);
-
+    private void init(Context context, AttributeSet attrs) {
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.AutoWidthHeightView);
         auto_height = typedArray.getInt(R.styleable.AutoWidthHeightView_auto_view_height, 0);
         auto_width = typedArray.getInt(R.styleable.AutoWidthHeightView_auto_view_width, 0);
         auto_type = typedArray.getInt(R.styleable.AutoWidthHeightView_auto_view_type, 1);
-
         typedArray.recycle();
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setMeasuredDimension(getDefaultSize(0, widthMeasureSpec),
-                getDefaultSize(0, heightMeasureSpec));
-
-        measureChildren(widthMeasureSpec, heightMeasureSpec);
-
-        int viewWidth = getMeasuredWidth();
-        int viewHeight = getMeasuredHeight();
-        switch (auto_type) {
-            case 0: // 动态计算出控件宽
-                viewWidth = (int) (viewHeight * ((auto_width * 1.0f) / auto_height));
-                break;
-            case 1: // 动态计算出控件高
-                viewHeight = (int) (viewWidth * ((auto_height * 1.0f) / auto_width));
-                break;
-            default:
-                break;
+        if (auto_type == -1) {
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        } else {
+            setMeasuredDimension(getDefaultSize(0, widthMeasureSpec), getDefaultSize(0, heightMeasureSpec));
+            measureChildren(widthMeasureSpec, heightMeasureSpec);
+            int viewWidth = getMeasuredWidth();
+            int viewHeight = getMeasuredHeight();
+            switch (auto_type) {
+                case 0: // 动态计算出控件宽
+                    viewWidth = (int) (viewHeight * ((auto_width * 1.0f) / auto_height));
+                    break;
+                case 1: // 动态计算出控件高
+                    viewHeight = (int) (viewWidth * ((auto_height * 1.0f) / auto_width));
+                    break;
+            }
+            widthMeasureSpec = MeasureSpec.makeMeasureSpec(viewWidth, MeasureSpec.EXACTLY);
+            heightMeasureSpec = MeasureSpec.makeMeasureSpec(viewHeight, MeasureSpec.EXACTLY);
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         }
-        widthMeasureSpec = MeasureSpec.makeMeasureSpec(viewWidth, MeasureSpec.EXACTLY);
-        heightMeasureSpec = MeasureSpec.makeMeasureSpec(viewHeight, MeasureSpec.EXACTLY);
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 }
