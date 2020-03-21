@@ -3,10 +3,14 @@ package com.renj.view.radius;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Outline;
+import android.graphics.Paint;
+import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.Path;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewOutlineProvider;
 
 import com.renj.view.R;
 import com.renj.view.autolayout.AutoImageView;
@@ -18,7 +22,8 @@ import com.renj.view.autolayout.AutoImageView;
  * <p>
  * 创建时间：2020-03-15   19:11
  * <p>
- * 描述：指定圆角的 ImageView
+ * 描述：指定圆角的 ImageView<br/>
+ * <b>注意：使用的裁剪画布形式，目前该api不支持抗锯齿效果</b>
  * <p>
  * 修订历史：
  * <p>
@@ -63,11 +68,13 @@ public class RadiusImageView extends AutoImageView {
         leftBottomRadius = roundArray.getDimensionPixelOffset(R.styleable.RoundView_round_leftBottom_radius, DEFAULT_RADIUS);
         roundArray.recycle();
 
+        // 角度边长不能小于0
+        if (DEFAULT_RADIUS >= radius) radius = DEFAULT_RADIUS;
         //如果四个角的值没有设置，那么就使用通用的radius的值。
-        if (DEFAULT_RADIUS == leftTopRadius) leftTopRadius = radius;
-        if (DEFAULT_RADIUS == rightTopRadius) rightTopRadius = radius;
-        if (DEFAULT_RADIUS == rightBottomRadius) rightBottomRadius = radius;
-        if (DEFAULT_RADIUS == leftBottomRadius) leftBottomRadius = radius;
+        if (DEFAULT_RADIUS >= leftTopRadius) leftTopRadius = radius;
+        if (DEFAULT_RADIUS >= rightTopRadius) rightTopRadius = radius;
+        if (DEFAULT_RADIUS >= rightBottomRadius) rightBottomRadius = radius;
+        if (DEFAULT_RADIUS >= leftBottomRadius) leftBottomRadius = radius;
     }
 
     @Override
@@ -83,30 +90,22 @@ public class RadiusImageView extends AutoImageView {
                 rightTopRadius <= DEFAULT_RADIUS && rightBottomRadius <= DEFAULT_RADIUS) {
             super.onDraw(canvas);
         } else {
-            // int maxLeft = Math.max(leftTopRadius, leftBottomRadius);
-            // int maxRight = Math.max(rightTopRadius, rightBottomRadius);
-            // int minWidth = maxLeft + maxRight;
-            // int maxTop = Math.max(leftTopRadius, rightTopRadius);
-            // int maxBottom = Math.max(leftBottomRadius, rightBottomRadius);
-            // int minHeight = maxTop + maxBottom;
-            // if (width >= minWidth && height > minHeight) {
-            Path path = new Path();
-            //四个角：右上，右下，左下，左上
-            path.moveTo(leftTopRadius, 0);
-            path.lineTo(width - rightTopRadius, 0);
-            path.quadTo(width, 0, width, rightTopRadius);
-
-            path.lineTo(width, height - rightBottomRadius);
-            path.quadTo(width, height, width - rightBottomRadius, height);
-
-            path.lineTo(leftBottomRadius, height);
-            path.quadTo(0, height, 0, height - leftBottomRadius);
-
-            path.lineTo(0, leftTopRadius);
-            path.quadTo(0, 0, leftTopRadius, 0);
-
+            canvas.setDrawFilter(new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG));
+            // 修正四个角的各个方向的长度，防止产生非 凸起路径(ConvexPath)，导致outline.setConvexPath()方法失败
+            // 所以4个圆角，应该有8个长度(每个圆角都由两个长度构成)
+            final Path path = RadiusUtils.calculateRadiusPath(leftTopRadius, rightTopRadius, leftBottomRadius, rightBottomRadius, width, height);
             canvas.clipPath(path);
-            // }
+
+            // 手动设置阴影，使用裁剪后的路径，防止阴影直角矩形显示
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                setOutlineProvider(new ViewOutlineProvider() {
+                    @Override
+                    public void getOutline(View view, Outline outline) {
+                        outline.setConvexPath(path);
+                    }
+                });
+                setClipToOutline(true);
+            }
             super.onDraw(canvas);
         }
     }

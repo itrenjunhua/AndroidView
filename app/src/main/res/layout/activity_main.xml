@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/color_white"
     tools:context=".MainActivity">
 
     <com.renj.view.CenterItemView
@@ -22,10 +23,11 @@
 
     <com.renj.view.radius.RadiusTextView
         android:id="@+id/textView"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_width="320dp"
+        android:layout_height="50dp"
         android:layout_margin="12dp"
         android:background="@drawable/selector_list_main"
+        android:elevation="5dp"
         android:gravity="center"
         android:text="自定义TextView，点我修改上面控件内容"
         android:textColor="@color/module_view_color_white"
@@ -33,7 +35,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cv_item_view"
-        app:round_radius="30dp" />
+        app:round_radius="5dp" />
 
     <Button
         android:id="@+id/bt_show_dialog"
@@ -58,7 +60,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/bt_show_dialog"
-        app:round_radius="10dp">
+        app:round_radius="25dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -84,6 +86,7 @@
         android:id="@+id/imageView2"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
+        android:elevation="3dp"
         android:scaleType="centerCrop"
         android:src="@mipmap/test"
         app:auto_view_height="120"
@@ -94,7 +97,21 @@
         app:layout_constraintStart_toEndOf="@id/imageView1"
         app:layout_constraintTop_toBottomOf="@+id/fl_radius"
         app:layout_constraintTop_toTopOf="@id/imageView1"
-        app:round_radius="5dp" />
+        app:round_radius="20dp" />
+
+    <TextView
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/shape_radius30_red"
+        android:elevation="5dp"
+        android:gravity="center"
+        android:text="使用shape设置背景"
+        android:textColor="@color/color_white"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
 
 </android.support.constraint.ConstraintLayout>

@@ -29,7 +29,7 @@ Android常用控件以及对 ListView、RecyclerView 的Adapter 的封装
 
     **详情查看[RecyclerView 控件使用](https://github.com/itrenjunhua/RRecyclerView)**
 
-* refresh包：基于[刷新控件SwipeToLoadLayout]( https://github.com/Aspsine/SwipeToLoadLayout)定义的刷新和加载更多控件
+* refresh包：基于[刷新控件SwipeToLoadLayout]( https://github.com/Aspsine/SwipeToLoadLayout)定义的刷新和加载更多控件，如果不使用该刷新控件，建议将该包删除，并且去除build文件中对SwipeToLoadLayout框架的依赖
     * [RefreshHeaderView](https://github.com/itrenjunhua/AndroidView/blob/master/android_view/src/main/java/com/renj/view/refresh/RefreshHeaderView.java)
     * [RefreshFooterView](https://github.com/itrenjunhua/AndroidView/blob/master/android_view/src/main/java/com/renj/view/refresh/RefreshFooterView.java)
 
