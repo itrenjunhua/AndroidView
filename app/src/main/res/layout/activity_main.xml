@@ -94,21 +94,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView2"
+        app:sm_layout_bottom_elevation="6dp"
         app:sm_layout_color="@color/color_red"
-        app:sm_layout_elevation="5dp"
-        app:sm_layout_radius="5dp"
-        app:sm_layout_size="20"
+        app:sm_layout_left_elevation="1dp"
+        app:sm_layout_radius="10dp"
+        app:sm_layout_right_elevation="1dp"
+        app:sm_layout_size="15"
+        app:sm_layout_top_elevation="1dp"
         app:sm_layout_type="sm_layout_shadow">
 
-        <TextView
-            android:id="@+id/tv_shadow"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/color_red"
-            android:gravity="center"
-            android:text="增加红色阴影效果"
-            android:textColor="@color/color_white"
-            android:textSize="15sp" />
+<!--        <com.renj.view.radius.RadiusTextView-->
+<!--            android:id="@+id/tv_shadow"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:background="@color/color_red"-->
+<!--            android:gravity="center"-->
+<!--            android:text="增加红色阴影效果"-->
+<!--            android:textColor="@color/color_white"-->
+<!--            android:textSize="15sp"-->
+<!--            app:radius_all="5dp" />-->
     </com.renj.view.ShadowMaskLayout>
 
     <com.renj.view.ShadowMaskLayout
@@ -120,9 +124,8 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sm_shadow"
         app:sm_layout_color="@color/color_red"
-        app:sm_layout_elevation="10dp"
-        app:sm_layout_radius="10dp"
-        app:sm_layout_size="20"
+        app:sm_layout_elevation="4dp"
+        app:sm_layout_size="12"
         app:sm_layout_type="sm_layout_mask">
 
         <TextView

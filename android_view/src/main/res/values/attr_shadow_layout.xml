@@ -1,27 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- 阴影或者发光效果布局属性 -->
     <declare-styleable name="ShadowMaskLayout">
+        <!-- 阴影或者发光 颜色 -->
         <attr name="sm_layout_color" format="color" />
+        <!-- 阴影或者发光 大小，值越大，扩散范围越大 -->
         <attr name="sm_layout_size" format="integer" />
 
+        <!-- 阴影或者发光 的圆角度数 -->
         <attr name="sm_layout_radius" format="dimension" />
         <attr name="sm_layout_leftTop_radius" format="dimension" />
         <attr name="sm_layout_rightTop_radius" format="dimension" />
         <attr name="sm_layout_rightBottom_radius" format="dimension" />
         <attr name="sm_layout_leftBottom_radius" format="dimension" />
 
+        <!-- 阴影或者发光 各个方向的深度 -->
         <attr name="sm_layout_elevation" format="dimension" />
         <attr name="sm_layout_left_elevation" format="dimension" />
-        <attr name="sm_layout_Top_elevation" format="dimension" />
+        <attr name="sm_layout_top_elevation" format="dimension" />
         <attr name="sm_layout_right_elevation" format="dimension" />
         <attr name="sm_layout_bottom_elevation" format="dimension" />
 
+        <!-- 阴影或者发光 类型。sm_layout_shadow：阴影类型 sm_layout_mask：发光类型 -->
         <attr name="sm_layout_type" format="enum">
             <enum name="sm_layout_shadow" value="0" />
             <enum name="sm_layout_mask" value="1" />
         </attr>
-
-        <attr name="sm_layout_shadow_dx" format="dimension"/>
-        <attr name="sm_layout_shadow_dy" format="dimension"/>
     </declare-styleable>
 </resources>
