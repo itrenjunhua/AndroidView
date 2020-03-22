@@ -60,12 +60,12 @@ public class RadiusImageView extends AutoImageView {
         super.init(context, attrs);
         if (Build.VERSION.SDK_INT < 18) setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         // 读取圆角配置
-        TypedArray roundArray = context.obtainStyledAttributes(attrs, R.styleable.RoundView);
-        radius = roundArray.getDimensionPixelOffset(R.styleable.RoundView_round_radius, DEFAULT_RADIUS);
-        leftTopRadius = roundArray.getDimensionPixelOffset(R.styleable.RoundView_round_leftTop_radius, DEFAULT_RADIUS);
-        rightTopRadius = roundArray.getDimensionPixelOffset(R.styleable.RoundView_round_rightTop_radius, DEFAULT_RADIUS);
-        rightBottomRadius = roundArray.getDimensionPixelOffset(R.styleable.RoundView_round_rightBottom_radius, DEFAULT_RADIUS);
-        leftBottomRadius = roundArray.getDimensionPixelOffset(R.styleable.RoundView_round_leftBottom_radius, DEFAULT_RADIUS);
+        TypedArray roundArray = context.obtainStyledAttributes(attrs, R.styleable.RadiusView);
+        radius = roundArray.getDimensionPixelOffset(R.styleable.RadiusView_radius_all, DEFAULT_RADIUS);
+        leftTopRadius = roundArray.getDimensionPixelOffset(R.styleable.RadiusView_radius_leftTop, DEFAULT_RADIUS);
+        rightTopRadius = roundArray.getDimensionPixelOffset(R.styleable.RadiusView_radius_rightTop, DEFAULT_RADIUS);
+        rightBottomRadius = roundArray.getDimensionPixelOffset(R.styleable.RadiusView_radius_rightBottom, DEFAULT_RADIUS);
+        leftBottomRadius = roundArray.getDimensionPixelOffset(R.styleable.RadiusView_radius_leftBottom, DEFAULT_RADIUS);
         roundArray.recycle();
 
         // 角度边长不能小于0

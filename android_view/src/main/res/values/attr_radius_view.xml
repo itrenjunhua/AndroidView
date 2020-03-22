@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--圆角控件属性-->
-    <declare-styleable name="RoundView">
-        <attr name="round_radius" format="dimension" />
-        <attr name="round_leftTop_radius" format="dimension" />
-        <attr name="round_rightTop_radius" format="dimension" />
-        <attr name="round_rightBottom_radius" format="dimension" />
-        <attr name="round_leftBottom_radius" format="dimension" />
+    <declare-styleable name="RadiusView">
+        <attr name="radius_all" format="dimension" />
+        <attr name="radius_leftTop" format="dimension" />
+        <attr name="radius_rightTop" format="dimension" />
+        <attr name="radius_rightBottom" format="dimension" />
+        <attr name="radius_leftBottom" format="dimension" />
     </declare-styleable>
 </resources>
