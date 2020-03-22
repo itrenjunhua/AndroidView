@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ShadowMaskLayout">
+        <attr name="sm_layout_color" format="color" />
+        <attr name="sm_layout_size" format="integer" />
+
+        <attr name="sm_layout_radius" format="dimension" />
+        <attr name="sm_layout_leftTop_radius" format="dimension" />
+        <attr name="sm_layout_rightTop_radius" format="dimension" />
+        <attr name="sm_layout_rightBottom_radius" format="dimension" />
+        <attr name="sm_layout_leftBottom_radius" format="dimension" />
+
+        <attr name="sm_layout_elevation" format="dimension" />
+        <attr name="sm_layout_left_elevation" format="dimension" />
+        <attr name="sm_layout_Top_elevation" format="dimension" />
+        <attr name="sm_layout_right_elevation" format="dimension" />
+        <attr name="sm_layout_bottom_elevation" format="dimension" />
+
+        <attr name="sm_layout_type" format="enum">
+            <enum name="sm_layout_shadow" value="0" />
+            <enum name="sm_layout_mask" value="1" />
+        </attr>
+
+        <attr name="sm_layout_shadow_dx" format="dimension"/>
+        <attr name="sm_layout_shadow_dy" format="dimension"/>
+    </declare-styleable>
+</resources>

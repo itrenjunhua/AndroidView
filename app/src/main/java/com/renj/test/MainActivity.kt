@@ -3,14 +3,14 @@ package com.renj.test
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import com.renj.view.CenterItemView
 import com.renj.view.dialog.CustomDialog
+import com.renj.view.radius.RadiusFrameLayout
 
 internal class MainActivity : AppCompatActivity() {
-    private lateinit var showDialog: Button
+    private lateinit var showDialog: RadiusFrameLayout
     private lateinit var centerItemView: CenterItemView
     private lateinit var textView: TextView
 
@@ -18,7 +18,7 @@ internal class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        showDialog = findViewById(R.id.bt_show_dialog)
+        showDialog = findViewById(R.id.fl_radius)
         centerItemView = findViewById(R.id.cv_item_view)
         textView = findViewById(R.id.textView)
 
@@ -33,24 +33,24 @@ internal class MainActivity : AppCompatActivity() {
             Toast.makeText(this@MainActivity, "点击", Toast.LENGTH_SHORT).show()
         }
 
-        showDialog.setOnClickListener {
-            CustomDialog.newInstance(this@MainActivity)
-                    .isShowTitle(true)
-                    .setTitleContent("自定义标题")
-                    .setDialogContent("自定义对话框内容")
-                    .setCancelText("取消")
-                    .setConfirmText("确定")
-                    .setCanceledOnTouchOut(false)
-                    .setCustomDialogListener(object : CustomDialog.CustomDialogListener {
-                        override fun onCancel(dialog: CustomDialog) {
-                            Toast.makeText(this@MainActivity, "取消", Toast.LENGTH_SHORT).show()
-                        }
+        var customDialogListener = CustomDialog.newInstance(this@MainActivity)
+                .isShowTitle(true)
+                .setTitleContent("自定义标题")
+                .setDialogContent("自定义对话框内容")
+                .setCancelText("取消")
+                .setConfirmText("确定")
+                .setCanceledOnTouchOut(false)
+                .setCustomDialogListener(object : CustomDialog.CustomDialogListener {
+                    override fun onCancel(dialog: CustomDialog) {
+                        Toast.makeText(this@MainActivity, "取消", Toast.LENGTH_SHORT).show()
+                    }
 
-                        override fun onConfirm(dialog: CustomDialog) {
-                            Toast.makeText(this@MainActivity, "确定", Toast.LENGTH_SHORT).show()
-                        }
-                    })
-                    .show()
+                    override fun onConfirm(dialog: CustomDialog) {
+                        Toast.makeText(this@MainActivity, "确定", Toast.LENGTH_SHORT).show()
+                    }
+                })
+        showDialog.setOnClickListener {
+            customDialogListener.show()
         }
     }
 }
