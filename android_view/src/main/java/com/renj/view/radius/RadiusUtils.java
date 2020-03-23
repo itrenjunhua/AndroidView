@@ -17,7 +17,8 @@ import android.graphics.Path;
  */
 public class RadiusUtils {
     /**
-     * 根据四个圆角大小和矩形边长计算出真实的4四个圆角的8条边长后的Path
+     * 根据四个圆角大小和矩形边长计算出真实的4四个圆角的8条边长后的 ConvexPath<br/>
+     * <b>ConvexPath： 圆角矩形的圆角度数大于矩形的高度或宽度(上下圆角度数和大于高度或者左右圆角度数大于高度，那么就不是 ConvexPath 了)</b>
      *
      * @param leftTopRadius     左上角圆角大小
      * @param rightTopRadius    右上角圆角大小

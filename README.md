@@ -36,7 +36,9 @@ Android常用控件以及对 ListView、RecyclerView 的Adapter 的封装
 * [CenterItemView](https://github.com/itrenjunhua/AndroidView/blob/master/android_view/src/main/java/com/renj/view/CenterItemView.java)：类似个人中心条目(左侧图标+文字name+文字value+右侧箭头样式)控件
 * [CircleImageView](https://github.com/itrenjunhua/AndroidView/blob/master/android_view/src/main/java/com/renj/view/CircleImageView.java)：用于显示圆形图片控件
 * [ClearAbleEditText](https://github.com/itrenjunhua/AndroidView/blob/master/android_view/src/main/java/com/renj/view/ClearAbleEditText.java)：带清除按钮的EditText
+* [LineView](https://github.com/itrenjunhua/AndroidView/blob/master/android_view/src/main/java/com/renj/view/LineView.java)：画线控件(水平/垂直实线/虚线)
 * [MyViewPager](https://github.com/itrenjunhua/AndroidView/blob/master/android_view/src/main/java/com/renj/view/MyViewPager.java)：可以设置是否能滑动的 ViewPager
+* [ShadowMaskLayout](https://github.com/itrenjunhua/AndroidView/blob/master/android_view/src/main/java/com/renj/view/ShadowMaskLayout.java)：阴影或者发光效果布局
 * [SimpleTextWatcher](https://github.com/itrenjunhua/AndroidView/blob/master/android_view/src/main/java/com/renj/view/SimpleTextWatcher.java)：对 TextWatcher 接口的空实现，选择方法重写，避免重写三个方法
 
 ## 其他控件代码仓库

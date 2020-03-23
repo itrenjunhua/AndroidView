@@ -21,7 +21,7 @@ import java.lang.annotation.RetentionPolicy;
  * <p>
  * 创建时间：2020-03-23   1:40
  * <p>
- * 描述：
+ * 描述：画线控件(水平/垂直实线/虚线)
  * <p>
  * 修订历史：
  * <p>
