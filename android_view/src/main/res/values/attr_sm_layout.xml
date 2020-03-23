@@ -9,17 +9,21 @@
 
         <!-- 阴影或者发光 的圆角度数 -->
         <attr name="sm_layout_radius" format="dimension" />
-        <attr name="sm_layout_leftTop_radius" format="dimension" />
-        <attr name="sm_layout_rightTop_radius" format="dimension" />
-        <attr name="sm_layout_rightBottom_radius" format="dimension" />
-        <attr name="sm_layout_leftBottom_radius" format="dimension" />
+        <attr name="sm_layout_radius_leftTop" format="dimension" />
+        <attr name="sm_layout_radius_rightTop" format="dimension" />
+        <attr name="sm_layout_radius_rightBottom" format="dimension" />
+        <attr name="sm_layout_radius_leftBottom" format="dimension" />
 
         <!-- 阴影或者发光 各个方向的深度 -->
         <attr name="sm_layout_elevation" format="dimension" />
-        <attr name="sm_layout_left_elevation" format="dimension" />
-        <attr name="sm_layout_top_elevation" format="dimension" />
-        <attr name="sm_layout_right_elevation" format="dimension" />
-        <attr name="sm_layout_bottom_elevation" format="dimension" />
+        <attr name="sm_layout_elevation_left" format="dimension" />
+        <attr name="sm_layout_elevation_top" format="dimension" />
+        <attr name="sm_layout_elevation_right" format="dimension" />
+        <attr name="sm_layout_elevation_bottom" format="dimension" />
+
+        <!-- 阴影效果特有属性，偏移 -->
+        <attr name="sm_layout_shadow_dx" format="dimension" />
+        <attr name="sm_layout_shadow_dy" format="dimension" />
 
         <!-- 阴影或者发光 类型。sm_layout_shadow：阴影类型 sm_layout_mask：发光类型 -->
         <attr name="sm_layout_type" format="enum">

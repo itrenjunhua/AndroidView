@@ -47,6 +47,8 @@ public class ShadowMaskLayout extends FrameLayout {
     private int rightTopRadius;
     private int rightBottomRadius;
     private int leftBottomRadius;
+    // 阴影效果特有属性，偏移
+    private int shadowDx, shadowDy;
 
     // 控件的宽和高
     private int width, height;
@@ -77,16 +79,20 @@ public class ShadowMaskLayout extends FrameLayout {
 
             // 取各个方向的大小
             int elevation = typedArray.getDimensionPixelSize(R.styleable.ShadowMaskLayout_sm_layout_elevation, 0);
-            paddingLeft = typedArray.getDimensionPixelSize(R.styleable.ShadowMaskLayout_sm_layout_left_elevation, elevation);
-            paddingTop = typedArray.getDimensionPixelSize(R.styleable.ShadowMaskLayout_sm_layout_top_elevation, elevation);
-            paddingRight = typedArray.getDimensionPixelSize(R.styleable.ShadowMaskLayout_sm_layout_right_elevation, elevation);
-            paddingBottom = typedArray.getDimensionPixelSize(R.styleable.ShadowMaskLayout_sm_layout_bottom_elevation, elevation);
+            paddingLeft = typedArray.getDimensionPixelSize(R.styleable.ShadowMaskLayout_sm_layout_elevation_left, elevation);
+            paddingTop = typedArray.getDimensionPixelSize(R.styleable.ShadowMaskLayout_sm_layout_elevation_top, elevation);
+            paddingRight = typedArray.getDimensionPixelSize(R.styleable.ShadowMaskLayout_sm_layout_elevation_right, elevation);
+            paddingBottom = typedArray.getDimensionPixelSize(R.styleable.ShadowMaskLayout_sm_layout_elevation_bottom, elevation);
 
             int radius = typedArray.getDimensionPixelSize(R.styleable.ShadowMaskLayout_sm_layout_radius, 0);
-            leftTopRadius = typedArray.getDimensionPixelSize(R.styleable.ShadowMaskLayout_sm_layout_leftTop_radius, radius);
-            rightTopRadius = typedArray.getDimensionPixelSize(R.styleable.ShadowMaskLayout_sm_layout_rightTop_radius, radius);
-            rightBottomRadius = typedArray.getDimensionPixelSize(R.styleable.ShadowMaskLayout_sm_layout_rightBottom_radius, radius);
-            leftBottomRadius = typedArray.getDimensionPixelSize(R.styleable.ShadowMaskLayout_sm_layout_leftBottom_radius, radius);
+            leftTopRadius = typedArray.getDimensionPixelSize(R.styleable.ShadowMaskLayout_sm_layout_radius_leftTop, radius);
+            rightTopRadius = typedArray.getDimensionPixelSize(R.styleable.ShadowMaskLayout_sm_layout_radius_rightTop, radius);
+            rightBottomRadius = typedArray.getDimensionPixelSize(R.styleable.ShadowMaskLayout_sm_layout_radius_rightBottom, radius);
+            leftBottomRadius = typedArray.getDimensionPixelSize(R.styleable.ShadowMaskLayout_sm_layout_radius_leftBottom, radius);
+
+            // 阴影效果特有属性，偏移
+            shadowDx = typedArray.getDimensionPixelSize(R.styleable.ShadowMaskLayout_sm_layout_shadow_dx, 0);
+            shadowDy = typedArray.getDimensionPixelSize(R.styleable.ShadowMaskLayout_sm_layout_shadow_dy, 0);
 
             typedArray.recycle();
         }
@@ -151,7 +157,7 @@ public class ShadowMaskLayout extends FrameLayout {
      */
     private void drawShadowLayer(Canvas canvas) {
         paint.setColor(shadowMaskColor);
-        paint.setShadowLayer(shadowMaskSize, 0, 0, shadowMaskColor);
+        paint.setShadowLayer(shadowMaskSize, shadowDx, shadowDy, shadowMaskColor);
         Path path = calculateRadiusPath(leftTopRadius, rightTopRadius, leftBottomRadius, rightBottomRadius,
                 width - paddingLeft - paddingRight, height - paddingTop - paddingBottom);
         path.offset(paddingLeft, paddingTop); // 对路径进行偏移，修改绘制位置

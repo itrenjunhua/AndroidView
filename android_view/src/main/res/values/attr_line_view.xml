@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="LineView">
+        <!--线颜色-->
+        <attr name="line_color" format="color" />
+        <!--线宽度，不设置使用控件宽度-->
+        <attr name="line_width" format="dimension" />
+        <!--线宽度-->
+        <attr name="line_dashWidth" format="dimension" />
+        <!--线间隔-->
+        <attr name="line_dashGap" format="dimension" />
+        <!--线方向 垂直/水平-->
+        <attr name="line_orientation" format="enum">
+            <!--水平-->
+            <enum name="horizontal" value="0" />
+            <!--垂直-->
+            <enum name="vertical" value="1" />
+        </attr>
+        <!--线类型 实线/虚线-->
+        <attr name="line_type" format="enum">
+            <!--水平线-->
+            <enum name="solid" value="0" />
+            <!--垂直线-->
+            <enum name="dash" value="1" />
+        </attr>
+    </declare-styleable>
+</resources>

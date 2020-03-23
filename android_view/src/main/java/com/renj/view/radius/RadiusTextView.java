@@ -59,11 +59,11 @@ public class RadiusTextView extends AppCompatTextView {
         if (Build.VERSION.SDK_INT < 18) setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         // 读取圆角配置
         TypedArray roundArray = context.obtainStyledAttributes(attrs, R.styleable.RadiusView);
-        radius = roundArray.getDimensionPixelOffset(R.styleable.RadiusView_radius_all, DEFAULT_RADIUS);
-        leftTopRadius = roundArray.getDimensionPixelOffset(R.styleable.RadiusView_radius_leftTop, DEFAULT_RADIUS);
-        rightTopRadius = roundArray.getDimensionPixelOffset(R.styleable.RadiusView_radius_rightTop, DEFAULT_RADIUS);
-        rightBottomRadius = roundArray.getDimensionPixelOffset(R.styleable.RadiusView_radius_rightBottom, DEFAULT_RADIUS);
-        leftBottomRadius = roundArray.getDimensionPixelOffset(R.styleable.RadiusView_radius_leftBottom, DEFAULT_RADIUS);
+        radius = roundArray.getDimensionPixelSize(R.styleable.RadiusView_radius_all, DEFAULT_RADIUS);
+        leftTopRadius = roundArray.getDimensionPixelSize(R.styleable.RadiusView_radius_leftTop, DEFAULT_RADIUS);
+        rightTopRadius = roundArray.getDimensionPixelSize(R.styleable.RadiusView_radius_rightTop, DEFAULT_RADIUS);
+        rightBottomRadius = roundArray.getDimensionPixelSize(R.styleable.RadiusView_radius_rightBottom, DEFAULT_RADIUS);
+        leftBottomRadius = roundArray.getDimensionPixelSize(R.styleable.RadiusView_radius_leftBottom, DEFAULT_RADIUS);
         roundArray.recycle();
 
         // 角度边长不能小于0

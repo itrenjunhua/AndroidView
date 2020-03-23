@@ -2,11 +2,18 @@ package com.renj.view.radius;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapShader;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Outline;
 import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.Path;
+import android.graphics.Shader;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
@@ -22,8 +29,7 @@ import com.renj.view.autolayout.AutoImageView;
  * <p>
  * 创建时间：2020-03-15   19:11
  * <p>
- * 描述：指定圆角的 ImageView<br/>
- * <b>注意：使用的裁剪画布形式，目前该api不支持抗锯齿效果</b>
+ * 描述：指定圆角的 ImageView
  * <p>
  * 修订历史：
  * <p>
@@ -32,6 +38,8 @@ import com.renj.view.autolayout.AutoImageView;
 public class RadiusImageView extends AutoImageView {
     // 默认没有圆角
     private final int DEFAULT_RADIUS = 0;
+    private static final Bitmap.Config BITMAP_CONFIG = Bitmap.Config.ARGB_8888;
+    private static final int COLOR_DRAWABLE_DIMENSION = 2;
 
     // 控件宽高
     private int width, height;
@@ -41,6 +49,12 @@ public class RadiusImageView extends AutoImageView {
     private int rightTopRadius;
     private int rightBottomRadius;
     private int leftBottomRadius;
+
+    private Paint paint;
+    // 3x3 矩阵，主要用于缩小放大
+    private Matrix matrix;
+    //渲染图像，使用图像为绘制图形着色
+    private BitmapShader bitmapShader;
 
     public RadiusImageView(Context context) {
         this(context, null);
@@ -61,11 +75,11 @@ public class RadiusImageView extends AutoImageView {
         if (Build.VERSION.SDK_INT < 18) setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         // 读取圆角配置
         TypedArray roundArray = context.obtainStyledAttributes(attrs, R.styleable.RadiusView);
-        radius = roundArray.getDimensionPixelOffset(R.styleable.RadiusView_radius_all, DEFAULT_RADIUS);
-        leftTopRadius = roundArray.getDimensionPixelOffset(R.styleable.RadiusView_radius_leftTop, DEFAULT_RADIUS);
-        rightTopRadius = roundArray.getDimensionPixelOffset(R.styleable.RadiusView_radius_rightTop, DEFAULT_RADIUS);
-        rightBottomRadius = roundArray.getDimensionPixelOffset(R.styleable.RadiusView_radius_rightBottom, DEFAULT_RADIUS);
-        leftBottomRadius = roundArray.getDimensionPixelOffset(R.styleable.RadiusView_radius_leftBottom, DEFAULT_RADIUS);
+        radius = roundArray.getDimensionPixelSize(R.styleable.RadiusView_radius_all, DEFAULT_RADIUS);
+        leftTopRadius = roundArray.getDimensionPixelSize(R.styleable.RadiusView_radius_leftTop, DEFAULT_RADIUS);
+        rightTopRadius = roundArray.getDimensionPixelSize(R.styleable.RadiusView_radius_rightTop, DEFAULT_RADIUS);
+        rightBottomRadius = roundArray.getDimensionPixelSize(R.styleable.RadiusView_radius_rightBottom, DEFAULT_RADIUS);
+        leftBottomRadius = roundArray.getDimensionPixelSize(R.styleable.RadiusView_radius_leftBottom, DEFAULT_RADIUS);
         roundArray.recycle();
 
         // 角度边长不能小于0
@@ -75,6 +89,9 @@ public class RadiusImageView extends AutoImageView {
         if (DEFAULT_RADIUS >= rightTopRadius) rightTopRadius = radius;
         if (DEFAULT_RADIUS >= rightBottomRadius) rightBottomRadius = radius;
         if (DEFAULT_RADIUS >= leftBottomRadius) leftBottomRadius = radius;
+
+        matrix = new Matrix();
+        paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     }
 
     @Override
@@ -91,10 +108,23 @@ public class RadiusImageView extends AutoImageView {
             super.onDraw(canvas);
         } else {
             canvas.setDrawFilter(new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG));
-            // 修正四个角的各个方向的长度，防止产生非 凸起路径(ConvexPath)，导致outline.setConvexPath()方法失败
+            // 修正四个角的各个方向的长度，防止产生非 凸起路径(ConvexPath)
             // 所以4个圆角，应该有8个长度(每个圆角都由两个长度构成)
             final Path path = RadiusUtils.calculateRadiusPath(leftTopRadius, rightTopRadius, leftBottomRadius, rightBottomRadius, width, height);
-            canvas.clipPath(path);
+            Bitmap bitmap = getBitmapFromDrawable(getDrawable());
+            bitmapShader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+            float scale = 1.0f;
+            if (!(bitmap.getWidth() == getWidth() && bitmap.getHeight() == getHeight())) {
+                // 如果图片的宽或者高与view的宽高不匹配，计算出需要缩放的比例；缩放后的图片的宽高，一定要大于我们view的宽高；所以我们这里取大值；
+                scale = Math.max(getWidth() * 1.0f / bitmap.getWidth(), getHeight() * 1.0f / bitmap.getHeight());
+            }
+            // shader的变换矩阵，这里主要用于放大或者缩小
+            matrix.setScale(scale, scale);
+            // 设置变换矩阵
+            bitmapShader.setLocalMatrix(matrix);
+            // 设置shader
+            paint.setShader(bitmapShader);
+            canvas.drawPath(path, paint);
 
             // 手动设置阴影，使用裁剪后的路径，防止阴影直角矩形显示
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -106,7 +136,34 @@ public class RadiusImageView extends AutoImageView {
                 });
                 setClipToOutline(true);
             }
-            super.onDraw(canvas);
+        }
+    }
+
+    private Bitmap getBitmapFromDrawable(Drawable drawable) {
+        if (drawable == null) {
+            return null;
+        }
+
+        if (drawable instanceof BitmapDrawable) {
+            return ((BitmapDrawable) drawable).getBitmap();
+        }
+
+        try {
+            Bitmap bitmap;
+
+            if (drawable instanceof ColorDrawable) {
+                bitmap = Bitmap.createBitmap(COLOR_DRAWABLE_DIMENSION, COLOR_DRAWABLE_DIMENSION, BITMAP_CONFIG);
+            } else {
+                bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), BITMAP_CONFIG);
+            }
+
+            Canvas canvas = new Canvas(bitmap);
+            drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+            drawable.draw(canvas);
+            return bitmap;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }
