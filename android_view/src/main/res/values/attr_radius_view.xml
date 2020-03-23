@@ -2,10 +2,15 @@
 <resources>
     <!--圆角控件属性-->
     <declare-styleable name="RadiusView">
+        <!--圆角属性-->
         <attr name="radius_all" format="dimension" />
         <attr name="radius_leftTop" format="dimension" />
         <attr name="radius_rightTop" format="dimension" />
         <attr name="radius_rightBottom" format="dimension" />
         <attr name="radius_leftBottom" format="dimension" />
+
+        <!--边框属性-->
+        <attr name="solid_width" format="dimension" />
+        <attr name="solid_color" format="color" />
     </declare-styleable>
 </resources>

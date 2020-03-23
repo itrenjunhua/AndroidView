@@ -5,11 +5,13 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Outline;
 import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.Path;
+import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -56,6 +58,10 @@ public class RadiusImageView extends AutoImageView {
     //渲染图像，使用图像为绘制图形着色
     private BitmapShader bitmapShader;
 
+    // 边框参数
+    private int solidWidth;
+    private int solidColor;
+
     public RadiusImageView(Context context) {
         this(context, null);
     }
@@ -74,13 +80,16 @@ public class RadiusImageView extends AutoImageView {
         super.init(context, attrs);
         if (Build.VERSION.SDK_INT < 18) setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         // 读取圆角配置
-        TypedArray roundArray = context.obtainStyledAttributes(attrs, R.styleable.RadiusView);
-        radius = roundArray.getDimensionPixelSize(R.styleable.RadiusView_radius_all, DEFAULT_RADIUS);
-        leftTopRadius = roundArray.getDimensionPixelSize(R.styleable.RadiusView_radius_leftTop, DEFAULT_RADIUS);
-        rightTopRadius = roundArray.getDimensionPixelSize(R.styleable.RadiusView_radius_rightTop, DEFAULT_RADIUS);
-        rightBottomRadius = roundArray.getDimensionPixelSize(R.styleable.RadiusView_radius_rightBottom, DEFAULT_RADIUS);
-        leftBottomRadius = roundArray.getDimensionPixelSize(R.styleable.RadiusView_radius_leftBottom, DEFAULT_RADIUS);
-        roundArray.recycle();
+        TypedArray radiusType = context.obtainStyledAttributes(attrs, R.styleable.RadiusView);
+        radius = radiusType.getDimensionPixelSize(R.styleable.RadiusView_radius_all, DEFAULT_RADIUS);
+        leftTopRadius = radiusType.getDimensionPixelSize(R.styleable.RadiusView_radius_leftTop, DEFAULT_RADIUS);
+        rightTopRadius = radiusType.getDimensionPixelSize(R.styleable.RadiusView_radius_rightTop, DEFAULT_RADIUS);
+        rightBottomRadius = radiusType.getDimensionPixelSize(R.styleable.RadiusView_radius_rightBottom, DEFAULT_RADIUS);
+        leftBottomRadius = radiusType.getDimensionPixelSize(R.styleable.RadiusView_radius_leftBottom, DEFAULT_RADIUS);
+
+        solidWidth = radiusType.getDimensionPixelSize(R.styleable.RadiusView_solid_width, 0);
+        solidColor = radiusType.getColor(R.styleable.RadiusView_solid_color, Color.TRANSPARENT);
+        radiusType.recycle();
 
         // 角度边长不能小于0
         if (DEFAULT_RADIUS >= radius) radius = DEFAULT_RADIUS;
@@ -106,6 +115,17 @@ public class RadiusImageView extends AutoImageView {
         if (leftTopRadius <= DEFAULT_RADIUS && leftBottomRadius <= DEFAULT_RADIUS &&
                 rightTopRadius <= DEFAULT_RADIUS && rightBottomRadius <= DEFAULT_RADIUS) {
             super.onDraw(canvas);
+
+            // 边框
+            if (solidWidth > 0) {
+                paint.reset();
+                paint.setAntiAlias(true);
+                paint.setStyle(Paint.Style.STROKE);
+                paint.setColor(solidColor);
+                paint.setStrokeWidth(solidWidth);
+                RectF rectF = new RectF(0, 0, width, height);
+                canvas.drawRect(rectF, paint);
+            }
         } else {
             canvas.setDrawFilter(new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG));
             // 修正四个角的各个方向的长度，防止产生非 凸起路径(ConvexPath)
@@ -135,6 +155,16 @@ public class RadiusImageView extends AutoImageView {
                     }
                 });
                 setClipToOutline(true);
+            }
+
+            // 边框
+            if (solidWidth > 0) {
+                paint.reset();
+                paint.setAntiAlias(true);
+                paint.setStyle(Paint.Style.STROKE);
+                paint.setColor(solidColor);
+                paint.setStrokeWidth(solidWidth);
+                canvas.drawPath(path, paint);
             }
         }
     }
