@@ -111,9 +111,21 @@ public class RadiusFrameLayout extends AutoFrameLayout { // 默认没有圆角
         width = getWidth();
         height = getHeight();
 
-        Path path = RadiusUtils.calculateRadiusBgPath(leftTopRadius, rightTopRadius, leftBottomRadius, rightBottomRadius, width, height);
+        final Path path = RadiusUtils.calculateRadiusBgPath(leftTopRadius, rightTopRadius, leftBottomRadius, rightBottomRadius, width, height);
         radiusDrawable = new RadiusDrawable(colorStateList, path);
         setBackground(radiusDrawable);
+
+        // 手动设置阴影，使用裁剪后的路径，防止阴影直角矩形显示
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            setElevation(getElevation());
+            setOutlineProvider(new ViewOutlineProvider() {
+                @Override
+                public void getOutline(View view, Outline outline) {
+                    outline.setConvexPath(path);
+                }
+            });
+            setClipToOutline(true);
+        }
     }
 
     @Override
@@ -123,24 +135,9 @@ public class RadiusFrameLayout extends AutoFrameLayout { // 默认没有圆角
             super.draw(canvas);
 
             // 边框
-            if (solidWidth > 0) {
+            if (solidWidth > 0)
                 canvas.drawRect(RadiusUtils.calculateRectSocketPath(width, height, solidWidth), paint);
-            }
         } else {
-            // 该api不支持抗锯齿效果
-            // canvas.clipPath(path);
-
-            // 手动设置阴影，使用裁剪后的路径，防止阴影直角矩形显示
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                setOutlineProvider(new ViewOutlineProvider() {
-                    @Override
-                    public void getOutline(View view, Outline outline) {
-                        Path path = RadiusUtils.calculateRadiusBgPath(leftTopRadius, rightTopRadius, leftBottomRadius, rightBottomRadius, width, height);
-                        outline.setConvexPath(path);
-                    }
-                });
-                setClipToOutline(true);
-            }
             super.draw(canvas);
 
             // 边框

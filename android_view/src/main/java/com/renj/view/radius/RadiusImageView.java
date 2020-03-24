@@ -50,7 +50,10 @@ public class RadiusImageView extends AutoImageView {
     private int rightBottomRadius;
     private int leftBottomRadius;
 
-    private Paint paint;
+    // 画图片的画笔
+    private Paint bitmapPaint;
+    // 画边框的画笔
+    private Paint solidPaint;
     // 3x3 矩阵，主要用于缩小放大
     private Matrix matrix;
     //渲染图像，使用图像为绘制图形着色
@@ -98,7 +101,14 @@ public class RadiusImageView extends AutoImageView {
         if (DEFAULT_RADIUS >= leftBottomRadius) leftBottomRadius = radius;
 
         matrix = new Matrix();
-        paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        bitmapPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        bitmapPaint.setDither(true);
+
+        solidPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        solidPaint.setDither(true);
+        solidPaint.setStyle(Paint.Style.STROKE);
+        solidPaint.setColor(solidColor);
+        solidPaint.setStrokeWidth(solidWidth);
     }
 
     @Override
@@ -106,6 +116,19 @@ public class RadiusImageView extends AutoImageView {
         super.onLayout(changed, left, top, right, bottom);
         width = getWidth();
         height = getHeight();
+
+        // 手动设置阴影，使用裁剪后的路径，防止阴影直角矩形显示
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            setElevation(getElevation());
+            setOutlineProvider(new ViewOutlineProvider() {
+                @Override
+                public void getOutline(View view, Outline outline) {
+                    Path path = RadiusUtils.calculateRadiusBgPath(leftTopRadius, rightTopRadius, leftBottomRadius, rightBottomRadius, width, height);
+                    outline.setConvexPath(path);
+                }
+            });
+            setClipToOutline(true);
+        }
     }
 
     @Override
@@ -115,17 +138,10 @@ public class RadiusImageView extends AutoImageView {
             super.onDraw(canvas);
 
             // 边框
-            if (solidWidth > 0) {
-                paint.reset();
-                paint.setDither(true);
-                paint.setAntiAlias(true);
-                paint.setStyle(Paint.Style.STROKE);
-                paint.setColor(solidColor);
-                paint.setStrokeWidth(solidWidth);
-                canvas.drawRect(RadiusUtils.calculateRectSocketPath(width, height, solidWidth), paint);
-            }
+            if (solidWidth > 0)
+                canvas.drawRect(RadiusUtils.calculateRectSocketPath(width, height, solidWidth), solidPaint);
         } else {
-            final Path path = RadiusUtils.calculateRadiusBgPath(leftTopRadius, rightTopRadius, leftBottomRadius, rightBottomRadius, width, height);
+            Path path = RadiusUtils.calculateRadiusBgPath(leftTopRadius, rightTopRadius, leftBottomRadius, rightBottomRadius, width, height);
             Bitmap bitmap = getBitmapFromDrawable(getDrawable());
             bitmapShader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
             float scale = 1.0f;
@@ -138,31 +154,14 @@ public class RadiusImageView extends AutoImageView {
             // 设置变换矩阵
             bitmapShader.setLocalMatrix(matrix);
             // 设置shader
-            paint.setShader(bitmapShader);
-            canvas.drawPath(path, paint);
-
-            // 手动设置阴影，使用裁剪后的路径，防止阴影直角矩形显示
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                setOutlineProvider(new ViewOutlineProvider() {
-                    @Override
-                    public void getOutline(View view, Outline outline) {
-                        outline.setConvexPath(path);
-                    }
-                });
-                setClipToOutline(true);
-            }
+            bitmapPaint.setShader(bitmapShader);
+            canvas.drawPath(path, bitmapPaint);
 
             // 边框
             if (solidWidth > 0) {
-                paint.reset();
-                paint.setDither(true);
-                paint.setAntiAlias(true);
-                paint.setStyle(Paint.Style.STROKE);
-                paint.setColor(solidColor);
-                paint.setStrokeWidth(solidWidth);
                 Path[] result = RadiusUtils.calculateRadiusSocketPath(leftTopRadius, rightTopRadius, leftBottomRadius, rightBottomRadius, width, height, solidWidth);
-                canvas.drawPath(result[0], paint);
-                canvas.drawPath(result[1], paint);
+                canvas.drawPath(result[0], solidPaint);
+                canvas.drawPath(result[1], solidPaint);
             }
         }
     }
