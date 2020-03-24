@@ -1,6 +1,7 @@
 package com.renj.view.radius;
 
 import android.graphics.Path;
+import android.graphics.RectF;
 
 /**
  * ======================================================================
@@ -16,8 +17,10 @@ import android.graphics.Path;
  * ======================================================================
  */
 public class RadiusUtils {
+
+
     /**
-     * 根据四个圆角大小和矩形边长计算出真实的4四个圆角的8条边长后的 ConvexPath<br/>
+     * 计算带圆角边框的背景路径 非ConvexPath<br/>
      * <b>ConvexPath： 圆角矩形的圆角度数大于矩形的高度或宽度(上下圆角度数和大于高度或者左右圆角度数大于高度，那么就不是 ConvexPath 了)</b>
      *
      * @param leftTopRadius     左上角圆角大小
@@ -28,14 +31,13 @@ public class RadiusUtils {
      * @param height            矩形高
      * @return 结果Path
      */
-    public static Path calculateRadiusPath(int leftTopRadius, int rightTopRadius,
-                                           int leftBottomRadius, int rightBottomRadius,
-                                           int width, int height) {
-
-        int leftTopRadiusLeft, leftTopRadiusTop; // 左上角
-        int leftBottomRadiusLeft, leftBottomRadiusBottom; // 左下角
-        int rightTopRadiusRight, rightTopRadiusTop; // 右上角
-        int rightBottomRadiusRight, rightBottomRadiusBottom; // 右下角
+    public static Path calculateRadiusBgPath(int leftTopRadius, int rightTopRadius,
+                                             int leftBottomRadius, int rightBottomRadius,
+                                             int width, int height) {
+        float leftTopRadiusLeft, leftTopRadiusTop; // 左上角
+        float leftBottomRadiusLeft, leftBottomRadiusBottom; // 左下角
+        float rightTopRadiusRight, rightTopRadiusTop; // 右上角
+        float rightBottomRadiusRight, rightBottomRadiusBottom; // 右下角
         int[] sideTop = calculateRadiusLength(leftTopRadius, rightTopRadius, width); // 上同边
         int[] sideBottom = calculateRadiusLength(leftBottomRadius, rightBottomRadius, width); // 下同边
         int[] sideLeft = calculateRadiusLength(leftTopRadius, leftBottomRadius, height); // 左同边
@@ -50,7 +52,7 @@ public class RadiusUtils {
         rightBottomRadiusRight = sideRight[1];
 
         Path resultPath = new Path();
-        //四个角：右上，右下，左下，左上
+        // 四个角：右上，右下，左下，左上
         resultPath.moveTo(leftTopRadiusTop, 0);
         resultPath.lineTo(width - rightTopRadiusTop, 0);
         resultPath.quadTo(width, 0, width, rightTopRadiusRight);
@@ -64,6 +66,90 @@ public class RadiusUtils {
         resultPath.lineTo(0, leftTopRadiusLeft);
         resultPath.quadTo(0, 0, leftTopRadiusTop, 0);
         return resultPath;
+    }
+
+    /**
+     * 计算直角矩形边框路径
+     *
+     * @param width      宽
+     * @param height     高
+     * @param solidWidth 线宽
+     * @return
+     */
+    public static RectF calculateRectSocketPath(int width, int height, int solidWidth) {
+        float newWidth = solidWidth / 2.0f;
+        return new RectF(newWidth, newWidth, width - newWidth, height - newWidth);
+    }
+
+    /**
+     * 计算圆角边框的边框路径 非ConvexPath<br/>
+     * <b>ConvexPath： 圆角矩形的圆角度数大于矩形的高度或宽度(上下圆角度数和大于高度或者左右圆角度数大于高度，那么就不是 ConvexPath 了)</b>
+     *
+     * @param leftTopRadius     左上角圆角大小
+     * @param rightTopRadius    右上角圆角大小
+     * @param leftBottomRadius  左下角圆角大小
+     * @param rightBottomRadius 右下角圆角大小
+     * @param width             矩形宽
+     * @param height            矩形高
+     * @param solidWidth        边框宽度
+     * @return 结果Path 数组，path[0]：四条边 path[1]：四个角的路径
+     */
+    public static Path[] calculateRadiusSocketPath(int leftTopRadius, int rightTopRadius,
+                                                   int leftBottomRadius, int rightBottomRadius,
+                                                   int width, int height, int solidWidth) {
+        Path[] result = new Path[2];
+        Path solidPath = new Path();
+        Path radiusPath = new Path();
+
+        float leftTopRadiusLeft, leftTopRadiusTop; // 左上角
+        float leftBottomRadiusLeft, leftBottomRadiusBottom; // 左下角
+        float rightTopRadiusRight, rightTopRadiusTop; // 右上角
+        float rightBottomRadiusRight, rightBottomRadiusBottom; // 右下角
+        int[] sideTop = calculateRadiusLength(leftTopRadius, rightTopRadius, width); // 上同边
+        int[] sideBottom = calculateRadiusLength(leftBottomRadius, rightBottomRadius, width); // 下同边
+        int[] sideLeft = calculateRadiusLength(leftTopRadius, leftBottomRadius, height); // 左同边
+        int[] sideRight = calculateRadiusLength(rightTopRadius, rightBottomRadius, height); // 右同边
+        leftTopRadiusTop = sideTop[0];
+        rightTopRadiusTop = sideTop[1];
+        leftBottomRadiusBottom = sideBottom[0];
+        rightBottomRadiusBottom = sideBottom[1];
+        leftTopRadiusLeft = sideLeft[0];
+        leftBottomRadiusLeft = sideLeft[1];
+        rightTopRadiusRight = sideRight[0];
+        rightBottomRadiusRight = sideRight[1];
+
+        // 对位置进行偏移线宽的一半，因为直接画线的话，有一半是画到画布外的，
+        // 但是因为有圆角，圆角后面还有画布，导致角的线宽比边的线宽要宽
+        float newWidth = solidWidth / 2.0f;
+        // 四条边路径
+        solidPath.moveTo(leftTopRadiusTop, newWidth);
+        solidPath.lineTo(width - rightTopRadiusTop, newWidth);
+
+        solidPath.moveTo(width - newWidth, rightTopRadiusRight);
+        solidPath.lineTo(width - newWidth, height - rightBottomRadiusRight);
+
+        solidPath.moveTo(width - rightBottomRadiusBottom, height - newWidth);
+        solidPath.lineTo(leftBottomRadiusBottom, height - newWidth);
+
+        solidPath.moveTo(newWidth, height - leftBottomRadiusLeft);
+        solidPath.lineTo(newWidth, leftTopRadiusLeft);
+
+        // 四个角路径
+        radiusPath.moveTo(newWidth, leftTopRadiusLeft);
+        radiusPath.quadTo(newWidth, newWidth, leftTopRadiusTop, newWidth);
+
+        radiusPath.moveTo(width - rightTopRadiusTop, newWidth);
+        radiusPath.quadTo(width, newWidth, width - newWidth, rightTopRadiusRight);
+
+        radiusPath.moveTo(width - newWidth, height - rightBottomRadiusRight);
+        radiusPath.quadTo(width - newWidth, height - newWidth, width - rightBottomRadiusBottom, height - newWidth);
+
+        radiusPath.moveTo(leftBottomRadiusBottom, height - newWidth);
+        radiusPath.quadTo(newWidth, height - newWidth, newWidth, height - leftBottomRadiusLeft);
+
+        result[0] = solidPath;
+        result[1] = radiusPath;
+        return result;
     }
 
 

@@ -6,6 +6,7 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
+import android.os.Build;
 import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -54,6 +55,7 @@ public class LineView extends View {
 
     public LineView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        if (Build.VERSION.SDK_INT < 18) setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.LineView, defStyleAttr, 0);
         lineWidth = typedArray.getDimension(R.styleable.LineView_line_width, 0);

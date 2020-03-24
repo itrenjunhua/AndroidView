@@ -57,31 +57,31 @@
         android:layout_width="320dp"
         android:layout_height="50dp"
         android:layout_margin="12dp"
-        android:background="@drawable/selector_list_main"
         android:elevation="5dp"
         android:gravity="center"
         android:text="自定义TextView，点我修改上面控件内容"
         android:textColor="@color/module_view_color_white"
         android:textSize="16sp"
+        app:background_color="@color/selected_main"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/line_horizontal"
-        app:radius_all="5dp"
+        app:radius_all="25dp"
         app:solid_color="#00ff00"
-        app:solid_width="2dp" />
+        app:solid_width="1dp" />
 
     <com.renj.view.radius.RadiusFrameLayout
         android:id="@+id/fl_radius"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_margin="12dp"
-        android:background="@drawable/selector_list_main"
         android:elevation="6dp"
+        app:background_color="@color/selected_main"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textView"
-        app:radius_all="20dp"
-        app:solid_color="#0000ff"
+        app:radius_all="8dp"
+        app:solid_color="@color/color_blue"
         app:solid_width="2dp">
 
         <TextView
@@ -145,11 +145,11 @@
             android:id="@+id/tv_shadow"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/color_red"
             android:gravity="center"
             android:text="增加红色阴影效果"
             android:textColor="@color/color_white"
             android:textSize="15sp"
+            app:background_color="@color/color_red"
             app:radius_all="5dp"
             app:solid_color="@color/color_red"
             app:solid_width="2dp" />

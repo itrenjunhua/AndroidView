@@ -1,14 +1,13 @@
 package com.renj.view.radius;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Outline;
 import android.graphics.Paint;
-import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.Path;
-import android.graphics.RectF;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
@@ -27,7 +26,6 @@ import com.renj.view.autolayout.AutoLinearLayout;
  * 创建时间：2020-03-16   0:13
  * <p>
  * 描述：指定圆角的 LinearLayout<br/>
- * <b>注意：使用的裁剪画布【canvas.clipPath(path)】形式，目前该api不支持抗锯齿效果</b>
  * <p>
  * 修订历史：
  * <p>
@@ -49,6 +47,8 @@ public class RadiusLinearLayout extends AutoLinearLayout {
     private int solidColor;
 
     private Paint paint;
+    private RadiusDrawable radiusDrawable;
+    private ColorStateList colorStateList;
 
     public RadiusLinearLayout(Context context) {
         this(context, null, 0);
@@ -72,6 +72,7 @@ public class RadiusLinearLayout extends AutoLinearLayout {
     @Override
     protected void init(Context context, AttributeSet attrs) {
         super.init(context, attrs);
+        setWillNotDraw(false);
         if (Build.VERSION.SDK_INT < 18) setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         // 读取圆角配置
         TypedArray radiusType = context.obtainStyledAttributes(attrs, R.styleable.RadiusView);
@@ -83,6 +84,11 @@ public class RadiusLinearLayout extends AutoLinearLayout {
 
         solidWidth = radiusType.getDimensionPixelSize(R.styleable.RadiusView_solid_width, 0);
         solidColor = radiusType.getColor(R.styleable.RadiusView_solid_color, Color.TRANSPARENT);
+
+        colorStateList = radiusType.getColorStateList(R.styleable.RadiusView_background_color);
+        if (colorStateList == null) {
+            colorStateList = ColorStateList.valueOf(0xFF000000);
+        }
         radiusType.recycle();
 
         // 角度边长不能小于0
@@ -94,7 +100,10 @@ public class RadiusLinearLayout extends AutoLinearLayout {
         if (DEFAULT_RADIUS >= leftBottomRadius) leftBottomRadius = radius;
 
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setDither(true);
         paint.setStyle(Paint.Style.STROKE);
+        paint.setColor(solidColor);
+        paint.setStrokeWidth(solidWidth);
     }
 
     @Override
@@ -102,6 +111,10 @@ public class RadiusLinearLayout extends AutoLinearLayout {
         super.onLayout(changed, left, top, right, bottom);
         width = getWidth();
         height = getHeight();
+
+        Path path = RadiusUtils.calculateRadiusBgPath(leftTopRadius, rightTopRadius, leftBottomRadius, rightBottomRadius, width, height);
+        radiusDrawable = new RadiusDrawable(colorStateList, path);
+        setBackground(radiusDrawable);
     }
 
     @Override
@@ -112,23 +125,18 @@ public class RadiusLinearLayout extends AutoLinearLayout {
 
             // 边框
             if (solidWidth > 0) {
-                paint.setColor(solidColor);
-                paint.setStrokeWidth(solidWidth);
-                RectF rectF = new RectF(0, 0, width, height);
-                canvas.drawRect(rectF, paint);
+                canvas.drawRect(RadiusUtils.calculateRectSocketPath(width, height, solidWidth), paint);
             }
         } else {
-            canvas.setDrawFilter(new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG));
-            // 修正四个角的各个方向的长度，防止产生非 凸起路径(ConvexPath)，导致outline.setConvexPath()方法失败
-            // 所以4个圆角，应该有8个长度(每个圆角都由两个长度构成)
-            final Path path = RadiusUtils.calculateRadiusPath(leftTopRadius, rightTopRadius, leftBottomRadius, rightBottomRadius, width, height);
-            canvas.clipPath(path);
+            // 该api不支持抗锯齿效果
+            // canvas.clipPath(path);
 
             // 手动设置阴影，使用裁剪后的路径，防止阴影直角矩形显示
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 setOutlineProvider(new ViewOutlineProvider() {
                     @Override
                     public void getOutline(View view, Outline outline) {
+                        Path path = RadiusUtils.calculateRadiusBgPath(leftTopRadius, rightTopRadius, leftBottomRadius, rightBottomRadius, width, height);
                         outline.setConvexPath(path);
                     }
                 });
@@ -138,9 +146,9 @@ public class RadiusLinearLayout extends AutoLinearLayout {
 
             // 边框
             if (solidWidth > 0) {
-                paint.setColor(solidColor);
-                paint.setStrokeWidth(solidWidth);
-                canvas.drawPath(path, paint);
+                Path[] result = RadiusUtils.calculateRadiusSocketPath(leftTopRadius, rightTopRadius, leftBottomRadius, rightBottomRadius, width, height, solidWidth);
+                canvas.drawPath(result[0], paint);
+                canvas.drawPath(result[1], paint);
             }
         }
     }

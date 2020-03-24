@@ -9,9 +9,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Outline;
 import android.graphics.Paint;
-import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.Path;
-import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -119,18 +117,15 @@ public class RadiusImageView extends AutoImageView {
             // 边框
             if (solidWidth > 0) {
                 paint.reset();
+                paint.setDither(true);
                 paint.setAntiAlias(true);
                 paint.setStyle(Paint.Style.STROKE);
                 paint.setColor(solidColor);
                 paint.setStrokeWidth(solidWidth);
-                RectF rectF = new RectF(0, 0, width, height);
-                canvas.drawRect(rectF, paint);
+                canvas.drawRect(RadiusUtils.calculateRectSocketPath(width, height, solidWidth), paint);
             }
         } else {
-            canvas.setDrawFilter(new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG));
-            // 修正四个角的各个方向的长度，防止产生非 凸起路径(ConvexPath)
-            // 所以4个圆角，应该有8个长度(每个圆角都由两个长度构成)
-            final Path path = RadiusUtils.calculateRadiusPath(leftTopRadius, rightTopRadius, leftBottomRadius, rightBottomRadius, width, height);
+            final Path path = RadiusUtils.calculateRadiusBgPath(leftTopRadius, rightTopRadius, leftBottomRadius, rightBottomRadius, width, height);
             Bitmap bitmap = getBitmapFromDrawable(getDrawable());
             bitmapShader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
             float scale = 1.0f;
@@ -160,11 +155,14 @@ public class RadiusImageView extends AutoImageView {
             // 边框
             if (solidWidth > 0) {
                 paint.reset();
+                paint.setDither(true);
                 paint.setAntiAlias(true);
                 paint.setStyle(Paint.Style.STROKE);
                 paint.setColor(solidColor);
                 paint.setStrokeWidth(solidWidth);
-                canvas.drawPath(path, paint);
+                Path[] result = RadiusUtils.calculateRadiusSocketPath(leftTopRadius, rightTopRadius, leftBottomRadius, rightBottomRadius, width, height, solidWidth);
+                canvas.drawPath(result[0], paint);
+                canvas.drawPath(result[1], paint);
             }
         }
     }

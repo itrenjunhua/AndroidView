@@ -12,5 +12,7 @@
         <!--边框属性-->
         <attr name="solid_width" format="dimension" />
         <attr name="solid_color" format="color" />
+        <!--背景颜色，系统的background将会失效-->
+        <attr name="background_color" format="color" />
     </declare-styleable>
 </resources>
