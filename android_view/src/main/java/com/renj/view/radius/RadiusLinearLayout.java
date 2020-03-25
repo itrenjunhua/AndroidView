@@ -3,11 +3,8 @@ package com.renj.view.radius;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
-import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Outline;
-import android.graphics.Paint;
 import android.graphics.Path;
 import android.os.Build;
 import android.support.annotation.Nullable;
@@ -18,6 +15,10 @@ import android.view.ViewOutlineProvider;
 
 import com.renj.view.R;
 import com.renj.view.autolayout.AutoLinearLayout;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * ======================================================================
@@ -47,11 +48,11 @@ public class RadiusLinearLayout extends AutoLinearLayout {
     private int leftBottomRadius;
     // 边框参数
     private int solidWidth;
-    private int solidColor;
+    private ColorStateList solidColorStateList;
+    private DashPathEffect dashPathEffect = null;
 
-    private Paint paint;
     private RadiusDrawable radiusDrawable;
-    private ColorStateList colorStateList;
+    private ColorStateList bgColorStateList;
 
     public RadiusLinearLayout(Context context) {
         this(context, null, 0);
@@ -86,16 +87,13 @@ public class RadiusLinearLayout extends AutoLinearLayout {
         leftBottomRadius = radiusType.getDimensionPixelSize(R.styleable.RadiusView_radius_leftBottom, DEFAULT_RADIUS);
 
         solidWidth = radiusType.getDimensionPixelSize(R.styleable.RadiusView_solid_width, 0);
-        solidColor = radiusType.getColor(R.styleable.RadiusView_solid_color, Color.TRANSPARENT);
+        solidColorStateList = radiusType.getColorStateList(R.styleable.RadiusView_solid_color);
 
         int dashGap = radiusType.getDimensionPixelSize(R.styleable.RadiusView_solid_dashGap, 0);
         int dashWidth = radiusType.getDimensionPixelSize(R.styleable.RadiusView_solid_dashWidth, 0);
         int lineType = radiusType.getInt(R.styleable.RadiusView_solid_type, TYPE_SOLID);
 
-        colorStateList = radiusType.getColorStateList(R.styleable.RadiusView_background_color);
-        if (colorStateList == null) {
-            colorStateList = ColorStateList.valueOf(0xFF000000);
-        }
+        bgColorStateList = radiusType.getColorStateList(R.styleable.RadiusView_background_color);
         radiusType.recycle();
 
         // 角度边长不能小于0
@@ -106,31 +104,19 @@ public class RadiusLinearLayout extends AutoLinearLayout {
         if (DEFAULT_RADIUS >= rightBottomRadius) rightBottomRadius = radius;
         if (DEFAULT_RADIUS >= leftBottomRadius) leftBottomRadius = radius;
 
-        paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setDither(true);
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setColor(solidColor);
-        paint.setStrokeWidth(solidWidth);
 
-        if (lineType == TYPE_SOLID) {
-            setLineTypeStyle(TYPE_SOLID, 0, 0, false);
-        } else {
-            setLineTypeStyle(TYPE_DASH, dashGap, dashWidth, false);
+        if (bgColorStateList == null) {
+            bgColorStateList = ColorStateList.valueOf(0xFF000000);
         }
-    }
+        if (solidColorStateList == null) {
+            solidColorStateList = ColorStateList.valueOf(0xFF000000);
+        }
 
-    // 设置线的类型和虚线样式
-    private void setLineTypeStyle(int lineType, float dashGap, float dashWidth, boolean invalidate) {
         if (lineType == TYPE_DASH) {
-            DashPathEffect dashPathEffect = null;
-            if (dashWidth > 0) {
-                dashPathEffect = new DashPathEffect(new float[]{dashWidth, dashGap}, 0);
-            }
-            paint.setPathEffect(dashPathEffect);
+            dashPathEffect = new DashPathEffect(new float[]{dashWidth, dashGap}, 0);
         } else {
-            paint.setPathEffect(null);
+            dashPathEffect = null;
         }
-        if (invalidate) invalidate();
     }
 
     @Override
@@ -139,8 +125,23 @@ public class RadiusLinearLayout extends AutoLinearLayout {
         width = getWidth();
         height = getHeight();
 
-        final Path path = RadiusUtils.calculateRadiusBgPath(leftTopRadius, rightTopRadius, leftBottomRadius, rightBottomRadius, width, height);
-        radiusDrawable = new RadiusDrawable(colorStateList, path);
+        final Path bgPath = RadiusUtils.calculateRadiusBgPath(leftTopRadius, rightTopRadius,
+                leftBottomRadius, rightBottomRadius, width, height);
+        // 边框
+        if (solidWidth > 0) {
+            List<Path> solidPath = new ArrayList<>();
+            if (leftTopRadius <= DEFAULT_RADIUS && leftBottomRadius <= DEFAULT_RADIUS &&
+                    rightTopRadius <= DEFAULT_RADIUS && rightBottomRadius <= DEFAULT_RADIUS) {
+                solidPath.add(RadiusUtils.calculateRectSocketPath(width, height, solidWidth));
+            } else {
+                Path[] solidPathArray = RadiusUtils.calculateRadiusSocketPath(leftTopRadius, rightTopRadius,
+                        leftBottomRadius, rightBottomRadius, width, height, solidWidth);
+                solidPath = Arrays.asList(solidPathArray);
+            }
+            radiusDrawable = new RadiusDrawable(bgColorStateList, bgPath, solidColorStateList, solidPath, solidWidth, dashPathEffect);
+        } else {
+            radiusDrawable = new RadiusDrawable(bgColorStateList, bgPath);
+        }
         setBackground(radiusDrawable);
 
         // 手动设置阴影，使用裁剪后的路径，防止阴影直角矩形显示
@@ -149,31 +150,10 @@ public class RadiusLinearLayout extends AutoLinearLayout {
             setOutlineProvider(new ViewOutlineProvider() {
                 @Override
                 public void getOutline(View view, Outline outline) {
-                    outline.setConvexPath(path);
+                    outline.setConvexPath(bgPath);
                 }
             });
             setClipToOutline(true);
-        }
-    }
-
-    @Override
-    public void draw(Canvas canvas) {
-        if (leftTopRadius <= DEFAULT_RADIUS && leftBottomRadius <= DEFAULT_RADIUS &&
-                rightTopRadius <= DEFAULT_RADIUS && rightBottomRadius <= DEFAULT_RADIUS) {
-            super.draw(canvas);
-
-            // 边框
-            if (solidWidth > 0)
-                canvas.drawRect(RadiusUtils.calculateRectSocketPath(width, height, solidWidth), paint);
-        } else {
-            super.draw(canvas);
-
-            // 边框
-            if (solidWidth > 0) {
-                Path[] result = RadiusUtils.calculateRadiusSocketPath(leftTopRadius, rightTopRadius, leftBottomRadius, rightBottomRadius, width, height, solidWidth);
-                canvas.drawPath(result[0], paint);
-                canvas.drawPath(result[1], paint);
-            }
         }
     }
 }

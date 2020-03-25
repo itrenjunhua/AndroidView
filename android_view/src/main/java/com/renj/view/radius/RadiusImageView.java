@@ -165,7 +165,7 @@ public class RadiusImageView extends AutoImageView {
 
             // 边框
             if (solidWidth > 0)
-                canvas.drawRect(RadiusUtils.calculateRectSocketPath(width, height, solidWidth), solidPaint);
+                canvas.drawPath(RadiusUtils.calculateRectSocketPath(width, height, solidWidth), solidPaint);
         } else {
             Path path = RadiusUtils.calculateRadiusBgPath(leftTopRadius, rightTopRadius, leftBottomRadius, rightBottomRadius, width, height);
             Bitmap bitmap = getBitmapFromDrawable(getDrawable());

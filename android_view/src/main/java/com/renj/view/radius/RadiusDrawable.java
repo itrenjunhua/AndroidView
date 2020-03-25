@@ -3,6 +3,7 @@ package com.renj.view.radius;
 import android.content.res.ColorStateList;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
+import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PixelFormat;
@@ -10,6 +11,8 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
+
+import java.util.List;
 
 /**
  * ======================================================================
@@ -25,51 +28,113 @@ import android.support.annotation.Nullable;
  * ======================================================================
  */
 public class RadiusDrawable extends Drawable {
-    private ColorStateList mBackground;
-    private Path mPath;
-    private final Paint mPaint;
-    private PorterDuffColorFilter mTintFilter;
-    private ColorStateList mTint;
-    private PorterDuff.Mode mTintMode;
+    // 背景颜色相关
+    private ColorStateList mBgColorsList;
+    private Path mBgPath;
+    private Paint mBgPaint;
+    private PorterDuffColorFilter mBgTintFilter;
+    private ColorStateList mBgTint;
+    private PorterDuff.Mode mBgTintMode;
+    // 边框线相关
+    private boolean mDrawSolid;
+    private ColorStateList mSolidColorsList;
+    private List<Path> mSolidPath;
+    private Paint mSolidPaint;
+    private PorterDuffColorFilter mSolidTintFilter;
+    private ColorStateList mSolidTint;
+    private PorterDuff.Mode mSolidTintMode;
 
-    RadiusDrawable(ColorStateList backgroundColor, Path path) {
-        this.mPath = path;
-        this.mTintMode = PorterDuff.Mode.SRC_IN;
-        this.mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        this.setBackground(backgroundColor);
+    RadiusDrawable(ColorStateList bgColorsList, Path path) {
+        this(bgColorsList, path, false, null, null, 0, null);
     }
 
-    private void setBackground(ColorStateList color) {
-        this.mBackground = color == null ? ColorStateList.valueOf(0) : color;
-        this.mPaint.setColor(this.mBackground.getColorForState(this.getState(), this.mBackground.getDefaultColor()));
+    RadiusDrawable(ColorStateList bgColorsList, Path path, ColorStateList solidColorsList,
+                   List<Path> solidPath, int solidWidth, DashPathEffect dashPathEffect) {
+        this(bgColorsList, path, true, solidColorsList, solidPath, solidWidth, dashPathEffect);
+    }
+
+    private RadiusDrawable(ColorStateList bgColorsList, Path path, boolean drawSolid, ColorStateList solidColorsList,
+                           List<Path> solidPath, int solidWidth, DashPathEffect dashPathEffect) {
+        this.mBgPath = path;
+        this.mBgTintMode = PorterDuff.Mode.SRC_IN;
+        this.mBgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        this.mBgPaint.setDither(true);
+
+        this.mDrawSolid = drawSolid;
+        if (drawSolid) {
+            this.mSolidPath = solidPath;
+            this.mSolidTintMode = PorterDuff.Mode.SRC_IN;
+            this.mSolidPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            this.mSolidPaint.setDither(true);
+            this.mSolidPaint.setStyle(Paint.Style.STROKE);
+            this.mSolidPaint.setStrokeWidth(solidWidth);
+            this.mSolidPaint.setPathEffect(dashPathEffect);
+        }
+
+        this.setBackground(bgColorsList, solidColorsList);
+    }
+
+    private void setBackground(ColorStateList bgColorsList, ColorStateList solidColorsList) {
+        this.mBgColorsList = bgColorsList == null ? ColorStateList.valueOf(0) : bgColorsList;
+        this.mBgPaint.setColor(this.mBgColorsList.getColorForState(this.getState(), this.mBgColorsList.getDefaultColor()));
+        if (mDrawSolid) {
+            this.mSolidColorsList = solidColorsList == null ? ColorStateList.valueOf(0) : solidColorsList;
+            this.mSolidPaint.setColor(this.mSolidColorsList.getColorForState(this.getState(), this.mSolidColorsList.getDefaultColor()));
+        }
     }
 
     @Override
     public void draw(Canvas canvas) {
-        Paint paint = this.mPaint;
-        boolean clearColorFilter;
-        if (this.mTintFilter != null && paint.getColorFilter() == null) {
-            paint.setColorFilter(this.mTintFilter);
-            clearColorFilter = true;
+        Paint bgPaint = this.mBgPaint;
+        boolean bgClearColorFilter;
+        if (this.mBgTintFilter != null && bgPaint.getColorFilter() == null) {
+            bgPaint.setColorFilter(this.mBgTintFilter);
+            bgClearColorFilter = true;
         } else {
-            clearColorFilter = false;
+            bgClearColorFilter = false;
         }
 
-        canvas.drawPath(mPath, paint);
-        if (clearColorFilter) {
-            paint.setColorFilter((ColorFilter) null);
+        canvas.drawPath(mBgPath, bgPaint);
+        if (bgClearColorFilter) {
+            bgPaint.setColorFilter(null);
+        }
+
+        if (mDrawSolid) {
+            Paint solidPaint = this.mSolidPaint;
+            boolean solidClearColorFilter;
+            if (this.mSolidTintFilter != null && solidPaint.getColorFilter() == null) {
+                solidPaint.setColorFilter(this.mSolidTintFilter);
+                solidClearColorFilter = true;
+            } else {
+                solidClearColorFilter = false;
+            }
+
+            for (Path solidPath : mSolidPath) {
+                canvas.drawPath(solidPath, solidPaint);
+            }
+            if (solidClearColorFilter) {
+                solidPaint.setColorFilter(null);
+            }
         }
 
     }
 
     @Override
     public void setAlpha(int alpha) {
-        this.mPaint.setAlpha(alpha);
+        this.mBgPaint.setAlpha(alpha);
+
+        if (mDrawSolid) {
+            this.mSolidPaint.setAlpha(alpha);
+        }
     }
 
     @Override
     public void setColorFilter(ColorFilter cf) {
-        this.mPaint.setColorFilter(cf);
+        this.mBgPaint.setColorFilter(cf);
+
+        if (mDrawSolid) {
+            this.mSolidPaint.setColorFilter(cf);
+        }
     }
 
     @Override
@@ -77,49 +142,88 @@ public class RadiusDrawable extends Drawable {
         return PixelFormat.TRANSLUCENT;
     }
 
-    public void setColor(@Nullable ColorStateList color) {
-        this.setBackground(color);
+    public void setColor(@Nullable ColorStateList backgroundColor, @Nullable ColorStateList solidColorsList) {
+        this.setBackground(backgroundColor, solidColorsList);
         this.invalidateSelf();
     }
 
-    public ColorStateList getColor() {
-        return this.mBackground;
+    public ColorStateList getBackGroundColor() {
+        return this.mBgColorsList;
+    }
+
+    public ColorStateList getSolidColor() {
+        return this.mSolidColorsList;
     }
 
     @Override
     public void setTintList(ColorStateList tint) {
-        this.mTint = tint;
-        this.mTintFilter = this.createTintFilter(this.mTint, this.mTintMode);
+        this.mBgTint = tint;
+        this.mBgTintFilter = this.createTintFilter(this.mBgTint, this.mBgTintMode);
+
+        if (mDrawSolid) {
+            this.mSolidTint = tint;
+            this.mSolidTintFilter = this.createTintFilter(this.mSolidTint, this.mSolidTintMode);
+        }
+
         this.invalidateSelf();
     }
 
     @Override
     public void setTintMode(PorterDuff.Mode tintMode) {
-        this.mTintMode = tintMode;
-        this.mTintFilter = this.createTintFilter(this.mTint, this.mTintMode);
+        this.mBgTintMode = tintMode;
+        this.mBgTintFilter = this.createTintFilter(this.mBgTint, this.mSolidTintMode);
+
+        if (mDrawSolid) {
+            this.mSolidTintMode = tintMode;
+            this.mSolidTintFilter = this.createTintFilter(this.mBgTint, this.mSolidTintMode);
+        }
+
         this.invalidateSelf();
     }
 
     @Override
     protected boolean onStateChange(int[] stateSet) {
-        int newColor = this.mBackground.getColorForState(stateSet, this.mBackground.getDefaultColor());
-        boolean colorChanged = newColor != this.mPaint.getColor();
-        if (colorChanged) {
-            this.mPaint.setColor(newColor);
+        int newBgColor = this.mBgColorsList.getColorForState(stateSet, this.mBgColorsList.getDefaultColor());
+        boolean bgColorChanged = newBgColor != this.mBgPaint.getColor();
+        if (bgColorChanged) {
+            this.mBgPaint.setColor(newBgColor);
         }
 
-        if (this.mTint != null && this.mTintMode != null) {
-            this.mTintFilter = this.createTintFilter(this.mTint, this.mTintMode);
+        boolean solidColorChanged = false;
+        if (mDrawSolid) {
+            int newSolidColor = this.mSolidColorsList.getColorForState(stateSet, this.mSolidColorsList.getDefaultColor());
+            solidColorChanged = newSolidColor != this.mSolidPaint.getColor();
+            if (solidColorChanged) {
+                this.mSolidPaint.setColor(newSolidColor);
+            }
+        }
+
+
+        if (this.mBgTint != null && this.mBgTintMode != null) {
+            this.mBgTintFilter = this.createTintFilter(this.mBgTint, this.mBgTintMode);
             //this.invalidateSelf();
             return true;
+        } else if (this.mSolidTint != null && this.mSolidTintMode != null) {
+            this.mSolidTintFilter = this.createTintFilter(this.mSolidTint, this.mSolidTintMode);
+            return true;
         } else {
-            return colorChanged;
+            return bgColorChanged || solidColorChanged;
         }
     }
 
     @Override
     public boolean isStateful() {
-        return this.mTint != null && this.mTint.isStateful() || this.mBackground != null && this.mBackground.isStateful() || super.isStateful();
+        if (mDrawSolid) {
+            return this.mBgTint != null && this.mBgTint.isStateful()
+                    || this.mBgColorsList != null && this.mBgColorsList.isStateful()
+                    || this.mSolidTint != null && this.mSolidTint.isStateful()
+                    || this.mSolidColorsList != null && this.mSolidColorsList.isStateful()
+                    || super.isStateful();
+        } else {
+            return this.mBgTint != null && this.mBgTint.isStateful()
+                    || this.mBgColorsList != null && this.mBgColorsList.isStateful()
+                    || super.isStateful();
+        }
     }
 
     private PorterDuffColorFilter createTintFilter(ColorStateList tint, PorterDuff.Mode tintMode) {

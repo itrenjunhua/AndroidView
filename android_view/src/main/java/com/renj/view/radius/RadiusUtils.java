@@ -1,7 +1,6 @@
 package com.renj.view.radius;
 
 import android.graphics.Path;
-import android.graphics.RectF;
 
 /**
  * ======================================================================
@@ -76,9 +75,15 @@ public class RadiusUtils {
      * @param solidWidth 线宽
      * @return
      */
-    public static RectF calculateRectSocketPath(int width, int height, int solidWidth) {
+    public static Path calculateRectSocketPath(int width, int height, int solidWidth) {
         float newWidth = solidWidth / 2.0f;
-        return new RectF(newWidth, newWidth, width - newWidth, height - newWidth);
+        Path result = new Path();
+        result.moveTo(newWidth, newWidth);
+        result.lineTo(width - newWidth, newWidth);
+        result.lineTo(width - newWidth, height - newWidth);
+        result.lineTo(newWidth, height - newWidth);
+        result.close();
+        return result;
     }
 
     /**
