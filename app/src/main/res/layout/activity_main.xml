@@ -82,6 +82,9 @@
         app:layout_constraintTop_toBottomOf="@id/textView"
         app:radius_all="8dp"
         app:solid_color="@color/color_blue"
+        app:solid_dashGap="2dp"
+        app:solid_dashWidth="2dp"
+        app:solid_type="dash"
         app:solid_width="2dp">
 
         <TextView

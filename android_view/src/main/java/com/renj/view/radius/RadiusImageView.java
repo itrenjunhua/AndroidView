@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.DashPathEffect;
 import android.graphics.Matrix;
 import android.graphics.Outline;
 import android.graphics.Paint;
@@ -40,6 +41,8 @@ public class RadiusImageView extends AutoImageView {
     private final int DEFAULT_RADIUS = 0;
     private static final Bitmap.Config BITMAP_CONFIG = Bitmap.Config.ARGB_8888;
     private static final int COLOR_DRAWABLE_DIMENSION = 2;
+    public static final int TYPE_SOLID = 0; // 实线
+    public static final int TYPE_DASH = 1;  // 虚线
 
     // 控件宽高
     private int width, height;
@@ -90,6 +93,10 @@ public class RadiusImageView extends AutoImageView {
 
         solidWidth = radiusType.getDimensionPixelSize(R.styleable.RadiusView_solid_width, 0);
         solidColor = radiusType.getColor(R.styleable.RadiusView_solid_color, Color.TRANSPARENT);
+
+        int dashGap = radiusType.getDimensionPixelSize(R.styleable.RadiusView_solid_dashGap, 0);
+        int dashWidth = radiusType.getDimensionPixelSize(R.styleable.RadiusView_solid_dashWidth, 0);
+        int lineType = radiusType.getInt(R.styleable.RadiusView_solid_type, TYPE_SOLID);
         radiusType.recycle();
 
         // 角度边长不能小于0
@@ -109,6 +116,25 @@ public class RadiusImageView extends AutoImageView {
         solidPaint.setStyle(Paint.Style.STROKE);
         solidPaint.setColor(solidColor);
         solidPaint.setStrokeWidth(solidWidth);
+        if (lineType == TYPE_SOLID) {
+            setLineTypeStyle(TYPE_SOLID, 0, 0, false);
+        } else {
+            setLineTypeStyle(TYPE_DASH, dashGap, dashWidth, false);
+        }
+    }
+
+    // 设置线的类型和虚线样式
+    private void setLineTypeStyle(int lineType, float dashGap, float dashWidth, boolean invalidate) {
+        if (lineType == TYPE_DASH) {
+            DashPathEffect dashPathEffect = null;
+            if (dashWidth > 0) {
+                dashPathEffect = new DashPathEffect(new float[]{dashWidth, dashGap}, 0);
+            }
+            solidPaint.setPathEffect(dashPathEffect);
+        } else {
+            solidPaint.setPathEffect(null);
+        }
+        if (invalidate) invalidate();
     }
 
     @Override

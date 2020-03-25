@@ -5,6 +5,7 @@ import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.DashPathEffect;
 import android.graphics.Outline;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -33,6 +34,8 @@ import com.renj.view.autolayout.AutoLinearLayout;
  */
 public class RadiusLinearLayout extends AutoLinearLayout {
     private final int DEFAULT_RADIUS = 0;
+    public static final int TYPE_SOLID = 0; // 实线
+    public static final int TYPE_DASH = 1;  // 虚线
 
     // 控件宽高
     private int width, height;
@@ -85,6 +88,10 @@ public class RadiusLinearLayout extends AutoLinearLayout {
         solidWidth = radiusType.getDimensionPixelSize(R.styleable.RadiusView_solid_width, 0);
         solidColor = radiusType.getColor(R.styleable.RadiusView_solid_color, Color.TRANSPARENT);
 
+        int dashGap = radiusType.getDimensionPixelSize(R.styleable.RadiusView_solid_dashGap, 0);
+        int dashWidth = radiusType.getDimensionPixelSize(R.styleable.RadiusView_solid_dashWidth, 0);
+        int lineType = radiusType.getInt(R.styleable.RadiusView_solid_type, TYPE_SOLID);
+
         colorStateList = radiusType.getColorStateList(R.styleable.RadiusView_background_color);
         if (colorStateList == null) {
             colorStateList = ColorStateList.valueOf(0xFF000000);
@@ -104,6 +111,26 @@ public class RadiusLinearLayout extends AutoLinearLayout {
         paint.setStyle(Paint.Style.STROKE);
         paint.setColor(solidColor);
         paint.setStrokeWidth(solidWidth);
+
+        if (lineType == TYPE_SOLID) {
+            setLineTypeStyle(TYPE_SOLID, 0, 0, false);
+        } else {
+            setLineTypeStyle(TYPE_DASH, dashGap, dashWidth, false);
+        }
+    }
+
+    // 设置线的类型和虚线样式
+    private void setLineTypeStyle(int lineType, float dashGap, float dashWidth, boolean invalidate) {
+        if (lineType == TYPE_DASH) {
+            DashPathEffect dashPathEffect = null;
+            if (dashWidth > 0) {
+                dashPathEffect = new DashPathEffect(new float[]{dashWidth, dashGap}, 0);
+            }
+            paint.setPathEffect(dashPathEffect);
+        } else {
+            paint.setPathEffect(null);
+        }
+        if (invalidate) invalidate();
     }
 
     @Override

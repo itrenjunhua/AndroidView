@@ -12,6 +12,18 @@
         <!--边框属性-->
         <attr name="solid_width" format="dimension" />
         <attr name="solid_color" format="color" />
+        <!--虚线长度-->
+        <attr name="solid_dashWidth" format="dimension" />
+        <!--线间隔-->
+        <attr name="solid_dashGap" format="dimension" />
+        <!--线类型 实线/虚线-->
+        <attr name="solid_type" format="enum">
+            <!--水平线-->
+            <enum name="solid" value="0" />
+            <!--垂直线-->
+            <enum name="dash" value="1" />
+        </attr>
+
         <!--背景颜色，系统的background将会失效-->
         <attr name="background_color" format="color" />
     </declare-styleable>

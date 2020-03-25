@@ -5,7 +5,7 @@
         <attr name="line_color" format="color" />
         <!--线宽度，不设置使用控件宽度-->
         <attr name="line_width" format="dimension" />
-        <!--线宽度-->
+        <!--虚线长度-->
         <attr name="line_dashWidth" format="dimension" />
         <!--线间隔-->
         <attr name="line_dashGap" format="dimension" />
