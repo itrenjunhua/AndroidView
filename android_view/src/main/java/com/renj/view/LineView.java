@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.os.Build;
@@ -141,7 +142,7 @@ public class LineView extends View {
 
     // 设置线颜色
     private void setColorStateList(ColorStateList colorStateList, boolean invalidate) {
-        colorStateList = colorStateList != null ? colorStateList : ColorStateList.valueOf(0xFF000000);
+        colorStateList = colorStateList != null ? colorStateList : ColorStateList.valueOf(Color.TRANSPARENT);
         int lineColor = colorStateList.getColorForState(getDrawableState(), 0);
         paint.setColor(lineColor);
         if (invalidate) invalidate();

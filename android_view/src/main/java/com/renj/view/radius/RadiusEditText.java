@@ -8,14 +8,12 @@ import android.graphics.DashPathEffect;
 import android.graphics.Outline;
 import android.graphics.Path;
 import android.os.Build;
-import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewOutlineProvider;
 
+import com.renj.view.ClearAbleEditText;
 import com.renj.view.R;
-import com.renj.view.autolayout.AutoLinearLayout;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,15 +24,15 @@ import java.util.List;
  * <p>
  * 作者：Renj
  * <p>
- * 创建时间：2020-03-16   0:13
+ * 创建时间：2020-03-15   19:11
  * <p>
- * 描述：指定圆角的 LinearLayout<br/>
+ * 描述：指定圆角的 EditText，继承至 {@link ClearAbleEditText} <br/>
  * <p>
  * 修订历史：
  * <p>
  * ======================================================================
  */
-public class RadiusLinearLayout extends AutoLinearLayout {
+public class RadiusEditText extends ClearAbleEditText {
     private final int DEFAULT_RADIUS = 0; // 默认没有圆角
     public static final int TYPE_SOLID = 0; // 实线
     public static final int TYPE_DASH = 1;  // 虚线
@@ -55,29 +53,21 @@ public class RadiusLinearLayout extends AutoLinearLayout {
     private RadiusDrawable radiusDrawable;
     private ColorStateList bgColorStateList;
 
-    public RadiusLinearLayout(Context context) {
-        this(context, null, 0);
+    public RadiusEditText(Context context) {
+        this(context, null);
     }
 
-    public RadiusLinearLayout(Context context, @Nullable AttributeSet attrs) {
+    public RadiusEditText(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public RadiusLinearLayout(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public RadiusEditText(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public RadiusLinearLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-        init(context, attrs);
-    }
-
-    @Override
     protected void init(Context context, AttributeSet attrs) {
-        super.init(context, attrs);
-        setWillNotDraw(false);
+        setFocusableInTouchMode(true);
         if (Build.VERSION.SDK_INT < 18) setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         // 读取圆角配置
         TypedArray radiusType = context.obtainStyledAttributes(attrs, R.styleable.RadiusView);

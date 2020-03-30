@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity
 import android.widget.TextView
 import android.widget.Toast
 import com.renj.view.CenterItemView
-import com.renj.view.LineView
 import com.renj.view.dialog.CustomDialog
 import com.renj.view.radius.RadiusFrameLayout
 
@@ -22,11 +21,6 @@ internal class MainActivity : AppCompatActivity() {
         showDialog = findViewById(R.id.fl_radius)
         centerItemView = findViewById(R.id.cv_item_view)
         textView = findViewById(R.id.textView)
-        var lineView = findViewById<LineView>(R.id.line_vertical)
-
-        lineView.setOnClickListener {
-            Toast.makeText(this@MainActivity, "线点击", Toast.LENGTH_SHORT).show()
-        }
 
         textView.setOnClickListener {
             showDialog.setBackgroundColor(Color.BLUE)

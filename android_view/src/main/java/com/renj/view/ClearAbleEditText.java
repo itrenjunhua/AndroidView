@@ -96,7 +96,7 @@ public class ClearAbleEditText extends AppCompatEditText {
     public ClearAbleEditText(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initAttr(attrs);
-        init();
+        initListener();
     }
 
     /**
@@ -125,7 +125,7 @@ public class ClearAbleEditText extends AppCompatEditText {
     /**
      * 初始化其他的相关内容
      */
-    private void init() {
+    private void initListener() {
         // 初始化并设置监听
         mTextWatcher = new MyTextWatcher();
         addTextChangedListener(mTextWatcher);

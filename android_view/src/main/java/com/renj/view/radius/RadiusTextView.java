@@ -3,6 +3,7 @@ package com.renj.view.radius;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Outline;
 import android.graphics.Path;
@@ -32,8 +33,7 @@ import java.util.List;
  * ======================================================================
  */
 public class RadiusTextView extends AppCompatTextView {
-    // 默认没有圆角
-    private final int DEFAULT_RADIUS = 0;
+    private final int DEFAULT_RADIUS = 0; // 默认没有圆角
     public static final int TYPE_SOLID = 0; // 实线
     public static final int TYPE_DASH = 1;  // 虚线
 
@@ -96,10 +96,10 @@ public class RadiusTextView extends AppCompatTextView {
 
 
         if (bgColorStateList == null) {
-            bgColorStateList = ColorStateList.valueOf(0xFF000000);
+            bgColorStateList = ColorStateList.valueOf(Color.TRANSPARENT);
         }
         if (solidColorStateList == null) {
-            solidColorStateList = ColorStateList.valueOf(0xFF000000);
+            solidColorStateList = ColorStateList.valueOf(Color.TRANSPARENT);
         }
 
         if (lineType == TYPE_DASH) {
