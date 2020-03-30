@@ -1,6 +1,10 @@
 # AndroidView
 Android常用控件以及对 ListView、RecyclerView 的Adapter 的封装
 
+## 部分效果
+
+![](https://github.com/itrenjunhua/AndroidView/raw/master/images/androidView.gif)
+
 ## 具体说明
 
 * autolayout包：根据宽高比例和指定宽(或者高)自动计算出高(或者宽)
