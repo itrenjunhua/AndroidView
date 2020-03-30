@@ -79,20 +79,20 @@ public class RadiusFrameLayout extends AutoFrameLayout { // 默认没有圆角
         if (Build.VERSION.SDK_INT < 18) setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         // 读取圆角配置
         TypedArray radiusType = context.obtainStyledAttributes(attrs, R.styleable.RadiusView);
-        radius = radiusType.getDimensionPixelSize(R.styleable.RadiusView_radius_all, DEFAULT_RADIUS);
-        leftTopRadius = radiusType.getDimensionPixelSize(R.styleable.RadiusView_radius_leftTop, DEFAULT_RADIUS);
-        rightTopRadius = radiusType.getDimensionPixelSize(R.styleable.RadiusView_radius_rightTop, DEFAULT_RADIUS);
-        rightBottomRadius = radiusType.getDimensionPixelSize(R.styleable.RadiusView_radius_rightBottom, DEFAULT_RADIUS);
-        leftBottomRadius = radiusType.getDimensionPixelSize(R.styleable.RadiusView_radius_leftBottom, DEFAULT_RADIUS);
+        radius = radiusType.getDimensionPixelSize(R.styleable.RadiusView_rv_radius_all, DEFAULT_RADIUS);
+        leftTopRadius = radiusType.getDimensionPixelSize(R.styleable.RadiusView_rv_radius_leftTop, DEFAULT_RADIUS);
+        rightTopRadius = radiusType.getDimensionPixelSize(R.styleable.RadiusView_rv_radius_rightTop, DEFAULT_RADIUS);
+        rightBottomRadius = radiusType.getDimensionPixelSize(R.styleable.RadiusView_rv_radius_rightBottom, DEFAULT_RADIUS);
+        leftBottomRadius = radiusType.getDimensionPixelSize(R.styleable.RadiusView_rv_radius_leftBottom, DEFAULT_RADIUS);
 
-        solidWidth = radiusType.getDimensionPixelSize(R.styleable.RadiusView_solid_width, 0);
-        solidColorStateList = radiusType.getColorStateList(R.styleable.RadiusView_solid_color);
+        solidWidth = radiusType.getDimensionPixelSize(R.styleable.RadiusView_rv_solid_width, 0);
+        solidColorStateList = radiusType.getColorStateList(R.styleable.RadiusView_rv_solid_color);
 
-        int dashGap = radiusType.getDimensionPixelSize(R.styleable.RadiusView_solid_dashGap, 0);
-        int dashWidth = radiusType.getDimensionPixelSize(R.styleable.RadiusView_solid_dashWidth, 0);
-        int lineType = radiusType.getInt(R.styleable.RadiusView_solid_type, TYPE_SOLID);
+        int dashGap = radiusType.getDimensionPixelSize(R.styleable.RadiusView_rv_solid_dashGap, 0);
+        int dashWidth = radiusType.getDimensionPixelSize(R.styleable.RadiusView_rv_solid_dashWidth, 0);
+        int lineType = radiusType.getInt(R.styleable.RadiusView_rv_solid_type, TYPE_SOLID);
 
-        bgColorStateList = radiusType.getColorStateList(R.styleable.RadiusView_background_color);
+        bgColorStateList = radiusType.getColorStateList(R.styleable.RadiusView_rv_background_color);
         radiusType.recycle();
 
         // 角度边长不能小于0
@@ -119,11 +119,56 @@ public class RadiusFrameLayout extends AutoFrameLayout { // 默认没有圆角
     }
 
     @Override
+    public void setBackgroundColor(int color) {
+        this.bgColorStateList = ColorStateList.valueOf(color);
+        if (radiusDrawable != null) {
+            radiusDrawable.setBackground(bgColorStateList, solidColorStateList);
+        }
+    }
+
+    public void setBackgroundColor(ColorStateList bgColorStateList) {
+        this.bgColorStateList = bgColorStateList;
+        if (radiusDrawable != null) {
+            radiusDrawable.setBackground(this.bgColorStateList, solidColorStateList);
+        }
+    }
+
+    public void setSolidColor(int color) {
+        this.solidColorStateList = ColorStateList.valueOf(color);
+        if (radiusDrawable != null) {
+            radiusDrawable.setBackground(this.bgColorStateList, solidColorStateList);
+        }
+    }
+
+    public void setSolidColor(ColorStateList solidColorStateList) {
+        this.solidColorStateList = solidColorStateList;
+        if (radiusDrawable != null) {
+            radiusDrawable.setBackground(bgColorStateList, this.solidColorStateList);
+        }
+    }
+
+    @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
         width = getWidth();
         height = getHeight();
 
+        final Path bgPath = setBackground();
+
+        // 手动设置阴影，使用裁剪后的路径，防止阴影直角矩形显示
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            setElevation(getElevation());
+            setOutlineProvider(new ViewOutlineProvider() {
+                @Override
+                public void getOutline(View view, Outline outline) {
+                    outline.setConvexPath(bgPath);
+                }
+            });
+            setClipToOutline(true);
+        }
+    }
+
+    private Path setBackground() {
         final Path bgPath = RadiusUtils.calculateRadiusBgPath(leftTopRadius, rightTopRadius,
                 leftBottomRadius, rightBottomRadius, width, height);
         // 边框
@@ -142,17 +187,6 @@ public class RadiusFrameLayout extends AutoFrameLayout { // 默认没有圆角
             radiusDrawable = new RadiusDrawable(bgColorStateList, bgPath);
         }
         setBackground(radiusDrawable);
-
-        // 手动设置阴影，使用裁剪后的路径，防止阴影直角矩形显示
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            setElevation(getElevation());
-            setOutlineProvider(new ViewOutlineProvider() {
-                @Override
-                public void getOutline(View view, Outline outline) {
-                    outline.setConvexPath(bgPath);
-                }
-            });
-            setClipToOutline(true);
-        }
+        return bgPath;
     }
 }

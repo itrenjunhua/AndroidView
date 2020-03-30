@@ -29,6 +29,7 @@ internal class MainActivity : AppCompatActivity() {
         }
 
         textView.setOnClickListener {
+            showDialog.setBackgroundColor(Color.BLUE)
             centerItemView.modifyNameText("修改后内容")
                     .modifyNameTextColor(Color.parseColor("#FF0000"))
                     .modifyValueText("RenJunhua")

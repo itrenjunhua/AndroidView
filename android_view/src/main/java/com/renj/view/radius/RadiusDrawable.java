@@ -74,7 +74,7 @@ public class RadiusDrawable extends Drawable {
         this.setBackground(bgColorsList, solidColorsList);
     }
 
-    private void setBackground(ColorStateList bgColorsList, ColorStateList solidColorsList) {
+    void setBackground(ColorStateList bgColorsList, ColorStateList solidColorsList) {
         this.mBgColorsList = bgColorsList == null ? ColorStateList.valueOf(0) : bgColorsList;
         this.mBgPaint.setColor(this.mBgColorsList.getColorForState(this.getState(), this.mBgColorsList.getDefaultColor()));
         if (mDrawSolid) {

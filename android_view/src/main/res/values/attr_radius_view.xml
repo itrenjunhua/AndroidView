@@ -3,21 +3,21 @@
     <!--圆角控件属性-->
     <declare-styleable name="RadiusView">
         <!--圆角属性-->
-        <attr name="radius_all" format="dimension" />
-        <attr name="radius_leftTop" format="dimension" />
-        <attr name="radius_rightTop" format="dimension" />
-        <attr name="radius_rightBottom" format="dimension" />
-        <attr name="radius_leftBottom" format="dimension" />
+        <attr name="rv_radius_all" format="dimension" />
+        <attr name="rv_radius_leftTop" format="dimension" />
+        <attr name="rv_radius_rightTop" format="dimension" />
+        <attr name="rv_radius_rightBottom" format="dimension" />
+        <attr name="rv_radius_leftBottom" format="dimension" />
 
         <!--边框属性-->
-        <attr name="solid_width" format="dimension" />
-        <attr name="solid_color" format="color" />
+        <attr name="rv_solid_width" format="dimension" />
+        <attr name="rv_solid_color" format="color" />
         <!--虚线长度-->
-        <attr name="solid_dashWidth" format="dimension" />
+        <attr name="rv_solid_dashWidth" format="dimension" />
         <!--线间隔-->
-        <attr name="solid_dashGap" format="dimension" />
+        <attr name="rv_solid_dashGap" format="dimension" />
         <!--线类型 实线/虚线-->
-        <attr name="solid_type" format="enum">
+        <attr name="rv_solid_type" format="enum">
             <!--水平线-->
             <enum name="solid" value="0" />
             <!--垂直线-->
@@ -25,6 +25,6 @@
         </attr>
 
         <!--背景颜色，系统的background将会失效-->
-        <attr name="background_color" format="color" />
+        <attr name="rv_background_color" format="color" />
     </declare-styleable>
 </resources>

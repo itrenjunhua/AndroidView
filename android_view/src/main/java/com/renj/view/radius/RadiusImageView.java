@@ -85,18 +85,18 @@ public class RadiusImageView extends AutoImageView {
         if (Build.VERSION.SDK_INT < 18) setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         // 读取圆角配置
         TypedArray radiusType = context.obtainStyledAttributes(attrs, R.styleable.RadiusView);
-        radius = radiusType.getDimensionPixelSize(R.styleable.RadiusView_radius_all, DEFAULT_RADIUS);
-        leftTopRadius = radiusType.getDimensionPixelSize(R.styleable.RadiusView_radius_leftTop, DEFAULT_RADIUS);
-        rightTopRadius = radiusType.getDimensionPixelSize(R.styleable.RadiusView_radius_rightTop, DEFAULT_RADIUS);
-        rightBottomRadius = radiusType.getDimensionPixelSize(R.styleable.RadiusView_radius_rightBottom, DEFAULT_RADIUS);
-        leftBottomRadius = radiusType.getDimensionPixelSize(R.styleable.RadiusView_radius_leftBottom, DEFAULT_RADIUS);
+        radius = radiusType.getDimensionPixelSize(R.styleable.RadiusView_rv_radius_all, DEFAULT_RADIUS);
+        leftTopRadius = radiusType.getDimensionPixelSize(R.styleable.RadiusView_rv_radius_leftTop, DEFAULT_RADIUS);
+        rightTopRadius = radiusType.getDimensionPixelSize(R.styleable.RadiusView_rv_radius_rightTop, DEFAULT_RADIUS);
+        rightBottomRadius = radiusType.getDimensionPixelSize(R.styleable.RadiusView_rv_radius_rightBottom, DEFAULT_RADIUS);
+        leftBottomRadius = radiusType.getDimensionPixelSize(R.styleable.RadiusView_rv_radius_leftBottom, DEFAULT_RADIUS);
 
-        solidWidth = radiusType.getDimensionPixelSize(R.styleable.RadiusView_solid_width, 0);
-        solidColor = radiusType.getColor(R.styleable.RadiusView_solid_color, Color.TRANSPARENT);
+        solidWidth = radiusType.getDimensionPixelSize(R.styleable.RadiusView_rv_solid_width, 0);
+        solidColor = radiusType.getColor(R.styleable.RadiusView_rv_solid_color, Color.TRANSPARENT);
 
-        int dashGap = radiusType.getDimensionPixelSize(R.styleable.RadiusView_solid_dashGap, 0);
-        int dashWidth = radiusType.getDimensionPixelSize(R.styleable.RadiusView_solid_dashWidth, 0);
-        int lineType = radiusType.getInt(R.styleable.RadiusView_solid_type, TYPE_SOLID);
+        int dashGap = radiusType.getDimensionPixelSize(R.styleable.RadiusView_rv_solid_dashGap, 0);
+        int dashWidth = radiusType.getDimensionPixelSize(R.styleable.RadiusView_rv_solid_dashWidth, 0);
+        int lineType = radiusType.getInt(R.styleable.RadiusView_rv_solid_type, TYPE_SOLID);
         radiusType.recycle();
 
         // 角度边长不能小于0
@@ -135,6 +135,11 @@ public class RadiusImageView extends AutoImageView {
             solidPaint.setPathEffect(null);
         }
         if (invalidate) invalidate();
+    }
+
+    public void setSolidColor(int color) {
+        solidPaint.setColor(color);
+        invalidate();
     }
 
     @Override
