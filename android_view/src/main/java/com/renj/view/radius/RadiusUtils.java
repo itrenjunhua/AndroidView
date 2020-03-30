@@ -19,8 +19,8 @@ public class RadiusUtils {
 
 
     /**
-     * 计算带圆角边框的背景路径 非ConvexPath<br/>
-     * <b>ConvexPath： 圆角矩形的圆角度数大于矩形的高度或宽度(上下圆角度数和大于高度或者左右圆角度数大于高度，那么就不是 ConvexPath 了)</b>
+     * 计算带圆角边框的背景路径 ConvexPath<br/>
+     * <b>ConvexPath 这里简单理解：圆角矩形的圆角度数大于矩形的高度或宽度(上下圆角度数的边长和大于高度或者左右圆角度数的边长大于高度，那么就不是 ConvexPath 了)</b>
      *
      * @param leftTopRadius     左上角圆角大小
      * @param rightTopRadius    右上角圆角大小
@@ -87,8 +87,8 @@ public class RadiusUtils {
     }
 
     /**
-     * 计算圆角边框的边框路径 非ConvexPath<br/>
-     * <b>ConvexPath： 圆角矩形的圆角度数大于矩形的高度或宽度(上下圆角度数和大于高度或者左右圆角度数大于高度，那么就不是 ConvexPath 了)</b>
+     * 计算圆角边框的边框路径 ConvexPath<br/>
+     * <b>ConvexPath 这里简单理解：圆角矩形的圆角度数大于矩形的高度或宽度(上下圆角度数的边长和大于高度或者左右圆角度数的边长大于高度，那么就不是 ConvexPath 了)</b>
      *
      * @param leftTopRadius     左上角圆角大小
      * @param rightTopRadius    右上角圆角大小

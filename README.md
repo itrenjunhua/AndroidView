@@ -10,6 +10,7 @@ Android常用控件以及对 ListView、RecyclerView 的Adapter 的封装
     * [AutoRelativeLayout](https://github.com/itrenjunhua/AndroidView/blob/master/android_view/src/main/java/com/renj/view/autolayout/AutoRelativeLayout.java)
 
 * radius包：继承至 autolayout包中控件，实现自定义圆角功能
+    * [RadiusEditText](https://github.com/itrenjunhua/AndroidView/blob/master/android_view/src/main/java/com/renj/view/radius/RadiusEditText.java)
     * [RadiusFrameLayout](https://github.com/itrenjunhua/AndroidView/blob/master/android_view/src/main/java/com/renj/view/radius/RadiusFrameLayout.java)
     * [RadiusImageView](https://github.com/itrenjunhua/AndroidView/blob/master/android_view/src/main/java/com/renj/view/radius/RadiusImageView.java)
     * [RadiusLinearLayout](https://github.com/itrenjunhua/AndroidView/blob/master/android_view/src/main/java/com/renj/view/radius/RadiusLinearLayout.java)
