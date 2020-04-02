@@ -95,7 +95,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
+                android:layout_gravity="center"
                 android:text="显示自定义对话框"
                 android:textColor="@color/module_view_color_white"
                 android:textSize="20sp" />
@@ -151,7 +151,6 @@
             android:layout_width="200dp"
             android:layout_height="120dp"
             android:elevation="8dp"
-            android:scaleType="centerCrop"
             android:src="@mipmap/test"
             app:auto_view_height="120"
             app:auto_view_type="auto_view_height"

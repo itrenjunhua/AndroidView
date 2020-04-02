@@ -11,6 +11,7 @@ import android.graphics.Matrix;
 import android.graphics.Outline;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -175,13 +176,7 @@ public class RadiusImageView extends AutoImageView {
             Path path = RadiusUtils.calculateRadiusBgPath(leftTopRadius, rightTopRadius, leftBottomRadius, rightBottomRadius, width, height);
             Bitmap bitmap = getBitmapFromDrawable(getDrawable());
             bitmapShader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
-            float scale = 1.0f;
-            if (!(bitmap.getWidth() == getWidth() && bitmap.getHeight() == getHeight())) {
-                // 如果图片的宽或者高与view的宽高不匹配，计算出需要缩放的比例；缩放后的图片的宽高，一定要大于我们view的宽高；所以我们这里取大值；
-                scale = Math.max(getWidth() * 1.0f / bitmap.getWidth(), getHeight() * 1.0f / bitmap.getHeight());
-            }
-            // shader的变换矩阵，这里主要用于放大或者缩小
-            matrix.setScale(scale, scale);
+            configureBounds(getDrawable());
             // 设置变换矩阵
             bitmapShader.setLocalMatrix(matrix);
             // 设置shader
@@ -197,6 +192,7 @@ public class RadiusImageView extends AutoImageView {
         }
     }
 
+    // 获取图片资源
     private Bitmap getBitmapFromDrawable(Drawable drawable) {
         if (drawable == null) {
             return null;
@@ -222,6 +218,71 @@ public class RadiusImageView extends AutoImageView {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    // 根据 ScaleType 进行矩阵变换
+    private void configureBounds(Drawable drawable) {
+        if (drawable == null) {
+            return;
+        }
+
+        final ScaleType scaleType = getScaleType();
+        final int intrinsicWidth = drawable.getIntrinsicWidth();
+        final int intrinsicHeight = drawable.getIntrinsicHeight();
+        final int vWidth = width - getPaddingStart() - getPaddingEnd();
+        final int vHeight = height - getPaddingTop() - getPaddingBottom();
+        final boolean fits = (intrinsicWidth < 0 || vWidth == intrinsicWidth)
+                && (intrinsicHeight < 0 || vHeight == intrinsicHeight);
+
+        if (intrinsicWidth <= 0 || intrinsicHeight <= 0 || ScaleType.FIT_XY == scaleType) {
+            matrix = null;
+        } else {
+            if (ScaleType.MATRIX == scaleType) {
+                matrix = null;
+            } else if (fits) {
+                matrix = null;
+            } else if (ScaleType.CENTER == scaleType) {
+                matrix.setTranslate(Math.round((vWidth - intrinsicWidth) * 0.5f),
+                        Math.round((vHeight - intrinsicHeight) * 0.5f));
+            } else if (ScaleType.CENTER_CROP == scaleType) {
+                float scale;
+                float dx = 0, dy = 0;
+
+                if (intrinsicWidth * vHeight > vWidth * intrinsicHeight) {
+                    scale = (float) vHeight / (float) intrinsicHeight;
+                    dx = (vWidth - intrinsicWidth * scale) * 0.5f;
+                } else {
+                    scale = (float) vWidth / (float) intrinsicWidth;
+                    dy = (vHeight - intrinsicHeight * scale) * 0.5f;
+                }
+
+                matrix.setScale(scale, scale);
+                matrix.postTranslate(Math.round(dx), Math.round(dy));
+            } else if (ScaleType.CENTER_INSIDE == scaleType) {
+                float scale;
+                float dx;
+                float dy;
+
+                if (intrinsicWidth <= vWidth && intrinsicHeight <= vHeight) {
+                    scale = 1.0f;
+                } else {
+                    scale = Math.min((float) vWidth / (float) intrinsicWidth,
+                            (float) vHeight / (float) intrinsicHeight);
+                }
+
+                dx = Math.round((vWidth - intrinsicWidth * scale) * 0.5f);
+                dy = Math.round((vHeight - intrinsicHeight * scale) * 0.5f);
+
+                matrix.setScale(scale, scale);
+                matrix.postTranslate(dx, dy);
+            } else {
+                RectF mTempSrc = new RectF();
+                RectF mTempDst = new RectF();
+                mTempSrc.set(0, 0, intrinsicWidth, intrinsicHeight);
+                mTempDst.set(0, 0, vWidth, vHeight);
+                matrix.setRectToRect(mTempSrc, mTempDst, Matrix.ScaleToFit.CENTER);
+            }
         }
     }
 }

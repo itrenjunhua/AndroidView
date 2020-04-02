@@ -5,7 +5,7 @@ import android.content.res.TypedArray;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
-import android.widget.RelativeLayout;
+import android.widget.FrameLayout;
 
 import com.renj.view.R;
 
@@ -24,7 +24,7 @@ import com.renj.view.R;
  * <p>
  * ======================================================================
  */
-public class AutoFrameLayout extends RelativeLayout {
+public class AutoFrameLayout extends FrameLayout {
     // 自动适配的类型，0：宽适配 1：高适配
     private int auto_type = 1;
     private int auto_width;
