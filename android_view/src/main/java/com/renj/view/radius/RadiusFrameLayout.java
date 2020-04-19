@@ -41,7 +41,6 @@ public class RadiusFrameLayout extends AutoFrameLayout {
     // 控件宽高
     private int width, height;
     // 圆角参数
-    private int radius;
     private int leftTopRadius;
     private int rightTopRadius;
     private int rightBottomRadius;
@@ -80,7 +79,7 @@ public class RadiusFrameLayout extends AutoFrameLayout {
         if (Build.VERSION.SDK_INT < 18) setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         // 读取圆角配置
         TypedArray radiusType = context.obtainStyledAttributes(attrs, R.styleable.RadiusView);
-        radius = radiusType.getDimensionPixelSize(R.styleable.RadiusView_rv_radius_all, DEFAULT_RADIUS);
+        int radius = radiusType.getDimensionPixelSize(R.styleable.RadiusView_rv_radius_all, DEFAULT_RADIUS);
         leftTopRadius = radiusType.getDimensionPixelSize(R.styleable.RadiusView_rv_radius_leftTop, DEFAULT_RADIUS);
         rightTopRadius = radiusType.getDimensionPixelSize(R.styleable.RadiusView_rv_radius_rightTop, DEFAULT_RADIUS);
         rightBottomRadius = radiusType.getDimensionPixelSize(R.styleable.RadiusView_rv_radius_rightBottom, DEFAULT_RADIUS);
@@ -146,6 +145,36 @@ public class RadiusFrameLayout extends AutoFrameLayout {
         if (radiusDrawable != null) {
             radiusDrawable.setBackground(bgColorStateList, this.solidColorStateList);
         }
+    }
+
+    public void setRadius(int radius) {
+        if (radius >= 0) {
+            leftTopRadius = radius;
+            rightTopRadius = radius;
+            rightBottomRadius = radius;
+            leftBottomRadius = radius;
+            invalidate();
+        }
+    }
+
+    public void setLeftTopRadius(int leftTopRadius) {
+        this.leftTopRadius = leftTopRadius;
+        invalidate();
+    }
+
+    public void setRightTopRadius(int rightTopRadius) {
+        this.rightTopRadius = rightTopRadius;
+        invalidate();
+    }
+
+    public void setRightBottomRadius(int rightBottomRadius) {
+        this.rightBottomRadius = rightBottomRadius;
+        invalidate();
+    }
+
+    public void setLeftBottomRadius(int leftBottomRadius) {
+        this.leftBottomRadius = leftBottomRadius;
+        invalidate();
     }
 
     @Override

@@ -24,6 +24,7 @@ import android.view.ViewOutlineProvider;
 import com.renj.view.R;
 import com.renj.view.autolayout.AutoImageView;
 
+
 /**
  * ======================================================================
  * <p>
@@ -48,7 +49,6 @@ public class RadiusImageView extends AutoImageView {
     // 控件宽高
     private int width, height;
     // 圆角参数
-    private int radius;
     private int leftTopRadius;
     private int rightTopRadius;
     private int rightBottomRadius;
@@ -86,7 +86,7 @@ public class RadiusImageView extends AutoImageView {
         if (Build.VERSION.SDK_INT < 18) setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         // 读取圆角配置
         TypedArray radiusType = context.obtainStyledAttributes(attrs, R.styleable.RadiusView);
-        radius = radiusType.getDimensionPixelSize(R.styleable.RadiusView_rv_radius_all, DEFAULT_RADIUS);
+        int radius = radiusType.getDimensionPixelSize(R.styleable.RadiusView_rv_radius_all, DEFAULT_RADIUS);
         leftTopRadius = radiusType.getDimensionPixelSize(R.styleable.RadiusView_rv_radius_leftTop, DEFAULT_RADIUS);
         rightTopRadius = radiusType.getDimensionPixelSize(R.styleable.RadiusView_rv_radius_rightTop, DEFAULT_RADIUS);
         rightBottomRadius = radiusType.getDimensionPixelSize(R.styleable.RadiusView_rv_radius_rightBottom, DEFAULT_RADIUS);
@@ -143,6 +143,36 @@ public class RadiusImageView extends AutoImageView {
         invalidate();
     }
 
+    public void setRadius(int radius) {
+        if (radius >= 0) {
+            leftTopRadius = radius;
+            rightTopRadius = radius;
+            rightBottomRadius = radius;
+            leftBottomRadius = radius;
+            invalidate();
+        }
+    }
+
+    public void setLeftTopRadius(int leftTopRadius) {
+        this.leftTopRadius = leftTopRadius;
+        invalidate();
+    }
+
+    public void setRightTopRadius(int rightTopRadius) {
+        this.rightTopRadius = rightTopRadius;
+        invalidate();
+    }
+
+    public void setRightBottomRadius(int rightBottomRadius) {
+        this.rightBottomRadius = rightBottomRadius;
+        invalidate();
+    }
+
+    public void setLeftBottomRadius(int leftBottomRadius) {
+        this.leftBottomRadius = leftBottomRadius;
+        invalidate();
+    }
+
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
@@ -175,13 +205,15 @@ public class RadiusImageView extends AutoImageView {
         } else {
             Path path = RadiusUtils.calculateRadiusBgPath(leftTopRadius, rightTopRadius, leftBottomRadius, rightBottomRadius, width, height);
             Bitmap bitmap = getBitmapFromDrawable(getDrawable());
-            bitmapShader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
-            configureBounds(getDrawable());
-            // 设置变换矩阵
-            bitmapShader.setLocalMatrix(matrix);
-            // 设置shader
-            bitmapPaint.setShader(bitmapShader);
-            canvas.drawPath(path, bitmapPaint);
+            if(bitmap != null) {
+                bitmapShader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+                configureBounds(getDrawable());
+                // 设置变换矩阵
+                bitmapShader.setLocalMatrix(matrix);
+                // 设置shader
+                bitmapPaint.setShader(bitmapShader);
+                canvas.drawPath(path, bitmapPaint);
+            }
 
             // 边框
             if (solidWidth > 0) {
@@ -230,7 +262,7 @@ public class RadiusImageView extends AutoImageView {
         final ScaleType scaleType = getScaleType();
         final int intrinsicWidth = drawable.getIntrinsicWidth();
         final int intrinsicHeight = drawable.getIntrinsicHeight();
-        final int vWidth = width - getPaddingStart() - getPaddingEnd();
+        final int vWidth = width - getPaddingLeft() - getPaddingRight();
         final int vHeight = height - getPaddingTop() - getPaddingBottom();
         final boolean fits = (intrinsicWidth < 0 || vWidth == intrinsicWidth)
                 && (intrinsicHeight < 0 || vHeight == intrinsicHeight);
@@ -243,6 +275,8 @@ public class RadiusImageView extends AutoImageView {
             } else if (fits) {
                 matrix = null;
             } else if (ScaleType.CENTER == scaleType) {
+                if (matrix == null)
+                    matrix = new Matrix();
                 matrix.setTranslate(Math.round((vWidth - intrinsicWidth) * 0.5f),
                         Math.round((vHeight - intrinsicHeight) * 0.5f));
             } else if (ScaleType.CENTER_CROP == scaleType) {
@@ -257,6 +291,8 @@ public class RadiusImageView extends AutoImageView {
                     dy = (vHeight - intrinsicHeight * scale) * 0.5f;
                 }
 
+                if (matrix == null)
+                    matrix = new Matrix();
                 matrix.setScale(scale, scale);
                 matrix.postTranslate(Math.round(dx), Math.round(dy));
             } else if (ScaleType.CENTER_INSIDE == scaleType) {
@@ -274,6 +310,8 @@ public class RadiusImageView extends AutoImageView {
                 dx = Math.round((vWidth - intrinsicWidth * scale) * 0.5f);
                 dy = Math.round((vHeight - intrinsicHeight * scale) * 0.5f);
 
+                if (matrix == null)
+                    matrix = new Matrix();
                 matrix.setScale(scale, scale);
                 matrix.postTranslate(dx, dy);
             } else {
@@ -281,6 +319,8 @@ public class RadiusImageView extends AutoImageView {
                 RectF mTempDst = new RectF();
                 mTempSrc.set(0, 0, intrinsicWidth, intrinsicHeight);
                 mTempDst.set(0, 0, vWidth, vHeight);
+                if (matrix == null)
+                    matrix = new Matrix();
                 matrix.setRectToRect(mTempSrc, mTempDst, Matrix.ScaleToFit.CENTER);
             }
         }
