@@ -24,7 +24,29 @@
             <enum name="dash" value="1" />
         </attr>
 
-        <!--背景颜色，系统的background将会失效-->
+        <!--背景颜色，系统的background将会失效，和 rv_shader_xxx 属性为互斥，rv_shader_xxx 优先级更高-->
         <attr name="rv_background_color" format="color" />
+
+        <!--背景颜色，使用渐变，系统的background将会失效，和 rv_background_color 属性为互斥，rv_shader_xxx 优先级更高-->
+        <attr name="rv_shader_start_color" format="color" />
+        <attr name="rv_shader_middle_color" format="color" />
+        <attr name="rv_shader_end_color" format="color" />
+        <!--背景颜色，使用渐变，渐变类型(如果使用渐变，此为必须设置属性，否则不是使用渐变)。系统的background将会失效-->
+        <attr name="rv_shader_type" format="enum">
+            <enum name="linear" value="10" />
+            <enum name="radial" value="11" />
+            <enum name="sweep" value="12" />
+        </attr>
+        <!--背景颜色，使用渐变，线性渐变特有属性，渐变方向。系统的background将会失效-->
+        <attr name="rv_shader_linear_orientation" format="enum">
+            <enum name="top_to_bottom" value="110" />
+            <enum name="bottom_to_top" value="111" />
+            <enum name="left_to_right" value="220" />
+            <enum name="right_to_left" value="221" />
+            <enum name="leftTop_to_rightBottom" value="330" />
+            <enum name="rightBottom_to_leftTop" value="331" />
+            <enum name="rightTop_to_leftBottom" value="440" />
+            <enum name="leftBottom_to_rightTop" value="441" />
+        </attr>
     </declare-styleable>
 </resources>

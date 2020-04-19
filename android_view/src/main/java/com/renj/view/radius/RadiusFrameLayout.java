@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Outline;
 import android.graphics.Path;
+import android.graphics.Shader;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
@@ -52,6 +53,10 @@ public class RadiusFrameLayout extends AutoFrameLayout {
 
     private RadiusDrawable radiusDrawable;
     private ColorStateList bgColorStateList;
+    // 渐变背景
+    private int[] bgShaderColors; // 背景渐变颜色值，优先级高于 bgColorStateList
+    private int bgShaderType; // 渐变类型
+    private int bgShaderLinearOrientation; // 线性渐变方向
 
     public RadiusFrameLayout(Context context) {
         this(context, null);
@@ -93,6 +98,17 @@ public class RadiusFrameLayout extends AutoFrameLayout {
         int lineType = radiusType.getInt(R.styleable.RadiusView_rv_solid_type, TYPE_SOLID);
 
         bgColorStateList = radiusType.getColorStateList(R.styleable.RadiusView_rv_background_color);
+
+        // 获取渐变信息
+        int startColor = radiusType.getColor(R.styleable.RadiusView_rv_shader_start_color, -1);
+        int middleColor = radiusType.getColor(R.styleable.RadiusView_rv_shader_middle_color, -1);
+        int endColor = radiusType.getColor(R.styleable.RadiusView_rv_shader_end_color, -1);
+        bgShaderType = radiusType.getInt(R.styleable.RadiusView_rv_shader_type, -1);
+        bgShaderLinearOrientation = radiusType.getInt(R.styleable.RadiusView_rv_shader_linear_orientation, ShaderUtils.LINEAR_ORIENTATION_TOP_TO_BOTTOM);
+        bgShaderColors = ShaderUtils.createColorsArray(startColor, middleColor, endColor);
+        if (bgShaderColors == null)
+            bgShaderType = -1;
+
         radiusType.recycle();
 
         // 角度边长不能小于0
@@ -201,6 +217,11 @@ public class RadiusFrameLayout extends AutoFrameLayout {
     private Path setBackground() {
         final Path bgPath = RadiusUtils.calculateRadiusBgPath(leftTopRadius, rightTopRadius,
                 leftBottomRadius, rightBottomRadius, width, height);
+
+        Shader bgShader = null;
+        if (bgShaderType != -1) {
+            bgShader = ShaderUtils.createShader(bgShaderType, width, height, bgShaderColors, bgShaderLinearOrientation);
+        }
         // 边框
         if (solidWidth > 0) {
             List<Path> solidPath = new ArrayList<>();
@@ -212,9 +233,16 @@ public class RadiusFrameLayout extends AutoFrameLayout {
                         leftBottomRadius, rightBottomRadius, width, height, solidWidth);
                 solidPath = Arrays.asList(solidPathArray);
             }
-            radiusDrawable = new RadiusDrawable(bgColorStateList, bgPath, solidColorStateList, solidPath, solidWidth, dashPathEffect);
+
+            if (bgShader == null)
+                radiusDrawable = new RadiusDrawable(bgColorStateList, bgPath, solidColorStateList, solidPath, solidWidth, dashPathEffect);
+            else
+                radiusDrawable = new RadiusDrawable(bgShader, bgPath, solidColorStateList, solidPath, solidWidth, dashPathEffect);
         } else {
-            radiusDrawable = new RadiusDrawable(bgColorStateList, bgPath);
+            if (bgShader == null)
+                radiusDrawable = new RadiusDrawable(bgColorStateList, bgPath);
+            else
+                radiusDrawable = new RadiusDrawable(bgShader, bgPath);
         }
         setBackground(radiusDrawable);
         return bgPath;
