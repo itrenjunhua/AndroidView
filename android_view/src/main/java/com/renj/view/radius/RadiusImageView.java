@@ -153,6 +153,14 @@ public class RadiusImageView extends AutoImageView {
         }
     }
 
+    public void setRadius(int leftTopRadius, int rightTopRadius, int rightBottomRadius, int leftBottomRadius) {
+        this.leftTopRadius = leftTopRadius;
+        this.rightTopRadius = rightTopRadius;
+        this.rightBottomRadius = rightBottomRadius;
+        this.leftBottomRadius = leftBottomRadius;
+        invalidate();
+    }
+
     public void setLeftTopRadius(int leftTopRadius) {
         this.leftTopRadius = leftTopRadius;
         invalidate();

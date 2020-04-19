@@ -173,6 +173,14 @@ public class RadiusFrameLayout extends AutoFrameLayout {
         }
     }
 
+    public void setRadius(int leftTopRadius, int rightTopRadius, int rightBottomRadius, int leftBottomRadius) {
+        this.leftTopRadius = leftTopRadius;
+        this.rightTopRadius = rightTopRadius;
+        this.rightBottomRadius = rightBottomRadius;
+        this.leftBottomRadius = leftBottomRadius;
+        requestLayout();
+    }
+
     public void setLeftTopRadius(int leftTopRadius) {
         this.leftTopRadius = leftTopRadius;
         requestLayout();
