@@ -159,28 +159,41 @@ public class RadiusTextView extends AppCompatTextView {
             rightTopRadius = radius;
             rightBottomRadius = radius;
             leftBottomRadius = radius;
-            invalidate();
+            requestLayout();
         }
     }
 
     public void setLeftTopRadius(int leftTopRadius) {
         this.leftTopRadius = leftTopRadius;
-        invalidate();
+        requestLayout();
     }
 
     public void setRightTopRadius(int rightTopRadius) {
         this.rightTopRadius = rightTopRadius;
-        invalidate();
+        requestLayout();
     }
 
     public void setRightBottomRadius(int rightBottomRadius) {
         this.rightBottomRadius = rightBottomRadius;
-        invalidate();
+        requestLayout();
     }
 
     public void setLeftBottomRadius(int leftBottomRadius) {
         this.leftBottomRadius = leftBottomRadius;
-        invalidate();
+        requestLayout();
+    }
+
+    public void setShaderInfo(@ShaderUtils.ShaderType int shapeType, int[] shapeColors) {
+        setShaderInfo(shapeType, shapeColors, ShaderUtils.LINEAR_ORIENTATION_TOP_TO_BOTTOM);
+    }
+
+    public void setShaderInfo(@ShaderUtils.ShaderType int shapeType, int[] shapeColors, @ShaderUtils.LinearOrientation int shaderLinearOrientation) {
+        if (shapeColors == null || shapeColors.length <= 0)
+            return;
+        this.bgShaderType = shapeType;
+        this.bgShaderColors = shapeColors;
+        this.bgShaderLinearOrientation = shaderLinearOrientation;
+        requestLayout();
     }
 
     @Override

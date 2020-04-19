@@ -8,6 +8,7 @@ import android.widget.Toast
 import com.renj.view.CenterItemView
 import com.renj.view.dialog.CustomDialog
 import com.renj.view.radius.RadiusFrameLayout
+import com.renj.view.radius.ShaderUtils
 
 internal class MainActivity : AppCompatActivity() {
     private lateinit var showDialog: RadiusFrameLayout
@@ -23,7 +24,10 @@ internal class MainActivity : AppCompatActivity() {
         textView = findViewById(R.id.textView)
 
         textView.setOnClickListener {
-            showDialog.setBackgroundColor(Color.BLUE)
+            // showDialog.setBackgroundColor(Color.BLUE)
+            showDialog.setRadius(50)
+            showDialog.setShaderInfo(ShaderUtils.SHADER_TYPE_LINEAR, intArrayOf(Color.YELLOW, Color.GREEN))
+
             centerItemView.modifyNameText("修改后内容")
                     .modifyNameTextColor(Color.parseColor("#FF0000"))
                     .modifyValueText("RenJunhua")
