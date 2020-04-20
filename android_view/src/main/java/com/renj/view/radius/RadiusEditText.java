@@ -91,9 +91,9 @@ public class RadiusEditText extends ClearAbleEditText {
         bgColorStateList = radiusType.getColorStateList(R.styleable.RadiusView_rv_background_color);
 
         // 获取渐变信息
-        int startColor = radiusType.getColor(R.styleable.RadiusView_rv_shader_start_color, Color.TRANSPARENT);
-        int middleColor = radiusType.getColor(R.styleable.RadiusView_rv_shader_middle_color, Color.TRANSPARENT);
-        int endColor = radiusType.getColor(R.styleable.RadiusView_rv_shader_end_color, Color.TRANSPARENT);
+        int startColor = radiusType.getColor(R.styleable.RadiusView_rv_shader_start_color, -1);
+        int middleColor = radiusType.getColor(R.styleable.RadiusView_rv_shader_middle_color, -1);
+        int endColor = radiusType.getColor(R.styleable.RadiusView_rv_shader_end_color, -1);
         bgShaderType = radiusType.getInt(R.styleable.RadiusView_rv_shader_type, -1);
         bgShaderLinearOrientation = radiusType.getInt(R.styleable.RadiusView_rv_shader_linear_orientation, ShaderUtils.LINEAR_ORIENTATION_TOP_TO_BOTTOM);
         bgShaderColors = ShaderUtils.createColorsArray(startColor, middleColor, endColor);
