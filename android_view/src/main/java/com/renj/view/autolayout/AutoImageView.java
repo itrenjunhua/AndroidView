@@ -2,7 +2,6 @@ package com.renj.view.autolayout;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
@@ -22,14 +21,7 @@ import com.renj.view.R;
  * <p>
  * ======================================================================
  */
-public class AutoImageView extends AppCompatImageView {
-    public final static int AUTO_TYPE_WIDTH = 0;
-    public final static int AUTO_TYPE_HEIGHT = 1;
-
-    @IntDef(value = {AUTO_TYPE_WIDTH, AUTO_TYPE_HEIGHT})
-    public @interface AutoType {
-    }
-
+public class AutoImageView extends AppCompatImageView implements IAutoLayout {
     // 自动适配的类型，0：宽适配 1：高适配
     private int auto_type = 1;
     private int auto_width;
@@ -57,7 +49,21 @@ public class AutoImageView extends AppCompatImageView {
         typedArray.recycle();
     }
 
-    public void setAutoViewInfo(@AutoType int autoType, int autoWidth, int autoHeight) {
+    /**
+     * @docRoot
+     */
+    @Override
+    public void setAutoViewInfo(int autoWidth, int autoHeight) {
+        this.auto_width = autoWidth;
+        this.auto_height = autoHeight;
+        requestLayout();
+    }
+
+    /**
+     * @docRoot
+     */
+    @Override
+    public void setAutoViewInfo(@IAutoLayout.AutoType int autoType, int autoWidth, int autoHeight) {
         this.auto_type = autoType;
         this.auto_width = autoWidth;
         this.auto_height = autoHeight;

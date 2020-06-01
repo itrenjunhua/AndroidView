@@ -3,7 +3,6 @@ package com.renj.view.autolayout;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
-import android.support.annotation.IntDef;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.widget.RelativeLayout;
@@ -25,14 +24,7 @@ import com.renj.view.R;
  * <p>
  * ======================================================================
  */
-public class AutoRelativeLayout extends RelativeLayout {
-    public final static int AUTO_TYPE_WIDTH = 0;
-    public final static int AUTO_TYPE_HEIGHT = 1;
-
-    @IntDef(value = {AUTO_TYPE_WIDTH, AUTO_TYPE_HEIGHT})
-    public @interface AutoType {
-    }
-
+public class AutoRelativeLayout extends RelativeLayout implements IAutoLayout {
     // 自动适配的类型，0：宽适配 1：高适配
     private int auto_type = 1;
     private int auto_width;
@@ -65,6 +57,20 @@ public class AutoRelativeLayout extends RelativeLayout {
         typedArray.recycle();
     }
 
+    /**
+     * @docRoot
+     */
+    @Override
+    public void setAutoViewInfo(int autoWidth, int autoHeight) {
+        this.auto_width = autoWidth;
+        this.auto_height = autoHeight;
+        requestLayout();
+    }
+
+    /**
+     * @docRoot
+     */
+    @Override
     public void setAutoViewInfo(@AutoType int autoType, int autoWidth, int autoHeight) {
         this.auto_type = autoType;
         this.auto_width = autoWidth;
