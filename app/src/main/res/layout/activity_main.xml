@@ -60,7 +60,7 @@
         <com.renj.view.radius.RadiusTextView
             android:id="@+id/textView"
             android:layout_width="320dp"
-            android:layout_height="50dp"
+            android:layout_height="48dp"
             android:layout_margin="12dp"
             android:elevation="5dp"
             android:gravity="center"
@@ -71,9 +71,9 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/line_horizontal"
             app:rv_background_color="@color/selected_main"
-            app:rv_radius_all="25dp"
+            app:rv_radius_all="40dp"
             app:rv_solid_color="#00ff00"
-            app:rv_solid_width="1dp" />
+            app:rv_solid_width="2dp" />
 
         <com.renj.view.radius.RadiusFrameLayout
             android:id="@+id/fl_radius"

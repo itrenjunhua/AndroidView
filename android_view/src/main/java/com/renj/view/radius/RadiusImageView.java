@@ -193,7 +193,7 @@ public class RadiusImageView extends AutoImageView {
             setOutlineProvider(new ViewOutlineProvider() {
                 @Override
                 public void getOutline(View view, Outline outline) {
-                    Path path = RadiusUtils.calculateRadiusBgPath(leftTopRadius, rightTopRadius, leftBottomRadius, rightBottomRadius, width, height);
+                    Path path = RadiusUtils.calculateRadiusBgPath(leftTopRadius, rightTopRadius, leftBottomRadius, rightBottomRadius, width, height, false);
                     outline.setConvexPath(path);
                 }
             });
@@ -213,7 +213,7 @@ public class RadiusImageView extends AutoImageView {
         } else {
             Path path = RadiusUtils.calculateRadiusBgPath(leftTopRadius, rightTopRadius, leftBottomRadius, rightBottomRadius, width, height);
             Bitmap bitmap = getBitmapFromDrawable(getDrawable());
-            if(bitmap != null) {
+            if (bitmap != null) {
                 bitmapShader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
                 configureBounds(getDrawable());
                 // 设置变换矩阵

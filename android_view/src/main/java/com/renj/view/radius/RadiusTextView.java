@@ -218,7 +218,12 @@ public class RadiusTextView extends AppCompatTextView {
             setOutlineProvider(new ViewOutlineProvider() {
                 @Override
                 public void getOutline(View view, Outline outline) {
-                    outline.setConvexPath(bgPath);
+                    if (bgPath.isConvex()) {
+                        outline.setConvexPath(bgPath);
+                    } else {
+                        outline.setConvexPath(RadiusUtils.calculateRadiusBgPath(leftTopRadius, rightTopRadius,
+                                leftBottomRadius, rightBottomRadius, width, height, false));
+                    }
                 }
             });
             setClipToOutline(true);

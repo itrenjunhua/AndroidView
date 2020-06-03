@@ -1,6 +1,7 @@
 package com.renj.view.radius;
 
 import android.graphics.Path;
+import android.graphics.RectF;
 
 /**
  * ======================================================================
@@ -16,7 +17,9 @@ import android.graphics.Path;
  * ======================================================================
  */
 public class RadiusUtils {
-
+    public static final int TYPE_RADIUS = 0;  // 圆角形状
+    public static final int TYPE_OVAL = 1;    // 两边为椭圆
+    public static final int TYPE_CIRCLE = 2;  // 整体为圆形
 
     /**
      * 计算带圆角边框的背景路径 ConvexPath<br/>
@@ -33,6 +36,69 @@ public class RadiusUtils {
     public static Path calculateRadiusBgPath(int leftTopRadius, int rightTopRadius,
                                              int leftBottomRadius, int rightBottomRadius,
                                              int width, int height) {
+        return calculateRadiusBgPath(leftTopRadius, rightTopRadius, leftBottomRadius, rightBottomRadius, width, height, true);
+    }
+
+    /**
+     * 计算带圆角边框的背景路径 ConvexPath<br/>
+     * <b>ConvexPath 这里简单理解：圆角矩形的圆角度数大于矩形的高度或宽度(上下圆角度数的边长和大于高度或者左右圆角度数的边长大于高度，那么就不是 ConvexPath 了)</b>
+     *
+     * @param leftTopRadius     左上角圆角大小
+     * @param rightTopRadius    右上角圆角大小
+     * @param leftBottomRadius  左下角圆角大小
+     * @param rightBottomRadius 右下角圆角大小
+     * @param width             矩形宽
+     * @param height            矩形高
+     * @param isGetType         是否需要判断类型，当为 true 时可能返回非 Convex Path
+     * @return 结果Path
+     */
+    public static Path calculateRadiusBgPath(int leftTopRadius, int rightTopRadius,
+                                             int leftBottomRadius, int rightBottomRadius,
+                                             int width, int height, boolean isGetType) {
+        if (isGetType) {
+            int type = getType(leftTopRadius, rightTopRadius, leftBottomRadius, rightBottomRadius, width, height);
+            if (type == TYPE_CIRCLE) {
+                Path resultPath = new Path();
+                RectF rectF = new RectF();
+                rectF.set(0, 0, width, height);
+                resultPath.addCircle(rectF.centerX(), rectF.centerY(), Math.min(rectF.width(), rectF.height()) / 2f, Path.Direction.CW);
+                return resultPath;
+            }
+
+            if (type == TYPE_OVAL) {
+                Path resultPath = new Path();
+                if (leftTopRadius + leftBottomRadius >= height) {
+                    // 左边半圆
+                    RectF leftRectF = new RectF();
+                    leftRectF.set(0, 0, height, height);
+                    resultPath.addArc(leftRectF, 90, 180);
+                    // 增加上边的线
+                    resultPath.lineTo(width - height / 2f, 0);
+                    // 右边半圆
+                    RectF rightRectF = new RectF();
+                    rightRectF.set(width - height, 0, width, height);
+                    resultPath.addArc(rightRectF, -90, 180);
+                    // 增加下边的线
+                    resultPath.lineTo(height / 2f, height);
+                } else {
+                    // 上边半圆
+                    RectF leftRectF = new RectF();
+                    leftRectF.set(0, 0, width, width);
+                    resultPath.addArc(leftRectF, 180, 180);
+                    // 增加右边的线
+                    resultPath.lineTo(width, height - width / 2f);
+                    // 下边半圆
+                    RectF rightRectF = new RectF();
+                    rightRectF.set(0, height - width, width, height);
+                    resultPath.addArc(rightRectF, 0, 180);
+                    // 增加左边的线
+                    resultPath.lineTo(0, width / 2f);
+                }
+
+                return resultPath;
+            }
+        }
+
         float leftTopRadiusLeft, leftTopRadiusTop; // 左上角
         float leftBottomRadiusLeft, leftBottomRadiusBottom; // 左下角
         float rightTopRadiusRight, rightTopRadiusTop; // 右上角
@@ -102,6 +168,62 @@ public class RadiusUtils {
     public static Path[] calculateRadiusSocketPath(int leftTopRadius, int rightTopRadius,
                                                    int leftBottomRadius, int rightBottomRadius,
                                                    int width, int height, int solidWidth) {
+        int type = getType(leftTopRadius, rightTopRadius, leftBottomRadius, rightBottomRadius, width, height);
+        if (type == TYPE_CIRCLE) {
+            Path[] result = new Path[1];
+            Path resultPath = new Path();
+            RectF rectF = new RectF();
+            rectF.set(0, 0, width, height);
+            // 对位置进行偏移线宽的一半，因为直接画线的话，有一半是画到画布外的，
+            // 但是因为有圆角，圆角后面还有画布，导致角的线宽比边的线宽要宽
+            // 矩形缩小边框的一半
+            float newWidth = solidWidth / 2.0f;
+            rectF.inset(newWidth, newWidth);
+            resultPath.addCircle(rectF.centerX(), rectF.centerY(), Math.min(rectF.width(), rectF.height()) / 2f, Path.Direction.CW);
+            result[0] = resultPath;
+            return result;
+        }
+
+        if (type == TYPE_OVAL) {
+            Path[] result = new Path[1];
+            Path resultPath = new Path();
+            // 对位置进行偏移线宽的一半，因为直接画线的话，有一半是画到画布外的，
+            // 但是因为有圆角，圆角后面还有画布，导致角的线宽比边的线宽要宽
+            // 矩形缩小边框的一半
+            float newWidth = solidWidth / 2.0f;
+
+            if (leftTopRadius + leftBottomRadius >= height) {
+                // 左边半圆
+                RectF leftRectF = new RectF();
+                leftRectF.set(newWidth, newWidth, height, height - newWidth);
+                resultPath.addArc(leftRectF, 90, 180);
+                // 增加上边的线
+                resultPath.lineTo(width - height / 2f, newWidth);
+                // 右边半圆
+                RectF rightRectF = new RectF();
+                rightRectF.set(width - height, newWidth, width - newWidth, height - newWidth);
+                resultPath.addArc(rightRectF, -90, 180);
+                // 增加下边的线
+                resultPath.lineTo(height / 2f, height - newWidth);
+            } else {
+                // 上边半圆
+                RectF leftRectF = new RectF();
+                leftRectF.set(newWidth, newWidth, width - newWidth, width);
+                resultPath.addArc(leftRectF, 180, 180);
+                // 增加右边的线
+                resultPath.lineTo(width - newWidth, height - width / 2f);
+                // 下边半圆
+                RectF rightRectF = new RectF();
+                rightRectF.set(newWidth, height - width, width - newWidth, height - newWidth);
+                resultPath.addArc(rightRectF, 0, 180);
+                // 增加左边的线
+                resultPath.lineTo(newWidth, width / 2f);
+            }
+
+            result[0] = resultPath;
+            return result;
+        }
+
         Path[] result = new Path[2];
         Path solidPath = new Path();
         Path radiusPath = new Path();
@@ -157,6 +279,31 @@ public class RadiusUtils {
         return result;
     }
 
+    /**
+     * 根据圆角大小和边框长度将圆角矩形作为什么图形处理
+     *
+     * @return TYPE_CIRCLE：圆形  TYPE_RADIUS：圆角矩形  TYPE_OVAL：两端作为椭圆
+     */
+    private static int getType(int leftTopRadius, int rightTopRadius,
+                               int leftBottomRadius, int rightBottomRadius,
+                               int width, int height) {
+        boolean heightOval = (leftTopRadius + rightTopRadius >= width) && (leftBottomRadius + rightBottomRadius >= width);
+        boolean widthOval = (leftTopRadius + leftBottomRadius >= height) && (rightTopRadius + rightBottomRadius >= height);
+
+        if (widthOval && heightOval) {
+            return TYPE_CIRCLE;
+        }
+
+        if (heightOval) {
+            return TYPE_OVAL;
+        }
+
+        if (widthOval) {
+            return TYPE_OVAL;
+        }
+
+        return TYPE_RADIUS;
+    }
 
     /**
      * 根据同边的两个圆角的分别长度和边的长度，重新计算两个圆角该有的长度(防止两个圆角的同边长度之后大于总的长度)<br/>
