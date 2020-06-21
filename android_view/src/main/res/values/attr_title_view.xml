@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--自定义标题控件-->
+    <declare-styleable name="TitleView">
+        <attr name="title_view_back_icon" format="reference" />
+        <attr name="title_view_back_show" format="boolean" />
+        <attr name="title_view_title" format="string" />
+        <attr name="title_view_title_size" format="dimension" />
+        <attr name="title_view_title_color" format="color" />
+        <attr name="title_view_right_text" format="string" />
+        <attr name="title_view_right_text_size" format="dimension" />
+        <attr name="title_view_right_text_color" format="color" />
+        <attr name="title_view_right_text_show" format="boolean" />
+        <attr name="title_view_right_img_icon" format="reference" />
+        <attr name="title_view_right_img_show" format="boolean" />
+        <attr name="title_view_right_custom_layout" format="reference" />
+        <attr name="title_view_right_custom_layout_show" format="boolean" />
+        <attr name="title_view_bottom_line_show" format="boolean" />
+    </declare-styleable>
+</resources>
