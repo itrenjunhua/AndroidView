@@ -21,6 +21,7 @@
             app:centerItemView_iconResImage="@mipmap/ic_launcher"
             app:centerItemView_iconViewIsShow="true"
             app:centerItemView_nameText="个人中心"
+            app:centerItemView_nameTextSize="18sp"
             app:centerItemView_valueText="Renj"
             app:centerItemView_valueViewIsShow="true"
             app:layout_constraintEnd_toEndOf="parent"
@@ -223,6 +224,38 @@
                 android:textColor="@color/color_white"
                 android:textSize="15sp" />
         </com.renj.view.ShadowMaskLayout>
+
+
+        <com.renj.view.TitleView
+            android:id="@+id/title_view_one"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@color/color_white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sm_mask"
+            app:title_view_back_show="false"
+            app:title_view_right_text="右边1"
+            app:title_view_right_textColor="@color/color_red"
+            app:title_view_right_textShow="true"
+            app:title_view_right_textSize="18sp"
+            app:title_view_title="标题1" />
+
+        <com.renj.view.TitleView
+            android:id="@+id/title_view_two"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@color/color_red"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title_view_one"
+            app:title_view_back_show="true"
+            app:title_view_right_textShow="false"
+            app:title_view_right_textSize="18sp"
+            app:title_view_title="标题1"
+            app:title_view_titleColor="@color/color_white" />
 
     </android.support.constraint.ConstraintLayout>
 </ScrollView>

@@ -5,16 +5,17 @@
         <attr name="title_view_back_icon" format="reference" />
         <attr name="title_view_back_show" format="boolean" />
         <attr name="title_view_title" format="string" />
-        <attr name="title_view_title_size" format="dimension" />
-        <attr name="title_view_title_color" format="color" />
+        <attr name="title_view_titleSize" format="dimension" />
+        <attr name="title_view_titleColor" format="color" />
         <attr name="title_view_right_text" format="string" />
-        <attr name="title_view_right_text_size" format="dimension" />
-        <attr name="title_view_right_text_color" format="color" />
-        <attr name="title_view_right_text_show" format="boolean" />
-        <attr name="title_view_right_img_icon" format="reference" />
-        <attr name="title_view_right_img_show" format="boolean" />
+        <attr name="title_view_right_textSize" format="dimension" />
+        <attr name="title_view_right_textColor" format="color" />
+        <attr name="title_view_right_textShow" format="boolean" />
+        <attr name="title_view_right_imgIcon" format="reference" />
+        <attr name="title_view_right_imgShow" format="boolean" />
         <attr name="title_view_right_custom_layout" format="reference" />
-        <attr name="title_view_right_custom_layout_show" format="boolean" />
+        <attr name="title_view_right_custom_layoutShow" format="boolean" />
         <attr name="title_view_bottom_line_show" format="boolean" />
+        <attr name="title_view_bottom_line_color" format="color" />
     </declare-styleable>
 </resources>

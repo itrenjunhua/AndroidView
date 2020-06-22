@@ -1,5 +1,6 @@
 package com.renj.view;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -47,7 +48,7 @@ public class TitleView extends RelativeLayout {
     private Drawable backIcon, rightIcon;
     private boolean backViewShow, rightTextShow, rightImageShow, rightCustomShow, bottomLineShow;
     private float titleTextSize, rightTextSize;
-    private int titleTextColor, rightTextColor;
+    private int titleTextColor, rightTextColor, bottomLineColor;
     private int rightCustomLayoutId;
 
     public TitleView(Context context) {
@@ -75,7 +76,7 @@ public class TitleView extends RelativeLayout {
     }
 
     private void initAttrs(Context context, AttributeSet attrs) {
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.CenterItemView);
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.TitleView);
         backIcon = typedArray.getDrawable(R.styleable.TitleView_title_view_back_icon);
         backViewShow = typedArray.getBoolean(R.styleable.TitleView_title_view_back_show, true);
         if (backIcon == null) {
@@ -87,21 +88,22 @@ public class TitleView extends RelativeLayout {
         }
 
         titleContent = typedArray.getString(R.styleable.TitleView_title_view_title);
-        titleTextSize = typedArray.getDimensionPixelSize(R.styleable.TitleView_title_view_title_size, resources.getDimensionPixelSize(R.dimen.module_view_title_size));
-        titleTextColor = typedArray.getColor(R.styleable.TitleView_title_view_title_color, resources.getColor(R.color.module_view_main_text));
+        titleTextSize = typedArray.getDimension(R.styleable.TitleView_title_view_titleSize, resources.getDimension(R.dimen.module_view_title_size));
+        titleTextColor = typedArray.getColor(R.styleable.TitleView_title_view_titleColor, resources.getColor(R.color.module_view_main_text));
 
         rightText = typedArray.getString(R.styleable.TitleView_title_view_right_text);
-        rightTextSize = typedArray.getDimensionPixelSize(R.styleable.TitleView_title_view_right_text_size, resources.getDimensionPixelSize(R.dimen.module_view_text_size));
-        rightTextColor = typedArray.getColor(R.styleable.TitleView_title_view_right_text_color, resources.getColor(R.color.module_view_gray_text));
-        rightTextShow = typedArray.getBoolean(R.styleable.TitleView_title_view_right_text_show, false);
+        rightTextSize = typedArray.getDimension(R.styleable.TitleView_title_view_right_textSize, resources.getDimension(R.dimen.module_view_text_size));
+        rightTextColor = typedArray.getColor(R.styleable.TitleView_title_view_right_textColor, resources.getColor(R.color.module_view_gray_text));
+        rightTextShow = typedArray.getBoolean(R.styleable.TitleView_title_view_right_textShow, false);
 
-        rightIcon = typedArray.getDrawable(R.styleable.TitleView_title_view_right_img_icon);
-        rightImageShow = typedArray.getBoolean(R.styleable.TitleView_title_view_right_img_show, false);
+        rightIcon = typedArray.getDrawable(R.styleable.TitleView_title_view_right_imgIcon);
+        rightImageShow = typedArray.getBoolean(R.styleable.TitleView_title_view_right_imgShow, false);
 
         rightCustomLayoutId = typedArray.getResourceId(R.styleable.TitleView_title_view_right_custom_layout, 0);
-        rightCustomShow = typedArray.getBoolean(R.styleable.TitleView_title_view_right_custom_layout_show, false);
+        rightCustomShow = typedArray.getBoolean(R.styleable.TitleView_title_view_right_custom_layoutShow, false);
 
         bottomLineShow = typedArray.getBoolean(R.styleable.TitleView_title_view_bottom_line_show, true);
+        bottomLineColor = typedArray.getColor(R.styleable.TitleView_title_view_bottom_line_color, resources.getColor(R.color.module_view_line_bg));
         typedArray.recycle();
     }
 
@@ -143,12 +145,12 @@ public class TitleView extends RelativeLayout {
         setBackViewShow(backViewShow);
         setBackViewIcon(backIcon);
 
-        setTitleSize(titleTextSize);
+        setTitleSize(TypedValue.COMPLEX_UNIT_PX, titleTextSize);
         setTitleColor(titleTextColor);
         setTitleContent(titleContent);
 
         setRightTextShow(rightTextShow);
-        setRightTextSize(rightTextSize);
+        setRightTextSize(TypedValue.COMPLEX_UNIT_PX, rightTextSize);
         setRightTextColor(rightTextColor);
         setRightTextContent(rightText);
 
@@ -159,110 +161,199 @@ public class TitleView extends RelativeLayout {
         setCustomRightView(rightCustomLayoutId);
 
         setBottomLineShow(bottomLineShow);
+        setBottomLineColor(bottomLineColor);
     }
 
 
     /*************** 设置控件样式 ***************/
+
+    /**
+     * 获取返回控件
+     */
     public ImageView getBackView() {
         return ivTitleBack;
     }
 
+    /**
+     * 设置返回图标资源ID
+     */
     public TitleView setBackViewIcon(@DrawableRes int drawableId) {
         ivTitleBack.setImageResource(drawableId);
         return this;
     }
 
+    /**
+     * 设置返回图标
+     */
     public TitleView setBackViewIcon(Drawable drawable) {
         if (drawable != null)
             ivTitleBack.setImageDrawable(drawable);
         return this;
     }
 
+    /**
+     * 设置返回图标是否显示
+     */
     public TitleView setBackViewShow(boolean backViewShow) {
         ivTitleBack.setVisibility(backViewShow ? VISIBLE : GONE);
         return this;
     }
 
+    /**
+     * 获取标题控件
+     */
     public TextView getTitleContentView() {
         return tvTitleContent;
     }
 
+    /**
+     * 设置标题内容
+     */
     public TitleView setTitleContent(String titleContent) {
         if (titleContent == null) titleContent = "";
         tvTitleContent.setText(titleContent);
         return this;
     }
 
+    /**
+     * 设置标题文字大小 sp
+     */
     public TitleView setTitleSize(float titleSize) {
-        tvTitleContent.setTextSize(TypedValue.COMPLEX_UNIT_PX, sp2px(titleSize));
+        tvTitleContent.setTextSize(titleSize);
         return this;
     }
 
+    /**
+     * 设置标题文字大小
+     */
+    public TitleView setTitleSize(int unit, float titleSize) {
+        tvTitleContent.setTextSize(unit, titleSize);
+        return this;
+    }
+
+    /**
+     * 设置标题文字颜色
+     */
     public TitleView setTitleColor(int titleColorValue) {
         tvTitleContent.setTextColor(titleColorValue);
         return this;
     }
 
+    /**
+     * 设置右边文字是否显示
+     */
     public TitleView setRightTextShow(boolean showRightText) {
         tvRightText.setVisibility(showRightText ? VISIBLE : GONE);
         return this;
     }
 
+    /**
+     * 设置右边文字内容
+     */
     public TitleView setRightTextContent(String rightTextContent) {
         if (rightTextContent == null) rightTextContent = "";
         tvRightText.setText(rightTextContent);
         return this;
     }
 
+    /**
+     * 设置右边文字大小 sp
+     */
     public TitleView setRightTextSize(float rightTextSize) {
-        tvRightText.setTextSize(TypedValue.COMPLEX_UNIT_PX, sp2px(rightTextSize));
+        tvRightText.setTextSize(rightTextSize);
         return this;
     }
 
+    /**
+     * 设置右边文字大小
+     */
+    public TitleView setRightTextSize(int unit, float rightTextSize) {
+        tvRightText.setTextSize(unit, rightTextSize);
+        return this;
+    }
+
+    /**
+     * 设置右边文字颜色
+     */
     public TitleView setRightTextColor(int rightTextColorValue) {
         tvRightText.setTextColor(rightTextColorValue);
         return this;
     }
 
+    /**
+     * 设置右边图片是否显示
+     */
     public TitleView setRightImgShow(boolean showRightImg) {
         ivRightImg.setVisibility(showRightImg ? VISIBLE : GONE);
         return this;
     }
 
+    /**
+     * 设置右边图片资源
+     */
     public TitleView setRightImageIcon(@DrawableRes int drawableId) {
         ivRightImg.setImageResource(drawableId);
         return this;
     }
 
+    /**
+     * 设置右边图片资源
+     */
     public TitleView setRightImageIcon(Drawable drawable) {
         if (drawable != null)
             ivRightImg.setImageDrawable(drawable);
         return this;
     }
 
+    /**
+     * 设置自定义右边样式是否显示
+     */
     public TitleView setCustomRightViewShow(boolean showCustomRightView) {
         vsRightCustom.setVisibility(showCustomRightView ? VISIBLE : GONE);
         return this;
     }
 
+    /**
+     * 设置自定义右边布局ID
+     */
+    @SuppressLint("ResourceType")
     public TitleView setCustomRightView(@LayoutRes int layoutId) {
-        vsRightCustom.setLayoutResource(layoutId);
-        customRightView = vsRightCustom.inflate();
+        if (layoutId > 0) {
+            vsRightCustom.setLayoutResource(layoutId);
+            customRightView = vsRightCustom.inflate();
+        }
         if (onRightCustomViewInflateListener != null) {
             onRightCustomViewInflateListener.onCustomViewFinish(customRightView);
         }
         return this;
     }
 
+    /**
+     * 获取自定义右边布局
+     */
     public View getCustomRightView() {
         return customRightView;
     }
 
+    /**
+     * 设置底部线是否显示
+     */
     public TitleView setBottomLineShow(boolean showBottomLine) {
         viewLine.setVisibility(showBottomLine ? VISIBLE : GONE);
         return this;
     }
 
+    /**
+     * 设置底部线颜色值
+     */
+    public TitleView setBottomLineColor(int bottomLineColorValue) {
+        viewLine.setBackgroundColor(bottomLineColorValue);
+        return this;
+    }
+
+    /**
+     * 获取底部线控件
+     */
     public View getViewLine() {
         return viewLine;
     }
@@ -320,10 +411,5 @@ public class TitleView extends RelativeLayout {
 
     public interface OnRightCustomViewInflateListener {
         void onCustomViewFinish(View customView);
-    }
-
-    private int sp2px(float spValue) {
-        float scale = resources.getDisplayMetrics().scaledDensity;
-        return (int) (spValue * scale + 0.5f);
     }
 }

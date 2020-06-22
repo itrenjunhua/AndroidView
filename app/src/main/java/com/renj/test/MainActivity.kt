@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import android.widget.TextView
 import android.widget.Toast
 import com.renj.view.CenterItemView
+import com.renj.view.TitleView
 import com.renj.view.dialog.CustomDialog
 import com.renj.view.radius.RadiusFrameLayout
 import com.renj.view.radius.ShaderUtils
@@ -57,5 +58,18 @@ internal class MainActivity : AppCompatActivity() {
         showDialog.setOnClickListener {
             customDialogListener.show()
         }
+
+
+        // TitleView
+        var titleViewOne = findViewById<TitleView>(R.id.title_view_one)
+        var titleViewTwo = findViewById<TitleView>(R.id.title_view_two)
+
+        titleViewOne.setOnRightTextClickListener { Toast.makeText(this@MainActivity, "右边文字", Toast.LENGTH_SHORT).show() }
+
+        titleViewTwo.setTitleContent("标题2")
+        titleViewTwo.setRightImgShow(true)
+        titleViewTwo.setRightImageIcon(R.mipmap.ic_launcher)
+        titleViewTwo.setOnBackViewClickListener { Toast.makeText(this@MainActivity, "返回", Toast.LENGTH_SHORT).show() }
+        titleViewTwo.setOnRightImageClickListener { Toast.makeText(this@MainActivity, "右边图片", Toast.LENGTH_SHORT).show() }
     }
 }
