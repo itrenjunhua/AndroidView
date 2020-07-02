@@ -130,6 +130,7 @@ public class RadiusEditText extends ClearAbleEditText {
     @Override
     public void setBackgroundColor(int color) {
         this.bgColorStateList = ColorStateList.valueOf(color);
+        this.bgShaderType = ShaderUtils.SHADER_TYPE_NONE;
         if (radiusDrawable != null) {
             radiusDrawable.setBackground(bgColorStateList, solidColorStateList);
         }
@@ -138,6 +139,7 @@ public class RadiusEditText extends ClearAbleEditText {
 
     public void setBackgroundColor(ColorStateList bgColorStateList) {
         this.bgColorStateList = bgColorStateList;
+        this.bgShaderType = ShaderUtils.SHADER_TYPE_NONE;
         if (radiusDrawable != null) {
             radiusDrawable.setBackground(this.bgColorStateList, solidColorStateList);
         }
@@ -257,7 +259,7 @@ public class RadiusEditText extends ClearAbleEditText {
                 leftBottomRadius, rightBottomRadius, width, height);
 
         Shader bgShader = null;
-        if (bgShaderType != -1) {
+        if (bgShaderType != ShaderUtils.SHADER_TYPE_NONE) {
             bgShader = ShaderUtils.createShader(bgShaderType, width, height, bgShaderColors, bgShaderLinearOrientation);
         }
         // 边框

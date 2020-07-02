@@ -157,7 +157,6 @@ public class RadiusFrameLayout extends AutoFrameLayout {
 
     public void setSolidColor(int color) {
         this.solidColorStateList = ColorStateList.valueOf(color);
-        this.bgShaderType = ShaderUtils.SHADER_TYPE_NONE;
         if (radiusDrawable != null) {
             radiusDrawable.setBackground(this.bgColorStateList, solidColorStateList);
         }
@@ -166,7 +165,6 @@ public class RadiusFrameLayout extends AutoFrameLayout {
 
     public void setSolidColor(ColorStateList solidColorStateList) {
         this.solidColorStateList = solidColorStateList;
-        this.bgShaderType = ShaderUtils.SHADER_TYPE_NONE;
         if (radiusDrawable != null) {
             radiusDrawable.setBackground(bgColorStateList, this.solidColorStateList);
         }

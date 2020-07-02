@@ -1,5 +1,6 @@
 package com.renj.test
 
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -28,9 +29,15 @@ internal class MainActivity : AppCompatActivity() {
         textView = findViewById(R.id.textView)
         imageView2 = findViewById(R.id.imageView2)
 
+        // showDialog.setRadius(10)
+        // showDialog.setBackgroundColor(Color.BLUE)
+        // showDialog.solidColor = Color.RED
+
         textView.setOnClickListener {
             showDialog.setRadius(50)
             // showDialog.setBackgroundColor(Color.BLUE)
+            // showDialog.solidColor = Color.RED
+            // showDialog.setSolidColor(ColorStateList.valueOf(Color.YELLOW))
             showDialog.setShaderInfo(ShaderUtils.SHADER_TYPE_LINEAR, intArrayOf(Color.YELLOW, Color.GREEN))
 
             // 修改图片圆角
