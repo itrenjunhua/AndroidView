@@ -67,6 +67,9 @@ public class RadiusImageView extends AutoImageView {
     private int solidWidth;
     private int solidColor;
 
+    // 是否需要强制重新布局
+    private boolean forceRefreshLayout;
+
     public RadiusImageView(Context context) {
         this(context, null);
     }
@@ -140,7 +143,7 @@ public class RadiusImageView extends AutoImageView {
 
     public void setSolidColor(int color) {
         solidPaint.setColor(color);
-        invalidate();
+        forceRefreshLayout();
     }
 
     public void setRadius(int radius) {
@@ -149,7 +152,7 @@ public class RadiusImageView extends AutoImageView {
             rightTopRadius = radius;
             rightBottomRadius = radius;
             leftBottomRadius = radius;
-            invalidate();
+            forceRefreshLayout();
         }
     }
 
@@ -158,47 +161,62 @@ public class RadiusImageView extends AutoImageView {
         this.rightTopRadius = rightTopRadius;
         this.rightBottomRadius = rightBottomRadius;
         this.leftBottomRadius = leftBottomRadius;
-        invalidate();
+        forceRefreshLayout();
     }
 
     public void setLeftTopRadius(int leftTopRadius) {
         this.leftTopRadius = leftTopRadius;
-        invalidate();
+        forceRefreshLayout();
     }
 
     public void setRightTopRadius(int rightTopRadius) {
         this.rightTopRadius = rightTopRadius;
-        invalidate();
+        forceRefreshLayout();
     }
 
     public void setRightBottomRadius(int rightBottomRadius) {
         this.rightBottomRadius = rightBottomRadius;
-        invalidate();
+        forceRefreshLayout();
     }
 
     public void setLeftBottomRadius(int leftBottomRadius) {
         this.leftBottomRadius = leftBottomRadius;
-        invalidate();
+        forceRefreshLayout();
     }
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
+
+        // 没有发生改变，并且不需要强制刷新就不在重新layout
+        if (!changed && !this.forceRefreshLayout) {
+            return;
+        }
+        this.forceRefreshLayout = false;
+
         width = getWidth();
         height = getHeight();
 
         // 手动设置阴影，使用裁剪后的路径，防止阴影直角矩形显示
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            setElevation(getElevation());
-            setOutlineProvider(new ViewOutlineProvider() {
-                @Override
-                public void getOutline(View view, Outline outline) {
-                    Path path = RadiusUtils.calculateRadiusBgPath(leftTopRadius, rightTopRadius, leftBottomRadius, rightBottomRadius, width, height, false);
-                    outline.setConvexPath(path);
-                }
-            });
-            setClipToOutline(true);
+            float elevation = Math.max(getElevation(), getTranslationZ());
+            if (elevation > 0) {
+                setElevation(elevation);
+                setOutlineProvider(new ViewOutlineProvider() {
+                    @Override
+                    public void getOutline(View view, Outline outline) {
+                        Path path = RadiusUtils.calculateRadiusBgPath(leftTopRadius, rightTopRadius, leftBottomRadius, rightBottomRadius, width, height, false);
+                        outline.setConvexPath(path);
+                    }
+                });
+                setClipToOutline(true);
+            }
         }
+    }
+
+    private void forceRefreshLayout() {
+        this.forceRefreshLayout = true;
+        requestLayout();
     }
 
     @Override

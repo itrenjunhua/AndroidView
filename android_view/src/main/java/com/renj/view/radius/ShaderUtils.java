@@ -27,6 +27,7 @@ public class ShaderUtils {
     public static final int SHADER_TYPE_LINEAR = 10; // 线性渐变
     public static final int SHADER_TYPE_RADIAL = 11; // 圆形渐变
     public static final int SHADER_TYPE_SWEEP = 12;  // 扫描渐变
+    public static final int SHADER_TYPE_NONE = -1;   // 不要渐变
 
     // 线性渐变方向
     public static final int LINEAR_ORIENTATION_TOP_TO_BOTTOM = 110; // 从上到下

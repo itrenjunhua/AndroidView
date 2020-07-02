@@ -3,18 +3,21 @@ package com.renj.test
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.renj.view.CenterItemView
 import com.renj.view.TitleView
 import com.renj.view.dialog.CustomDialog
 import com.renj.view.radius.RadiusFrameLayout
+import com.renj.view.radius.RadiusImageView
 import com.renj.view.radius.ShaderUtils
 
 internal class MainActivity : AppCompatActivity() {
     private lateinit var showDialog: RadiusFrameLayout
     private lateinit var centerItemView: CenterItemView
     private lateinit var textView: TextView
+    private lateinit var imageView2: RadiusImageView
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,11 +26,15 @@ internal class MainActivity : AppCompatActivity() {
         showDialog = findViewById(R.id.fl_radius)
         centerItemView = findViewById(R.id.cv_item_view)
         textView = findViewById(R.id.textView)
+        imageView2 = findViewById(R.id.imageView2)
 
         textView.setOnClickListener {
-            // showDialog.setBackgroundColor(Color.BLUE)
             showDialog.setRadius(50)
+            // showDialog.setBackgroundColor(Color.BLUE)
             showDialog.setShaderInfo(ShaderUtils.SHADER_TYPE_LINEAR, intArrayOf(Color.YELLOW, Color.GREEN))
+
+            // 修改图片圆角
+            imageView2.setRadius(12)
 
             centerItemView.modifyNameText("修改后内容")
                     .modifyNameTextColor(Color.parseColor("#FF0000"))

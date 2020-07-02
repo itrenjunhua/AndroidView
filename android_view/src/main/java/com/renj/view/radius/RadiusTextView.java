@@ -56,6 +56,8 @@ public class RadiusTextView extends AppCompatTextView {
     private int[] bgShaderColors; // 背景渐变颜色值，优先级高于 bgColorStateList
     private int bgShaderType; // 渐变类型
     private int bgShaderLinearOrientation; // 线性渐变方向
+    // 是否需要强制重新布局
+    private boolean forceRefreshLayout;
 
     public RadiusTextView(Context context) {
         this(context, null);
@@ -97,7 +99,7 @@ public class RadiusTextView extends AppCompatTextView {
         bgShaderLinearOrientation = radiusType.getInt(R.styleable.RadiusView_rv_shader_linear_orientation, ShaderUtils.LINEAR_ORIENTATION_TOP_TO_BOTTOM);
         bgShaderColors = ShaderUtils.createColorsArray(startColor, middleColor, endColor);
         if (bgShaderColors == null)
-            bgShaderType = -1;
+            bgShaderType = ShaderUtils.SHADER_TYPE_NONE;
 
         radiusType.recycle();
 
@@ -130,6 +132,7 @@ public class RadiusTextView extends AppCompatTextView {
         if (radiusDrawable != null) {
             radiusDrawable.setBackground(bgColorStateList, solidColorStateList);
         }
+        forceRefreshLayout();
     }
 
     public void setBackgroundColor(ColorStateList bgColorStateList) {
@@ -137,6 +140,7 @@ public class RadiusTextView extends AppCompatTextView {
         if (radiusDrawable != null) {
             radiusDrawable.setBackground(this.bgColorStateList, solidColorStateList);
         }
+        forceRefreshLayout();
     }
 
     public void setSolidColor(int color) {
@@ -144,6 +148,7 @@ public class RadiusTextView extends AppCompatTextView {
         if (radiusDrawable != null) {
             radiusDrawable.setBackground(this.bgColorStateList, solidColorStateList);
         }
+        forceRefreshLayout();
     }
 
     public void setSolidColor(ColorStateList solidColorStateList) {
@@ -151,6 +156,7 @@ public class RadiusTextView extends AppCompatTextView {
         if (radiusDrawable != null) {
             radiusDrawable.setBackground(bgColorStateList, this.solidColorStateList);
         }
+        forceRefreshLayout();
     }
 
     public void setRadius(int radius) {
@@ -159,7 +165,7 @@ public class RadiusTextView extends AppCompatTextView {
             rightTopRadius = radius;
             rightBottomRadius = radius;
             leftBottomRadius = radius;
-            requestLayout();
+            forceRefreshLayout();
         }
     }
 
@@ -168,27 +174,27 @@ public class RadiusTextView extends AppCompatTextView {
         this.rightTopRadius = rightTopRadius;
         this.rightBottomRadius = rightBottomRadius;
         this.leftBottomRadius = leftBottomRadius;
-        requestLayout();
+        forceRefreshLayout();
     }
 
     public void setLeftTopRadius(int leftTopRadius) {
         this.leftTopRadius = leftTopRadius;
-        requestLayout();
+        forceRefreshLayout();
     }
 
     public void setRightTopRadius(int rightTopRadius) {
         this.rightTopRadius = rightTopRadius;
-        requestLayout();
+        forceRefreshLayout();
     }
 
     public void setRightBottomRadius(int rightBottomRadius) {
         this.rightBottomRadius = rightBottomRadius;
-        requestLayout();
+        forceRefreshLayout();
     }
 
     public void setLeftBottomRadius(int leftBottomRadius) {
         this.leftBottomRadius = leftBottomRadius;
-        requestLayout();
+        forceRefreshLayout();
     }
 
     public void setShaderInfo(@ShaderUtils.ShaderType int shapeType, int[] shapeColors) {
@@ -201,12 +207,19 @@ public class RadiusTextView extends AppCompatTextView {
         this.bgShaderType = shapeType;
         this.bgShaderColors = shapeColors;
         this.bgShaderLinearOrientation = shaderLinearOrientation;
-        requestLayout();
+        forceRefreshLayout();
     }
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
+
+        // 没有发生改变，并且不需要强制刷新就不在重新layout
+        if (!changed && !this.forceRefreshLayout) {
+            return;
+        }
+        this.forceRefreshLayout = false;
+
         width = getWidth();
         height = getHeight();
 
@@ -214,20 +227,28 @@ public class RadiusTextView extends AppCompatTextView {
 
         // 手动设置阴影，使用裁剪后的路径，防止阴影直角矩形显示
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            setElevation(getElevation());
-            setOutlineProvider(new ViewOutlineProvider() {
-                @Override
-                public void getOutline(View view, Outline outline) {
-                    if (bgPath.isConvex()) {
-                        outline.setConvexPath(bgPath);
-                    } else {
-                        outline.setConvexPath(RadiusUtils.calculateRadiusBgPath(leftTopRadius, rightTopRadius,
-                                leftBottomRadius, rightBottomRadius, width, height, false));
+            float elevation = Math.max(getElevation(), getTranslationZ());
+            if (elevation > 0) {
+                setElevation(elevation);
+                setOutlineProvider(new ViewOutlineProvider() {
+                    @Override
+                    public void getOutline(View view, Outline outline) {
+                        if (bgPath.isConvex()) {
+                            outline.setConvexPath(bgPath);
+                        } else {
+                            outline.setConvexPath(RadiusUtils.calculateRadiusBgPath(leftTopRadius, rightTopRadius,
+                                    leftBottomRadius, rightBottomRadius, width, height, false));
+                        }
                     }
-                }
-            });
-            setClipToOutline(true);
+                });
+                setClipToOutline(true);
+            }
         }
+    }
+
+    private void forceRefreshLayout() {
+        this.forceRefreshLayout = true;
+        requestLayout();
     }
 
     private Path setBackground() {
