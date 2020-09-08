@@ -2,6 +2,7 @@ package com.renj.view.radius;
 
 import android.content.res.ColorStateList;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
@@ -40,40 +41,27 @@ public class RadiusDrawable extends Drawable {
     // 边框线相关
     private boolean mDrawSolid;
     private ColorStateList mSolidColorsList;
+    private Shader mSolidShader; // 渐变优先级更高
     private List<Path> mSolidPath;
     private Paint mSolidPaint;
     private PorterDuffColorFilter mSolidTintFilter;
     private ColorStateList mSolidTint;
     private PorterDuff.Mode mSolidTintMode;
 
-    RadiusDrawable(ColorStateList bgColorsList, Path path) {
-        this(bgColorsList, null, path, false, null, null, 0, null);
+    public RadiusDrawable(ColorStateList bgColorsList, Shader bgShader, Path path) {
+        this(bgColorsList, bgShader, path, 0, null, null, null, null);
     }
 
-    RadiusDrawable(Shader bgShader, Path path) {
-        this(null, bgShader, path, false, null, null, 0, null);
-    }
-
-    RadiusDrawable(ColorStateList bgColorsList, Path path, ColorStateList solidColorsList,
-                   List<Path> solidPath, int solidWidth, DashPathEffect dashPathEffect) {
-        this(bgColorsList, null, path, true, solidColorsList, solidPath, solidWidth, dashPathEffect);
-    }
-
-    RadiusDrawable(Shader bgShader, Path path, ColorStateList solidColorsList,
-                   List<Path> solidPath, int solidWidth, DashPathEffect dashPathEffect) {
-        this(null, bgShader, path, true, solidColorsList, solidPath, solidWidth, dashPathEffect);
-    }
-
-    private RadiusDrawable(ColorStateList bgColorsList, Shader bgShader, Path path, boolean drawSolid, ColorStateList solidColorsList,
-                           List<Path> solidPath, int solidWidth, DashPathEffect dashPathEffect) {
+    public RadiusDrawable(ColorStateList bgColorsList, Shader bgShader, Path path, int solidWidth, ColorStateList solidColorsList,
+                          Shader solidShader, List<Path> solidPath, DashPathEffect dashPathEffect) {
         this.mBgPath = path;
         this.mBgTintMode = PorterDuff.Mode.SRC_IN;
         this.mBgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         this.mBgPaint.setDither(true);
         this.mBgShader = bgShader;
 
-        this.mDrawSolid = drawSolid;
-        if (drawSolid) {
+        this.mDrawSolid = solidWidth > 0;
+        if (mDrawSolid) {
             this.mSolidPath = solidPath;
             this.mSolidTintMode = PorterDuff.Mode.SRC_IN;
             this.mSolidPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -81,6 +69,7 @@ public class RadiusDrawable extends Drawable {
             this.mSolidPaint.setStyle(Paint.Style.STROKE);
             this.mSolidPaint.setStrokeWidth(solidWidth);
             this.mSolidPaint.setPathEffect(dashPathEffect);
+            this.mSolidShader = solidShader;
         }
 
         this.setBackground(bgColorsList, solidColorsList);
@@ -98,7 +87,7 @@ public class RadiusDrawable extends Drawable {
             this.mBgColorsList = bgColorsList == null ? ColorStateList.valueOf(0) : bgColorsList;
             this.mBgPaint.setColor(this.mBgColorsList.getColorForState(this.getState(), this.mBgColorsList.getDefaultColor()));
         }
-        if (mDrawSolid) {
+        if (mDrawSolid && mSolidShader == null) {
             this.mSolidColorsList = solidColorsList == null ? ColorStateList.valueOf(0) : solidColorsList;
             this.mSolidPaint.setColor(this.mSolidColorsList.getColorForState(this.getState(), this.mSolidColorsList.getDefaultColor()));
         }
@@ -108,9 +97,11 @@ public class RadiusDrawable extends Drawable {
     public void draw(Canvas canvas) {
         Paint bgPaint = this.mBgPaint;
         boolean bgClearColorFilter = false;
-        boolean hasBgShader = mBgShader == null;
+        boolean hasBgShader = mBgShader != null;
         if (hasBgShader) {
-            if (this.mBgTintFilter != null && bgPaint.getColorFilter() == null) {
+            bgPaint.setShader(mBgShader);
+        } else {
+            if (this.mBgTintFilter != null) {
                 bgPaint.setColorFilter(this.mBgTintFilter);
                 bgClearColorFilter = true;
             } else {
@@ -118,22 +109,25 @@ public class RadiusDrawable extends Drawable {
             }
         }
 
-        if (!hasBgShader)
-            bgPaint.setShader(mBgShader);
-
         canvas.drawPath(mBgPath, bgPaint);
-        if (bgClearColorFilter && hasBgShader) {
+        if (bgClearColorFilter) {
             bgPaint.setColorFilter(null);
         }
 
+
         if (mDrawSolid) {
             Paint solidPaint = this.mSolidPaint;
-            boolean solidClearColorFilter;
-            if (this.mSolidTintFilter != null && solidPaint.getColorFilter() == null) {
-                solidPaint.setColorFilter(this.mSolidTintFilter);
-                solidClearColorFilter = true;
+            boolean solidClearColorFilter = false;
+            boolean hasSolidShader = mSolidShader != null;
+            if (hasSolidShader) {
+                solidPaint.setShader(mSolidShader);
             } else {
-                solidClearColorFilter = false;
+                if (this.mSolidTintFilter != null) {
+                    solidPaint.setColorFilter(this.mSolidTintFilter);
+                    solidClearColorFilter = true;
+                } else {
+                    solidClearColorFilter = false;
+                }
             }
 
             for (Path solidPath : mSolidPath) {
@@ -208,7 +202,7 @@ public class RadiusDrawable extends Drawable {
             this.mBgTintFilter = this.createTintFilter(this.mBgTint, this.mSolidTintMode);
         }
 
-        if (mDrawSolid) {
+        if (mDrawSolid && mSolidShader == null) {
             this.mSolidTintMode = tintMode;
             this.mSolidTintFilter = this.createTintFilter(this.mBgTint, this.mSolidTintMode);
         }
@@ -228,7 +222,7 @@ public class RadiusDrawable extends Drawable {
         }
 
         boolean solidColorChanged = false;
-        if (mDrawSolid) {
+        if (mDrawSolid && mSolidShader == null) {
             int newSolidColor = this.mSolidColorsList.getColorForState(stateSet, this.mSolidColorsList.getDefaultColor());
             solidColorChanged = newSolidColor != this.mSolidPaint.getColor();
             if (solidColorChanged) {
@@ -241,7 +235,7 @@ public class RadiusDrawable extends Drawable {
             this.mBgTintFilter = this.createTintFilter(this.mBgTint, this.mBgTintMode);
             this.invalidateSelf();
             return true;
-        } else if (this.mSolidTint != null && this.mSolidTintMode != null) {
+        } else if (this.mSolidShader == null && this.mSolidTint != null && this.mSolidTintMode != null) {
             this.mSolidTintFilter = this.createTintFilter(this.mSolidTint, this.mSolidTintMode);
             return true;
         } else {

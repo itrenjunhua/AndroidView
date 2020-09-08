@@ -85,15 +85,16 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textView"
-            app:rv_background_color="@color/color_red"
             app:rv_radius_all="8dp"
             app:rv_shader_end_color="@color/color_blue"
             app:rv_shader_linear_orientation="right_to_left"
             app:rv_shader_start_color="@color/color_red"
             app:rv_shader_type="linear"
-            app:rv_solid_color="@color/selected_blue_green"
             app:rv_solid_dashGap="2dp"
             app:rv_solid_dashWidth="2dp"
+            app:rv_solid_shader_end_color="@color/color_green"
+            app:rv_solid_shader_start_color="@color/color_yellow"
+            app:rv_solid_shader_type="linear"
             app:rv_solid_type="dash"
             app:rv_solid_width="2dp">
 

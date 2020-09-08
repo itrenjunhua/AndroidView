@@ -1,10 +1,8 @@
 package com.renj.test
 
-import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.renj.view.CenterItemView
@@ -13,6 +11,7 @@ import com.renj.view.dialog.CustomDialog
 import com.renj.view.radius.RadiusFrameLayout
 import com.renj.view.radius.RadiusImageView
 import com.renj.view.radius.ShaderUtils
+import com.renj.view.radius.ShaderUtils.LINEAR_ORIENTATION_LEFT_TO_RIGHT
 
 internal class MainActivity : AppCompatActivity() {
     private lateinit var showDialog: RadiusFrameLayout
@@ -39,6 +38,7 @@ internal class MainActivity : AppCompatActivity() {
             // showDialog.solidColor = Color.RED
             // showDialog.setSolidColor(ColorStateList.valueOf(Color.YELLOW))
             showDialog.setShaderInfo(ShaderUtils.SHADER_TYPE_LINEAR, intArrayOf(Color.YELLOW, Color.GREEN))
+            showDialog.setSolidShaderInfo(ShaderUtils.SHADER_TYPE_LINEAR, intArrayOf(Color.BLUE, Color.RED), LINEAR_ORIENTATION_LEFT_TO_RIGHT)
 
             // 修改图片圆角
             imageView2.setRadius(12)
