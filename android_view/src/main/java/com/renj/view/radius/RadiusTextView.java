@@ -33,11 +33,7 @@ import java.util.List;
  * <p>
  * ======================================================================
  */
-public class RadiusTextView extends AppCompatTextView {
-    private final int DEFAULT_RADIUS = 0; // 默认没有圆角
-    public static final int TYPE_SOLID = 0; // 实线
-    public static final int TYPE_DASH = 1;  // 虚线
-
+public class RadiusTextView extends AppCompatTextView implements IRadiusLayout{
     // 控件宽高
     private int width, height;
     // 圆角参数
@@ -104,7 +100,7 @@ public class RadiusTextView extends AppCompatTextView {
         solidColorStateList = radiusType.getColorStateList(R.styleable.RadiusView_rv_solid_color);
         int dashGap = radiusType.getDimensionPixelSize(R.styleable.RadiusView_rv_solid_dashGap, 0);
         int dashWidth = radiusType.getDimensionPixelSize(R.styleable.RadiusView_rv_solid_dashWidth, 0);
-        int lineType = radiusType.getInt(R.styleable.RadiusView_rv_solid_type, TYPE_SOLID);
+        int lineType = radiusType.getInt(R.styleable.RadiusView_rv_solid_type, SOLID_TYPE_SOLID);
         int solidStartColor = radiusType.getColor(R.styleable.RadiusView_rv_solid_shader_start_color, -1);
         int solidMiddleColor = radiusType.getColor(R.styleable.RadiusView_rv_solid_shader_middle_color, -1);
         int solidEndColor = radiusType.getColor(R.styleable.RadiusView_rv_solid_shader_end_color, -1);
@@ -132,7 +128,7 @@ public class RadiusTextView extends AppCompatTextView {
             solidColorStateList = ColorStateList.valueOf(Color.TRANSPARENT);
         }
 
-        if (lineType == TYPE_DASH) {
+        if (lineType == SOLID_TYPE_DASH) {
             dashPathEffect = new DashPathEffect(new float[]{dashWidth, dashGap}, 0);
         } else {
             dashPathEffect = null;
@@ -149,6 +145,7 @@ public class RadiusTextView extends AppCompatTextView {
         forceRefreshLayout();
     }
 
+    @Override
     public void setBackgroundColor(ColorStateList bgColorStateList) {
         this.bgColorStateList = bgColorStateList;
         this.bgShaderType = ShaderUtils.SHADER_TYPE_NONE;
@@ -158,6 +155,15 @@ public class RadiusTextView extends AppCompatTextView {
         forceRefreshLayout();
     }
 
+    @Override
+    public void setSolidDashPathEffect(DashPathEffect dashPathEffect) {
+        if (dashPathEffect != null) {
+            this.dashPathEffect = dashPathEffect;
+            forceRefreshLayout();
+        }
+    }
+
+    @Override
     public void setSolidColor(int color) {
         this.solidColorStateList = ColorStateList.valueOf(color);
         if (radiusDrawable != null) {
@@ -166,6 +172,7 @@ public class RadiusTextView extends AppCompatTextView {
         forceRefreshLayout();
     }
 
+    @Override
     public void setSolidColor(ColorStateList solidColorStateList) {
         this.solidColorStateList = solidColorStateList;
         if (radiusDrawable != null) {
@@ -174,6 +181,7 @@ public class RadiusTextView extends AppCompatTextView {
         forceRefreshLayout();
     }
 
+    @Override
     public void setRadius(int radius) {
         if (radius >= 0) {
             leftTopRadius = radius;
@@ -184,6 +192,7 @@ public class RadiusTextView extends AppCompatTextView {
         }
     }
 
+    @Override
     public void setRadius(int leftTopRadius, int rightTopRadius, int rightBottomRadius, int leftBottomRadius) {
         this.leftTopRadius = leftTopRadius;
         this.rightTopRadius = rightTopRadius;
@@ -192,30 +201,36 @@ public class RadiusTextView extends AppCompatTextView {
         forceRefreshLayout();
     }
 
+    @Override
     public void setLeftTopRadius(int leftTopRadius) {
         this.leftTopRadius = leftTopRadius;
         forceRefreshLayout();
     }
 
+    @Override
     public void setRightTopRadius(int rightTopRadius) {
         this.rightTopRadius = rightTopRadius;
         forceRefreshLayout();
     }
 
+    @Override
     public void setRightBottomRadius(int rightBottomRadius) {
         this.rightBottomRadius = rightBottomRadius;
         forceRefreshLayout();
     }
 
+    @Override
     public void setLeftBottomRadius(int leftBottomRadius) {
         this.leftBottomRadius = leftBottomRadius;
         forceRefreshLayout();
     }
 
+    @Override
     public void setShaderInfo(@ShaderUtils.ShaderType int shapeType, int[] shapeColors) {
         setShaderInfo(shapeType, shapeColors, ShaderUtils.LINEAR_ORIENTATION_TOP_TO_BOTTOM);
     }
 
+    @Override
     public void setShaderInfo(@ShaderUtils.ShaderType int shapeType, int[] shapeColors, @ShaderUtils.LinearOrientation int shaderLinearOrientation) {
         if (shapeColors == null || shapeColors.length <= 0)
             return;
@@ -225,10 +240,12 @@ public class RadiusTextView extends AppCompatTextView {
         forceRefreshLayout();
     }
 
+    @Override
     public void setSolidShaderInfo(@ShaderUtils.ShaderType int shapeType, int[] shapeColors) {
         setSolidShaderInfo(shapeType, shapeColors, ShaderUtils.LINEAR_ORIENTATION_TOP_TO_BOTTOM);
     }
 
+    @Override
     public void setSolidShaderInfo(@ShaderUtils.ShaderType int shapeType, int[] shapeColors, @ShaderUtils.LinearOrientation int shaderLinearOrientation) {
         if (shapeColors == null || shapeColors.length <= 0)
             return;
