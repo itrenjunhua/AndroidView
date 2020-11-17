@@ -2,8 +2,9 @@
 <resources>
 
     <!--可以设置是否能滑动的 ViewPager-->
-    <declare-styleable name="MyViewPager">
+    <declare-styleable name="CustomViewPager">
         <attr name="is_can_scroll" format="boolean" />
+        <attr name="intercept_inner_viewpager" format="boolean" />
     </declare-styleable>
 
 </resources>
