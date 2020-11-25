@@ -28,11 +28,21 @@ import android.widget.FrameLayout;
  */
 public class ShadowMaskLayout extends FrameLayout {
 
-    public static final int TYPE_SHADOW = 0;
-    public static final int TYPE_MASK = 1;
+    /**
+     * 不要特殊效果
+     */
+    public static final int SHADOW_MASK_TYPE_NONE = -1;
+    /**
+     * 阴影效果
+     */
+    public static final int SHADOW_MASK_TYPE_SHADOW = 0;
+    /**
+     * 发光效果
+     */
+    public static final int SHADOW_MASK_TYPE_MASK = 1;
 
     // 阴影还是发光，默认阴影
-    private int shadowMaskType = TYPE_SHADOW;
+    private int shadowMaskType = SHADOW_MASK_TYPE_SHADOW;
     // 阴影或者发光大小
     private int shadowMaskSize = 0;
     // 阴影或者发光颜色
@@ -73,7 +83,7 @@ public class ShadowMaskLayout extends FrameLayout {
 
         TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.ShadowMaskLayout);
         if (typedArray != null) {
-            shadowMaskType = typedArray.getInt(R.styleable.ShadowMaskLayout_sm_layout_type, TYPE_SHADOW);
+            shadowMaskType = typedArray.getInt(R.styleable.ShadowMaskLayout_sm_layout_type, SHADOW_MASK_TYPE_SHADOW);
             shadowMaskColor = typedArray.getColor(R.styleable.ShadowMaskLayout_sm_layout_color, Color.BLACK);
             shadowMaskSize = typedArray.getInteger(R.styleable.ShadowMaskLayout_sm_layout_size, 0);
 
@@ -112,6 +122,143 @@ public class ShadowMaskLayout extends FrameLayout {
         paint.setStyle(Paint.Style.FILL);
     }
 
+    /**
+     * 设置效果
+     *
+     * @param shadowType {@link #SHADOW_MASK_TYPE_NONE}/{@link #SHADOW_MASK_TYPE_SHADOW}/{@link #SHADOW_MASK_TYPE_MASK}
+     */
+    public void setShadowMaskType(int shadowType) {
+        this.shadowMaskType = shadowType;
+        postInvalidate();
+    }
+
+    /**
+     * 设置圆角大小，四个圆角一样
+     *
+     * @param radius 圆角大小
+     */
+    public void setRadius(int radius) {
+        if (radius >= 0) {
+            leftTopRadius = radius;
+            rightTopRadius = radius;
+            rightBottomRadius = radius;
+            leftBottomRadius = radius;
+            requestLayout();
+        }
+    }
+
+    /**
+     * 设置圆角大小，分别设置四个
+     *
+     * @param leftTopRadius     左上角圆角大小
+     * @param rightTopRadius    右上角圆角大小
+     * @param rightBottomRadius 左下角圆角大小
+     * @param leftBottomRadius  右下角圆角大小
+     */
+    public void setRadius(int leftTopRadius, int rightTopRadius, int rightBottomRadius, int leftBottomRadius) {
+        if (leftTopRadius < 0) this.leftTopRadius = leftTopRadius;
+        if (rightTopRadius < 0) this.rightTopRadius = rightTopRadius;
+        if (rightBottomRadius < 0) this.rightBottomRadius = rightBottomRadius;
+        if (leftBottomRadius < 0) this.leftBottomRadius = leftBottomRadius;
+        requestLayout();
+    }
+
+    /**
+     * 设置左上角圆角大小
+     *
+     * @param leftTopRadius 左上角圆角大小
+     */
+    public void setLeftTopRadius(int leftTopRadius) {
+        if (leftTopRadius >= 0) {
+            this.leftTopRadius = leftTopRadius;
+            requestLayout();
+        }
+    }
+
+    /**
+     * 设置右上角圆角大小
+     *
+     * @param rightTopRadius 右上角圆角大小
+     */
+    public void setRightTopRadius(int rightTopRadius) {
+        if (rightTopRadius >= 0) {
+            this.rightTopRadius = rightTopRadius;
+            requestLayout();
+        }
+    }
+
+    /**
+     * 设置右下角圆角大小
+     *
+     * @param rightBottomRadius 右下角圆角大小
+     */
+    public void setRightBottomRadius(int rightBottomRadius) {
+        if (rightBottomRadius >= 0) {
+            this.rightBottomRadius = rightBottomRadius;
+            requestLayout();
+        }
+    }
+
+    /**
+     * 设置左下角圆角大小
+     *
+     * @param leftBottomRadius 左下角圆角大小
+     */
+    public void setLeftBottomRadius(int leftBottomRadius) {
+        if (leftBottomRadius >= 0) {
+            this.leftBottomRadius = leftBottomRadius;
+            requestLayout();
+        }
+    }
+
+    /**
+     * 设置阴影或者发光大小
+     *
+     * @param shadowMaskSize 阴影或者发光大小
+     */
+    public void setShadowMaskSize(int shadowMaskSize) {
+        this.shadowMaskSize = shadowMaskSize;
+        postInvalidate();
+    }
+
+    /**
+     * 设置阴影或者发光颜色
+     *
+     * @param shadowMaskColor 阴影或者发光颜色
+     */
+    public void setShadowMaskColor(int shadowMaskColor) {
+        this.shadowMaskColor = shadowMaskColor;
+        postInvalidate();
+    }
+
+    /**
+     * 设置阴影或者发光 各个方向的深度
+     *
+     * @param elevationLeft   左边的深度
+     * @param elevationTop    上边的深度
+     * @param elevationRight  右边的深度
+     * @param elevationBottom 下边的深度
+     */
+    public void setElevationPadding(int elevationLeft, int elevationTop, int elevationRight, int elevationBottom) {
+        if (elevationLeft >= 0) this.paddingLeft = elevationLeft;
+        if (elevationTop >= 0) this.paddingTop = elevationTop;
+        if (elevationRight >= 0) this.paddingRight = elevationRight;
+        if (elevationBottom >= 0) this.paddingBottom = elevationBottom;
+        postInvalidate();
+    }
+
+    /**
+     * 设置阴影偏移属性（此为阴影效果特有，类型为：{@link #SHADOW_MASK_TYPE_SHADOW}）
+     *
+     * @param shadowDx 水平方向上的偏移量
+     * @param shadowDy 垂直方向上的偏移量
+     */
+    public void setShadowOffset(int shadowDx, int shadowDy) {
+        this.shadowDx = shadowDx;
+        this.shadowDy = shadowDy;
+        postInvalidate();
+    }
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -130,10 +277,10 @@ public class ShadowMaskLayout extends FrameLayout {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (shadowMaskType == TYPE_SHADOW) {
+        if (shadowMaskType == SHADOW_MASK_TYPE_SHADOW) {
             // 阴影效果
             drawShadowLayer(canvas);
-        } else if (shadowMaskType == TYPE_MASK) {
+        } else if (shadowMaskType == SHADOW_MASK_TYPE_MASK) {
             // 发光效果
             drawMaskFilter(canvas);
         }

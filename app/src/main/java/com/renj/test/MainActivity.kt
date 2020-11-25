@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import android.widget.TextView
 import android.widget.Toast
 import com.renj.view.CenterItemView
+import com.renj.view.ShadowMaskLayout
 import com.renj.view.TitleView
 import com.renj.view.dialog.CustomDialog
 import com.renj.view.radius.RadiusFrameLayout
@@ -18,6 +19,7 @@ internal class MainActivity : AppCompatActivity() {
     private lateinit var centerItemView: CenterItemView
     private lateinit var textView: TextView
     private lateinit var imageView2: RadiusImageView
+    private lateinit var smShadow: ShadowMaskLayout
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +29,7 @@ internal class MainActivity : AppCompatActivity() {
         centerItemView = findViewById(R.id.cv_item_view)
         textView = findViewById(R.id.textView)
         imageView2 = findViewById(R.id.imageView2)
+        smShadow = findViewById(R.id.sm_shadow)
 
         // showDialog.setRadius(10)
         // showDialog.setBackgroundColor(Color.BLUE)
@@ -63,10 +66,15 @@ internal class MainActivity : AppCompatActivity() {
                 .setCustomDialogListener(object : CustomDialog.CustomDialogListener {
                     override fun onCancel(dialog: CustomDialog) {
                         Toast.makeText(this@MainActivity, "取消", Toast.LENGTH_SHORT).show()
+
+                        smShadow.setShadowMaskType(ShadowMaskLayout.SHADOW_MASK_TYPE_NONE)
                     }
 
                     override fun onConfirm(dialog: CustomDialog) {
                         Toast.makeText(this@MainActivity, "确定", Toast.LENGTH_SHORT).show()
+
+                        smShadow.setShadowMaskType(ShadowMaskLayout.SHADOW_MASK_TYPE_SHADOW)
+                        smShadow.setShadowMaskColor(Color.BLUE)
                     }
                 })
         showDialog.setOnClickListener {
