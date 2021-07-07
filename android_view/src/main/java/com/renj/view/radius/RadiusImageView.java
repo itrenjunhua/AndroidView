@@ -205,7 +205,7 @@ public class RadiusImageView extends AutoImageView {
                 setOutlineProvider(new ViewOutlineProvider() {
                     @Override
                     public void getOutline(View view, Outline outline) {
-                        Path path = RadiusUtils.calculateRadiusBgPath(leftTopRadius, rightTopRadius, leftBottomRadius, rightBottomRadius, width, height, false);
+                        Path path = RadiusUtils.calculateBgPath(leftTopRadius, rightTopRadius, leftBottomRadius, rightBottomRadius, width, height, false);
                         outline.setConvexPath(path);
                     }
                 });
@@ -229,7 +229,7 @@ public class RadiusImageView extends AutoImageView {
             if (solidWidth > 0)
                 canvas.drawPath(RadiusUtils.calculateRectSocketPath(width, height, solidWidth), solidPaint);
         } else {
-            Path path = RadiusUtils.calculateRadiusBgPath(leftTopRadius, rightTopRadius, leftBottomRadius, rightBottomRadius, width, height);
+            Path path = RadiusUtils.calculateBgPath(leftTopRadius, rightTopRadius, leftBottomRadius, rightBottomRadius, width, height);
             Bitmap bitmap = getBitmapFromDrawable(getDrawable());
             if (bitmap != null) {
                 bitmapShader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
@@ -243,7 +243,7 @@ public class RadiusImageView extends AutoImageView {
 
             // 边框
             if (solidWidth > 0) {
-                Path[] result = RadiusUtils.calculateRadiusSocketPath(leftTopRadius, rightTopRadius, leftBottomRadius, rightBottomRadius, width, height, solidWidth);
+                Path[] result = RadiusUtils.calculateSocketPath(leftTopRadius, rightTopRadius, leftBottomRadius, rightBottomRadius, width, height, solidWidth);
                 canvas.drawPath(result[0], solidPaint);
                 canvas.drawPath(result[1], solidPaint);
             }

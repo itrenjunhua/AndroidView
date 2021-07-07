@@ -14,6 +14,7 @@ import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -62,7 +63,7 @@ public class RadiusDrawable extends Drawable {
 
         this.mDrawSolid = solidWidth > 0;
         if (mDrawSolid) {
-            this.mSolidPath = solidPath;
+            this.mSolidPath = solidPath == null ? new ArrayList<Path>() : solidPath;
             this.mSolidTintMode = PorterDuff.Mode.SRC_IN;
             this.mSolidPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             this.mSolidPaint.setDither(true);

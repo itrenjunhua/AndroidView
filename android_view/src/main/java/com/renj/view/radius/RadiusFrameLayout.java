@@ -292,7 +292,7 @@ public class RadiusFrameLayout extends AutoFrameLayout  implements IRadiusLayout
                         if (bgPath.isConvex()) {
                             outline.setConvexPath(bgPath);
                         } else {
-                            outline.setConvexPath(RadiusUtils.calculateRadiusBgPath(leftTopRadius, rightTopRadius,
+                            outline.setConvexPath(RadiusUtils.calculateBgPath(leftTopRadius, rightTopRadius,
                                     leftBottomRadius, rightBottomRadius, width, height, false));
                         }
                     }
@@ -308,7 +308,7 @@ public class RadiusFrameLayout extends AutoFrameLayout  implements IRadiusLayout
     }
 
     private Path setBackground() {
-        final Path bgPath = RadiusUtils.calculateRadiusBgPath(leftTopRadius, rightTopRadius,
+        final Path bgPath = RadiusUtils.calculateBgPath(leftTopRadius, rightTopRadius,
                 leftBottomRadius, rightBottomRadius, width, height);
 
         Shader bgShader = null;
@@ -322,15 +322,9 @@ public class RadiusFrameLayout extends AutoFrameLayout  implements IRadiusLayout
                 solidShader = ShaderUtils.createShader(solidShaderType, width, height, solidShaderColors, solidShaderLinearOrientation);
             }
 
-            List<Path> solidPath = new ArrayList<>();
-            if (leftTopRadius <= DEFAULT_RADIUS && leftBottomRadius <= DEFAULT_RADIUS &&
-                    rightTopRadius <= DEFAULT_RADIUS && rightBottomRadius <= DEFAULT_RADIUS) {
-                solidPath.add(RadiusUtils.calculateRectSocketPath(width, height, solidWidth));
-            } else {
-                Path[] solidPathArray = RadiusUtils.calculateRadiusSocketPath(leftTopRadius, rightTopRadius,
-                        leftBottomRadius, rightBottomRadius, width, height, solidWidth);
-                solidPath = Arrays.asList(solidPathArray);
-            }
+            Path[] solidPathArray = RadiusUtils.calculateSocketPath(leftTopRadius, rightTopRadius,
+                    leftBottomRadius, rightBottomRadius, width, height, solidWidth);
+            List<Path> solidPath = Arrays.asList(solidPathArray);
 
             radiusDrawable = new RadiusDrawable(bgColorStateList, bgShader, bgPath, solidWidth, solidColorStateList, solidShader, solidPath, dashPathEffect);
         } else {
