@@ -23,6 +23,8 @@ import java.util.List;
  * ======================================================================
  */
 public class ShaderUtils {
+    // 定义超出颜色范围的值作为非颜色值
+    public static final int COLOR_VALUE_NONE = -0xFFFFFFFF;
     // 渐变类型
     public static final int SHADER_TYPE_LINEAR = 10; // 线性渐变
     public static final int SHADER_TYPE_RADIAL = 11; // 圆形渐变
@@ -105,13 +107,13 @@ public class ShaderUtils {
 
     public static int[] createColorsArray(int startColor, int middleColor, int endColor) {
         List<Integer> colors = new ArrayList<>();
-        if (startColor != -1) {
+        if (startColor != COLOR_VALUE_NONE) {
             colors.add(startColor);
         }
-        if (middleColor != -1) {
+        if (middleColor != COLOR_VALUE_NONE) {
             colors.add(middleColor);
         }
-        if (endColor != -1) {
+        if (endColor != COLOR_VALUE_NONE) {
             colors.add(endColor);
         }
         if (colors.size() > 0) {

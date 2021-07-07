@@ -85,10 +85,10 @@ public class RadiusTextView extends AppCompatTextView implements IRadiusLayout {
 
         // 获取背景信息
         bgColorStateList = radiusType.getColorStateList(R.styleable.RadiusView_rv_background_color);
-        int startColor = radiusType.getColor(R.styleable.RadiusView_rv_shader_start_color, -1);
-        int middleColor = radiusType.getColor(R.styleable.RadiusView_rv_shader_middle_color, -1);
-        int endColor = radiusType.getColor(R.styleable.RadiusView_rv_shader_end_color, -1);
-        bgShaderType = radiusType.getInt(R.styleable.RadiusView_rv_shader_type, -1);
+        int startColor = radiusType.getColor(R.styleable.RadiusView_rv_shader_start_color, ShaderUtils.COLOR_VALUE_NONE);
+        int middleColor = radiusType.getColor(R.styleable.RadiusView_rv_shader_middle_color, ShaderUtils.COLOR_VALUE_NONE);
+        int endColor = radiusType.getColor(R.styleable.RadiusView_rv_shader_end_color, ShaderUtils.COLOR_VALUE_NONE);
+        bgShaderType = radiusType.getInt(R.styleable.RadiusView_rv_shader_type, ShaderUtils.SHADER_TYPE_NONE);
         bgShaderLinearOrientation = radiusType.getInt(R.styleable.RadiusView_rv_shader_linear_orientation, ShaderUtils.LINEAR_ORIENTATION_TOP_TO_BOTTOM);
         bgShaderColors = ShaderUtils.createColorsArray(startColor, middleColor, endColor);
         if (bgShaderColors == null)
@@ -101,10 +101,10 @@ public class RadiusTextView extends AppCompatTextView implements IRadiusLayout {
         int dashGap = radiusType.getDimensionPixelSize(R.styleable.RadiusView_rv_solid_dashGap, 0);
         int dashWidth = radiusType.getDimensionPixelSize(R.styleable.RadiusView_rv_solid_dashWidth, 0);
         int lineType = radiusType.getInt(R.styleable.RadiusView_rv_solid_type, SOLID_TYPE_SOLID);
-        int solidStartColor = radiusType.getColor(R.styleable.RadiusView_rv_solid_shader_start_color, -1);
-        int solidMiddleColor = radiusType.getColor(R.styleable.RadiusView_rv_solid_shader_middle_color, -1);
-        int solidEndColor = radiusType.getColor(R.styleable.RadiusView_rv_solid_shader_end_color, -1);
-        solidShaderType = radiusType.getInt(R.styleable.RadiusView_rv_solid_shader_type, -1);
+        int solidStartColor = radiusType.getColor(R.styleable.RadiusView_rv_solid_shader_start_color, ShaderUtils.COLOR_VALUE_NONE);
+        int solidMiddleColor = radiusType.getColor(R.styleable.RadiusView_rv_solid_shader_middle_color, ShaderUtils.COLOR_VALUE_NONE);
+        int solidEndColor = radiusType.getColor(R.styleable.RadiusView_rv_solid_shader_end_color, ShaderUtils.COLOR_VALUE_NONE);
+        solidShaderType = radiusType.getInt(R.styleable.RadiusView_rv_solid_shader_type, ShaderUtils.SHADER_TYPE_NONE);
         solidShaderLinearOrientation = radiusType.getInt(R.styleable.RadiusView_rv_solid_shader_linear_orientation, ShaderUtils.LINEAR_ORIENTATION_TOP_TO_BOTTOM);
         solidShaderColors = ShaderUtils.createColorsArray(solidStartColor, solidMiddleColor, solidEndColor);
         if (solidShaderColors == null)

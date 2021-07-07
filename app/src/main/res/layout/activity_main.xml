@@ -88,6 +88,7 @@
             app:rv_radius_all="8dp"
             app:rv_shader_end_color="@color/color_blue"
             app:rv_shader_linear_orientation="right_to_left"
+            app:rv_shader_middle_color="@color/color_white"
             app:rv_shader_start_color="@color/color_red"
             app:rv_shader_type="linear"
             app:rv_solid_dashGap="2dp"
