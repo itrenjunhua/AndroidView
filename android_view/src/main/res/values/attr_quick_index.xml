@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--快速索引控件（主要用于列表）-->
+    <declare-styleable name="QuickIndexView">
+        <attr name="qiv_text_size" format="dimension" />
+        <attr name="qiv_text_color" format="color" />
+        <attr name="qiv_text_touch_size" format="dimension" />
+        <attr name="qiv_text_touch_color" format="color" />
+
+        <attr name="qiv_text_cell_max_height" format="dimension" />
+    </declare-styleable>
+</resources>

@@ -34,10 +34,6 @@ Android常用控件以及对 ListView、RecyclerView 的Adapter 的封装
 
     **详情查看[RecyclerView 控件使用](https://github.com/itrenjunhua/RRecyclerView)**
 
-* refresh包：基于[刷新控件SwipeToLoadLayout]( https://github.com/Aspsine/SwipeToLoadLayout)定义的刷新和加载更多控件，如果不使用该刷新控件，建议将该包删除，并且去除build文件中对SwipeToLoadLayout框架的依赖
-    * [RefreshHeaderView](https://github.com/itrenjunhua/AndroidView/blob/master/android_view/src/main/java/com/renj/view/refresh/RefreshHeaderView.java)
-    * [RefreshFooterView](https://github.com/itrenjunhua/AndroidView/blob/master/android_view/src/main/java/com/renj/view/refresh/RefreshFooterView.java)
-
 * [CenterItemView](https://github.com/itrenjunhua/AndroidView/blob/master/android_view/src/main/java/com/renj/view/CenterItemView.java)：类似个人中心条目(左侧图标+文字name+文字value+右侧箭头样式)控件
 * [CircleImageView](https://github.com/itrenjunhua/AndroidView/blob/master/android_view/src/main/java/com/renj/view/CircleImageView.java)：用于显示圆形图片控件
 * [ClearAbleEditText](https://github.com/itrenjunhua/AndroidView/blob/master/android_view/src/main/java/com/renj/view/ClearAbleEditText.java)：带清除按钮的EditText

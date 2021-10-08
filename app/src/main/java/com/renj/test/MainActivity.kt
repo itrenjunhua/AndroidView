@@ -1,5 +1,6 @@
 package com.renj.test
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -54,6 +55,7 @@ internal class MainActivity : AppCompatActivity() {
 
         centerItemView.setOnClickListener {
             Toast.makeText(this@MainActivity, "点击", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this@MainActivity,QuickIndexActivity::class.java))
         }
 
         var customDialogListener = CustomDialog.newInstance(this@MainActivity)
