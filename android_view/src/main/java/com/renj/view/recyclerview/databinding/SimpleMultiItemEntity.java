@@ -1,4 +1,4 @@
-package com.renj.view.recyclerview.adapter;
+package com.renj.view.recyclerview.databinding;
 
 import java.util.Objects;
 
