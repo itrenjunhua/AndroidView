@@ -11,6 +11,8 @@ import android.graphics.Matrix;
 import android.graphics.Outline;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
@@ -232,13 +234,40 @@ public class RadiusImageView extends AutoImageView {
             Path path = RadiusUtils.calculateBgPath(leftTopRadius, rightTopRadius, leftBottomRadius, rightBottomRadius, width, height);
             Bitmap bitmap = getBitmapFromDrawable(getDrawable());
             if (bitmap != null) {
-                bitmapShader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
-                configureBounds(getDrawable());
-                // 设置变换矩阵
-                bitmapShader.setLocalMatrix(matrix);
-                // 设置shader
-                bitmapPaint.setShader(bitmapShader);
-                canvas.drawPath(path, bitmapPaint);
+                if (configureBounds(getDrawable())) {
+                    bitmapShader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+                    // 设置变换矩阵
+                    bitmapShader.setLocalMatrix(matrix);
+                    // 设置shader
+                    bitmapPaint.setShader(bitmapShader);
+                    canvas.drawPath(path, bitmapPaint);
+                } else {
+                    // 关闭硬件加速
+                    setLayerType(View.LAYER_TYPE_SOFTWARE, bitmapPaint);
+                    // 使用离屏缓存，新建一个srcRectF区域大小的图层
+                    int saveLayer = canvas.saveLayer(0, 0, width, height, null, Canvas.ALL_SAVE_FLAG);
+                    // 绘制path
+                    canvas.drawPath(path, bitmapPaint);
+                    // 设置混合模式
+                    bitmapPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+                    final int intrinsicWidth = bitmap.getWidth();
+                    final int intrinsicHeight = bitmap.getHeight();
+                    final int vWidth = width - getPaddingLeft() - getPaddingRight();
+                    final int vHeight = height - getPaddingTop() - getPaddingBottom();
+                    final float scale = Math.min((float) vWidth / (float) intrinsicWidth,
+                            (float) vHeight / (float) intrinsicHeight);
+
+                    int dx = Math.round((vWidth - intrinsicWidth * scale) * 0.5f);
+                    int dy = Math.round((vHeight - intrinsicHeight * scale) * 0.5f);
+                    Matrix matrix = new Matrix();
+                    matrix.postScale(scale, scale);
+                    canvas.drawBitmap(Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true),
+                            dx, dy, bitmapPaint);
+                    // 清除Xfermode
+                    bitmapPaint.setXfermode(null);
+                    // 恢复画布状态
+                    canvas.restoreToCount(saveLayer);
+                }
             }
 
             // 边框
@@ -280,12 +309,16 @@ public class RadiusImageView extends AutoImageView {
     }
 
     // 根据 ScaleType 进行矩阵变换
-    private void configureBounds(Drawable drawable) {
+    private boolean configureBounds(Drawable drawable) {
         if (drawable == null) {
-            return;
+            return true;
         }
 
         final ScaleType scaleType = getScaleType();
+
+        if (ScaleType.FIT_CENTER == scaleType) {
+            return false;
+        }
         final int intrinsicWidth = drawable.getIntrinsicWidth();
         final int intrinsicHeight = drawable.getIntrinsicHeight();
         final int vWidth = width - getPaddingLeft() - getPaddingRight();
@@ -350,5 +383,6 @@ public class RadiusImageView extends AutoImageView {
                 matrix.setRectToRect(mTempSrc, mTempDst, Matrix.ScaleToFit.CENTER);
             }
         }
+        return true;
     }
 }
